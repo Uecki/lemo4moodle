@@ -233,6 +233,7 @@ global $CFG;
     <!-- Reset Charts (BarChart, LineChart) -->
     <script>
     $(document).ready(function() {
+		
         /* Bar Chart - reset button */
         $('#rst_btn_1').click(function() {
         /* do something */
@@ -261,7 +262,18 @@ global $CFG;
 
     });
     </script>
-        
+     
+	<script>
+        $(document).ready(function() {
+            drawBarChart();
+        });
+		
+		$(document).ready(function() {
+            drawLineChart();
+        });
+    </script>
+	
+	 
     <script>
         $(document).ready(function() {
             $('#btn_close').click(function(){
@@ -372,7 +384,9 @@ global $CFG;
                             <div class="input-field col s12">
                                 <div class="divider"></div>
                                 <p>Datensicherung:</p>
-                                <a href="<?php echo 'saved_datasets/'.$courseID.'_'.$userID.'/data_'.$courseID.'_'.$userID.'.json'; ?>" download="<?php echo 'activitygraph_data_'.$courseID.'_'.$userID.'.json'; ?>" class="btn waves-effect waves-light grey darken-3 button">Raw Data (JSON)</a>
+                                <!-- Button nicht mehr nötig.
+								<a href="<?php echo 'saved_datasets/'.$courseID.'_'.$userID.'/data_'.$courseID.'_'.$userID.'.json'; ?>" download="<?php echo 'activitygraph_data_'.$courseID.'_'.$userID.'.json'; ?>" class="btn waves-effect waves-light grey darken-3 button">Raw Data (JSON)</a>
+								-->
                                 <form action='create_html.php' method='post' id='download_form_1'>
 									<a class="btn waves-effect waves-light grey darken-3 button ajax" id="html_btn_1">HTML Download</a>
 									<input type='hidden' value='<?php echo $courseID ?>' name='id'>
@@ -403,8 +417,9 @@ global $CFG;
                                     <button class="btn waves-effect waves-light grey darken-3 button" type="submit" name="action" id="rst_btn_2">R&uuml;ckg&auml;ngig</button>
                                     <div class="divider"></div>
                                     <p>Datensicherung:</p>
+									<!-- Button nicht mehr nötig.
                                     <a href="<?php echo 'saved_datasets/'.$courseID.'_'.$userID.'/data_'.$courseID.'_'.$userID.'.json'; ?>" download="<?php echo 'activitygraph_data_'.$courseID.'_'.$userID.'.json'; ?>" class="btn waves-effect waves-light grey darken-3 button">Raw Data (JSON)</a>
-									
+									-->
 									<form action='create_html.php' method='post' id='download_form_2'>
 										<a class="btn waves-effect waves-light grey darken-3 button ajax" id="html_btn_2">HTML Download</a>
 										<input type='hidden' value='<?php echo $courseID ?>' name='id'>
