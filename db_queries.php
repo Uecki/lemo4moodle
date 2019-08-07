@@ -58,7 +58,7 @@
 	# SQL Query -> ActivityChart (date, hits, user counter)	
 	$query = "SELECT  FROM_UNIXTIME (timecreated, '%d-%m-%Y') AS 'date', COUNT(action) AS 'allHits', count(DISTINCT userid) AS 'users', COUNT(case when userid = $userID then $userID end) AS 'ownHits'
 	FROM `mdl_logstore_standard_log` 
-	WHERE (action = 'viewed' AND courseid =  '4') OR (action = 'viewed' AND courseid = '".$courseID."')
+	WHERE (action = 'viewed' AND courseid = '".$courseID."')
 	#GROUP BY FROM_UNIXTIME (timecreated, '%m-%d-%y')
 	GROUP BY FROM_UNIXTIME (timecreated, '%y-%m-%d')
 	ORDER BY 'Datum'"; #Warum 'Datum' statt 'date'?--> aber kein Unterschied zu sehen.
