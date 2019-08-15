@@ -11,9 +11,10 @@ include_once (moodle_path.'/report/outline/index.php');
 include_once (moodle_path.'/config.php');
 ob_end_clean();
 
-#get courseID, userID,
+#get courseID, userID and allData (encoded data-arrays in JSON-format)
 $courseID = $_POST["id"];
 $userID = $_POST["userid"];
+$allData = json_decode($_POST["data"], true);
 
 # get today's date 
 $heute = date("d.m.y");
@@ -27,13 +28,17 @@ $pathForHTML = "saved_datasets/".$courseID."_".$userID."/data_".$courseID."_".$u
 # get data from moodle/report/activity_report (access possible through /report/outline/index.php)
 $table = html_writer::table($outlinetable);
 
+/*
 # load json file (located on web server)
 $file = 'saved_datasets/'.$courseID.'_'.$userID.'/data_'.$courseID.'_'.$userID.'.json';
 $existingData = json_decode(file_get_contents($file), true);
+*/
 
 $activity_array = array();
-$activity_array = $existingData[0];
-$barchart_array = $existingData[1];
+$activity_array = $allData[0];
+$barchart_array = $allData[1];
+
+
 
 # create lineChart data
 $lineChart = '';
@@ -56,6 +61,9 @@ foreach($activity_array as $fO){
     $f++;
 }
 
+
+
+
 #create bar chart data
 $j = 1;
 $leng = count($barchart_array);
@@ -71,6 +79,9 @@ foreach($barchart_array as $bar){
     }
     $j++;
 }
+
+
+
 
 # filter array
 $js_activity = json_encode($activity_array, JSON_NUMERIC_CHECK);
