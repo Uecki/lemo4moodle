@@ -257,12 +257,16 @@ global $CFG;
 			activity_chart.draw(data, options); 
             $('#datepicker_3').val("");
             $('#datepicker_4').val("");
+			
+			//console.log(<?php echo $lineChart; ?>);
         });
 
 
     });
     </script>
-     
+    
+	
+	<!-- Download funktioniert nicht, wenn das aktiv ist.
 	<script>
         $(document).ready(function() {
             drawBarChart();
@@ -272,7 +276,7 @@ global $CFG;
             drawLineChart();
         });
     </script>
-	
+	-->
 	 
     <script>
         $(document).ready(function() {
@@ -384,13 +388,18 @@ global $CFG;
                             <div class="input-field col s12">
                                 <div class="divider"></div>
                                 <p>Datensicherung:</p>
+								
                                 <!-- Button nicht mehr nötig.
 								<a href="<?php echo 'saved_datasets/'.$courseID.'_'.$userID.'/data_'.$courseID.'_'.$userID.'.json'; ?>" download="<?php echo 'activitygraph_data_'.$courseID.'_'.$userID.'.json'; ?>" class="btn waves-effect waves-light grey darken-3 button">Raw Data (JSON)</a>
 								-->
+								
                                 <form action='create_html.php' method='post' id='download_form_1'>
 									<a class="btn waves-effect waves-light grey darken-3 button ajax" id="html_btn_1">HTML Download</a>
+									<!-- Variables that are to be posted to create_html.php.  -->
 									<input type='hidden' value='<?php echo $courseID ?>' name='id'>
 									<input type='hidden' value='<?php echo $userID ?>' name='userid'>
+									<input type='hidden' value='<?php echo $allData ?>' name='data'>
+									
 								</form>
 								<!--
 								<a href="create_html.php" download="test.html" class="btn waves-effect waves-light grey darken-3 button ajax" id="html_btn_1">HTML Download</a>
@@ -417,13 +426,17 @@ global $CFG;
                                     <button class="btn waves-effect waves-light grey darken-3 button" type="submit" name="action" id="rst_btn_2">R&uuml;ckg&auml;ngig</button>
                                     <div class="divider"></div>
                                     <p>Datensicherung:</p>
+									
 									<!-- Button nicht mehr nötig.
                                     <a href="<?php echo 'saved_datasets/'.$courseID.'_'.$userID.'/data_'.$courseID.'_'.$userID.'.json'; ?>" download="<?php echo 'activitygraph_data_'.$courseID.'_'.$userID.'.json'; ?>" class="btn waves-effect waves-light grey darken-3 button">Raw Data (JSON)</a>
 									-->
+									
 									<form action='create_html.php' method='post' id='download_form_2'>
 										<a class="btn waves-effect waves-light grey darken-3 button ajax" id="html_btn_2">HTML Download</a>
+										<!-- Variables that are to be posted to create_html.php.  -->
 										<input type='hidden' value='<?php echo $courseID ?>' name='id'>
 										<input type='hidden' value='<?php echo $userID ?>' name='userid'>
+										<input type='hidden' value='<?php echo $fullData ?>' name='data'>
 								    </form>
 									<!--
                                     <a href="#" download="test.html" class="btn waves-effect waves-light grey darken-3 button ajax" id="html_btn_2">Download HTML</a>
