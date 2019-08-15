@@ -254,6 +254,7 @@
 		$j++;
 	}
 
+	
 	# save data as JSON
 	# create data_array (lineChartArray, barchart_data)
 	# data as JSON [activity_data[date, overallHits, ownHits, users], barchart_data[name, hits, users]]
@@ -262,13 +263,16 @@
 	$data_array[] = $barchart_data_array;
 	
 	
-	
+	/*
 	# path to json file | filename
 	$file = 'saved_datasets/'.$courseID.'_'.$userID.'/data_'.$courseID.'_'.$userID.'.json';
+    */
 
 	# encode data_array as JSON !JSON_NUMERIC_CHECK
-	$createJSON = json_encode($data_array, JSON_NUMERIC_CHECK);
+	# gets encoded only to be decoded in create_html.php,decode probably not necessary
+	$allData = json_encode($data_array, JSON_NUMERIC_CHECK);
 
+	/*
 	# check if $file exists
 	if (file_exists($file)){
 		# APPEND (ActivityData)
@@ -342,6 +346,8 @@
 		file_put_contents($file, $createJSON);
 		echo '<center>File did not exist. (deleted or never existed before) so it was freshly created</center>';
 	}
+	*/
+	
 	
 	
 	#disconnect from the database
