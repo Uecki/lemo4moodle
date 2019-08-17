@@ -70,8 +70,12 @@ global $CFG;
     
         // Load Charts and the corechart package.
   google.charts.load('current', {
-      'packages': ['bar', 'line', 'corechart', 'controls']
+      'packages': ['bar', 'line', 'treemap', 'corechart', 'controls']
   });
+
+
+
+	
 
   // Draw the bar chart when Charts is loaded
   google.charts.setOnLoadCallback(drawBarChart);
@@ -79,9 +83,12 @@ global $CFG;
   // Draw the line chart when Charts is loaded.
   google.charts.setOnLoadCallback(drawLineChart);
 
+  // Draw the treemap chart when Charts is loaded.
+  google.charts.setOnLoadCallback(drawTreeMap);
 
 
   var activity_chart;
+  
   
   // Callback that draws the bar chart
   function drawBarChart(){
@@ -141,6 +148,62 @@ global $CFG;
       activity_chart.draw(data, options);
 	  
     }
+	
+	//Callback that draws the treemap.
+	function drawTreeMap() {
+		var data = new google.visualization.arrayToDataTable([
+          ['Location', 'Parent', 'Market trade volume (size)', 'Market increase/decrease (color)'],
+          ['Global',    null,                 0,                               0],
+          ['America',   'Global',             0,                               0],
+          ['Europe',    'Global',             0,                               0],
+          ['Asia',      'Global',             0,                               0],
+          ['Australia', 'Global',             0,                               0],
+          ['Africa',    'Global',             0,                               0],
+          ['Brazil',    'America',            11,                              10],
+          ['USA',       'America',            52,                              31],
+          ['Mexico',    'America',            24,                              12],
+          ['Canada',    'America',            16,                              -23],
+          ['France',    'Europe',             42,                              -11],
+          ['Germany',   'Europe',             31,                              -2],
+          ['Sweden',    'Europe',             22,                              -13],
+          ['Italy',     'Europe',             17,                              4],
+          ['UK',        'Europe',             21,                              -5],
+          ['China',     'Asia',               36,                              4],
+          ['Japan',     'Asia',               20,                              -12],
+          ['India',     'Asia',               40,                              63],
+          ['Laos',      'Asia',               4,                               34],
+          ['Mongolia',  'Asia',               1,                               -5],
+          ['Israel',    'Asia',               12,                              24],
+          ['Iran',      'Asia',               18,                              13],
+          ['Pakistan',  'Asia',               11,                              -52],
+          ['Egypt',     'Africa',             21,                              0],
+          ['S. Africa', 'Africa',             30,                              43],
+          ['Sudan',     'Africa',             12,                              2],
+          ['Congo',     'Africa',             10,                              12],
+          ['Zaire',     'Africa',             8,                               10]
+        ]);
+		
+		tree = new google.visualization.TreeMap(document.getElementById('treemap'));
+
+        tree.draw(data, {
+          minColor: '#f00',
+          midColor: '#ddd',
+          maxColor: '#0d0',
+          headerHeight: 15,
+          fontColor: 'black',
+          showScale: true
+        });
+
+	}
+	
+	
+	//Callback that draws all charts on tab change.
+	//To be optimized to only load chart for current tab.
+	function drawAllCharts() {
+		drawBarChart();
+		drawLineChart();
+		drawTreeMap();
+	}
 	
 	
   
@@ -230,6 +293,7 @@ global $CFG;
             });
         });
     </script>
+	
     <!-- Reset Charts (BarChart, LineChart) -->
     <script>
     $(document).ready(function() {
@@ -264,19 +328,6 @@ global $CFG;
 
     });
     </script>
-    
-	
-	<!-- Download funktioniert nicht, wenn das aktiv ist.
-	<script>
-        $(document).ready(function() {
-            drawBarChart();
-        });
-		
-		$(document).ready(function() {
-            drawLineChart();
-        });
-    </script>
-	-->
 	 
     <script>
         $(document).ready(function() {
@@ -290,16 +341,11 @@ global $CFG;
     <!-- redraw charts when its tab is clicked -->
     <script>
     $(document).ready(function() {
-        $('#tab_barChart').click(function(){
-            drawBarChart();
-
-        });
-        $('#tab_activityChart').click(function(){
-            drawLineChart();
-
-        });
-    });
         
+		//Minimalize tabs are being initialized, callback function 'drawAllCharts' is executed on tab change
+		$('#tabs').tabs({ 'onShow': drawAllCharts });
+		
+	});
     </script>
 
 
@@ -360,12 +406,12 @@ global $CFG;
         </nav>
         <div class="row">
             <div class="col s12">
-                <ul class="tabs">
+                <ul class="tabs" id="tabs">
                     <li class="tab disabled">
                         <a href="#">Logdaten seit: <?php echo userdate($minlog);?></a>
                     </li>
                     <li class="tab" id="tab_barChart">
-                        <a class="active" href="#chart1">Bar Chart</a>
+                        <a class="active" href="#chart1" >Bar Chart</a>
                     </li>
                     <li class="tab" id="tab_activityChart">
                         <a href="#chart2">Activity Chart</a>
@@ -373,7 +419,7 @@ global $CFG;
                     <li class="tab disabled" id="tab_heatMap">
                         <a href="#chart3">not finished (heat map)</a>
                     </li>
-                    <li class="tab disabled" id="tab_treeMap">
+                    <li class="tab" id="tab_treeMap">
                         <a href="#chart4">not finished (tree map)</a>
                     </li>
                 </ul>
@@ -470,7 +516,7 @@ global $CFG;
             <div id="chart4" class="col s12">
                 <div class="row">
                     <div class="col s9 chart">
-                        <!-- place chart here -->
+                        <div  id="treemap" class="chart"></div>
                     </div>
                         <div id="options" class="col s3">
                             <div class="row">
@@ -488,6 +534,7 @@ global $CFG;
                 </div>
             </div>
     </div>
+	
     <div id="report">
         <ul class="collapsible z-depth-0" data-collapsible="accordion">
             <li>
