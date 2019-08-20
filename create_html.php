@@ -16,6 +16,8 @@ $courseID = $_POST["id"];
 $userID = $_POST["userid"];
 $allData = json_decode($_POST["data"], true);
 
+error_log($allData, 2, "test.txt");
+
 # get today's date 
 $heute = date("d.m.y");
 
@@ -37,6 +39,7 @@ $existingData = json_decode(file_get_contents($file), true);
 $activity_array = array();
 $activity_array = $allData[0];
 $barchart_array = $allData[1];
+$treemap_array  = $allData[2];
 
 
 
@@ -68,16 +71,42 @@ foreach($activity_array as $fO){
 $j = 1;
 $leng = count($barchart_array);
 $barchart_data_array = array();
-$bar_chart_data = "[['Dateiname', 'Zugriffe', 'Nutzer'],";
-
+$bar_chart_data = '[["Dateiname", "Zugriffe", "Nutzer"],';
 foreach($barchart_array as $bar){
     if ($j < $leng ){
-        $bar_chart_data .= "['".$bar[0]."', ".$bar[1].", ".$bar[2]."],";
+        $bar_chart_data .= '["'.$bar[0].'", '.$bar[1].', '.$bar[2].'],';
     }
     if($j == $leng ){
-        $bar_chart_data .= "['".$bar[0]."', ".$bar[1].", ".$bar[2]."]]";
+        $bar_chart_data .= '["'.$bar[0].'", '.$bar[1].', '.$bar[2].']]';
     }
     $j++;
+}
+
+
+#create treemap data
+$i = 1;
+$nodeTitle; #variable for node title
+$leng2 = count($treemap_array);
+$treemap_data_array = array();
+$treemap_data = 
+	"['Name', 'Parent', 'Size', 'Color'],
+		['Global', null, 0, 0],
+			['Dateien', 'Global', 0, 0],";
+
+foreach($treemap_array as $tree){
+	#if-clause for node title. (Maybe) To be expanded for forum, chat and assignments.
+	if ($tree[1] == 'content') {
+		$nodeTitle = 'Dateien';
+	}
+	#else if ()...
+	
+	if ($i < $leng ){
+		$treemap_data .= "['".$tree[0]."', '".$tree[1]."', ".$tree[2].", ".$tree[3]."],";
+	}
+	if($i == $leng ){
+		$treemap_data .= "['".$tree[0]."', '".$tree[1]."', ".$tree[2].", ".$tree[3]."]";
+	}
+	$i++;
 }
 
 
@@ -105,21 +134,27 @@ $content = '<!DOCTYPE html>
     <script src="https://www.google.com/jsapi"></script>
 
     <!-- Materialize CSS Compiled and minified CSS -->
-    <link rel="stylesheet" href="  
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	
+	<!-- Materialize CSS  Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
 
     <!-- Google Charts - Draw Charts -->
     <script>
 
 
         // Load Charts and the corechart package.
-        google.charts.load("current", { "packages": ["bar", "line", "corechart", "controls"] });
+        google.charts.load("current", { "packages": ["bar", "line", "treemap", "corechart", "controls"] });
 
         // Draw the bar chart when Charts is loaded
         google.charts.setOnLoadCallback(drawBarChart);
 
         // Draw the line chart when Charts is loaded.
         google.charts.setOnLoadCallback(drawLineChart);
+		
+		// Draw the treemap chart when Charts is loaded.
+		google.charts.setOnLoadCallback(drawTreeMap);
 
 
 
@@ -183,6 +218,39 @@ $content = '<!DOCTYPE html>
             activity_chart = new google.visualization.LineChart(document.getElementById("line_chart"));
             activity_chart.draw(data, options);
         }
+		
+		//Callback that draws the treemap.
+	function drawTreeMap() {
+
+		var data = new google.visualization.arrayToDataTable(['.$treemap_data.']);
+		
+		tree = new google.visualization.TreeMap(document.getElementById("treemap"));
+
+        tree.draw(data, {
+          minColor: "#f00",
+          midColor: "#ddd",
+          maxColor: "#0d0",
+          headerHeight: 15,
+          fontColor: "black",
+          highlightOnMouseOver: true,
+		  title: "TreeMap für die Anzahl der Klicks pro Datei. Rechtsklick, um eine Ebene nach oben zu gelangen.",
+		  generateTooltip: showTooltipTreemap
+        });
+		
+		function showTooltipTreemap(row, size, value) {
+			return "<div style='."'background:#fd9; padding:10px; border-style:solid'".'>" + " Anzahl der Klicks: " + size + " </div>";
+		}
+
+	}
+	
+	
+	//Callback that draws all charts on tab change.
+	//To be optimized to only load chart for current tab.
+	function drawAllCharts() {
+		drawBarChart();
+		drawLineChart();
+		drawTreeMap();
+	}
 
 
 
@@ -313,16 +381,15 @@ $content = '<!DOCTYPE html>
     <!-- redraw charts when its tab is clicked -->
     <script>
         $(document).ready(function () {
-            $("#tab_barChart").click(function () {
-                drawBarChart();
+            $(document).ready(function() {
+        
+				//Minimalize tabs are being initialized, callback function "drawAllCharts"is executed on tab change
+				$("#tabs").tabs({ "onShow": drawAllCharts });
+		
+			});
 
-            });
-            $("#tab_activityChart").click(function () {
-                drawLineChart();
 
-
-            });
-        });
+		});
 
     </script>
 
@@ -445,7 +512,7 @@ $content = '<!DOCTYPE html>
         </nav>
         <div class="row">
             <div class="col s12">
-                <ul class="tabs">
+                <ul class="tabs" id="tabs">
                     <li class="tab disabled">
                         <a href="#">Lokale Version erstellt: '.$heute.'</a>
                     </li>
@@ -458,8 +525,8 @@ $content = '<!DOCTYPE html>
                     <li class="tab disabled" id="tab_heatMap">
                         <a href="#chart3">not finished (heat map)</a>
                     </li>
-                    <li class="tab disabled" id="tab_treeMap">
-                        <a href="#chart4">not finished (tree map)</a>
+                    <li class="tab" id="tab_treeMap">
+                        <a href="#chart4">TreeMap</a>
                     </li>
                 </ul>
             </div>
@@ -513,7 +580,7 @@ $content = '<!DOCTYPE html>
             <div id="chart4" class="col s12">
                 <div class="row">
                     <div class="col s9 chart">
-                        <!-- place chart here -->
+                        <div  id="treemap" class="chart"></div>
                     </div>
                     <div id="options" class="col s3">
                         <div class="row">
@@ -545,6 +612,7 @@ $content = '<!DOCTYPE html>
         $(window).resize(function () {
             drawBarChart();
             drawLineChart();
+			drawTreeMap();
         });
 
     </script>

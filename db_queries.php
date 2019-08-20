@@ -228,8 +228,9 @@
 	}
 
 	# SQL Query for bar chart data
-	$query_barchart_data = "SELECT RESOURCE.id, FILES.contextid, FILES.component, FILES.filearea, FILES.filename, name, counter_hits, counter_user FROM 
-	(SELECT contextid, courseid, objectid, userid, count(objectid) AS counter_hits, count(DISTINCT userid) AS counter_user FROM mdl_logstore_standard_log WHERE `action`='viewed' AND `target`='course_module' GROUP BY courseid, objectid) AS LOGS 
+	$query_barchart_data = 
+	"SELECT RESOURCE.id, FILES.contextid, FILES.component, FILES.filearea, FILES.filename, name, counter_hits, counter_user 
+	FROM (SELECT contextid, courseid, objectid, userid, count(objectid) AS counter_hits, count(DISTINCT userid) AS counter_user FROM mdl_logstore_standard_log WHERE `action`='viewed' AND `target`='course_module' GROUP BY courseid, objectid) AS LOGS 
 	JOIN (SELECT contextid, component, filearea, itemid, filename FROM mdl_files WHERE `filename` != '.') AS FILES ON LOGS.contextid = FILES.contextid
 	JOIN (SELECT id FROM mdl_course) AS COURSE ON LOGS.courseid = COURSE.id
 	JOIN (SELECT mdl_resource.id, name, timemodified FROM mdl_resource) AS RESOURCE ON LOGS.objectid = RESOURCE.id WHERE `courseid` = '".$courseID."'";
@@ -249,19 +250,53 @@
 		}
 		if($j == $leng ){
 			$bar_chart_data .= "['".$bar->name."', ".$bar->counter_hits.", ".$bar->counter_user."]]";
+	
 		}
 		$barchart_data_array[] = array($bar->name, $bar->counter_hits, $bar->counter_user);
 		$j++;
 	}
 
+
+	#Use barchart query for treemap
+	$treemap = $barchart;
+	
+	
+	#create treemap data
+	$color = -50; #variable for node color
+	$i = 1;
+	$nodeTitle; #variable for node title
+	$leng2 = count($treemap);
+	$treemap_data_array = array();
+	$treemap_data = 
+		"['Name', 'Parent', 'Size', 'Color'],
+			['Global', null, 0, 0],
+				['Dateien', 'Global', 0, 0],";
+
+	foreach($treemap as $tree){
+		#if-clause for node title. (Maybe) To be expanded for forum, chat and assignments.
+		if ($tree->filearea == 'content') {
+			$nodeTitle = 'Dateien';
+		}
+		#else if ()...
+		
+		if ($i < $leng ){
+			$treemap_data .= "['".$tree->name."', '".$nodeTitle."', ".$tree->counter_hits.", ".$color."],";
+		}
+		if($i == $leng ){
+			$treemap_data .= "['".$tree->name."', '".$nodeTitle."', ".$tree->counter_hits.", ".$color."]";
+		}
+		$treemap_data_array[] = array($tree->name, $nodeTitle, $tree->counter_hits, $color);
+		$i++;
+		$color= $color+10;
+	}
 	
 	# save data as JSON
 	# create data_array (lineChartArray, barchart_data)
-	# data as JSON [activity_data[date, overallHits, ownHits, users], barchart_data[name, hits, users]]
+	# data as JSON [activity_data[date, overallHits, ownHits, users], barchart_data[name, hits, users], treemap_data[name, title, hits, color(as int)]]
 	$data_array = array();
 	$data_array[] = $lineChartArray;
 	$data_array[] = $barchart_data_array;
-	
+	$data_array[] = $treemap_data_array;
 	
 	/*
 	# path to json file | filename

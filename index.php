@@ -151,37 +151,8 @@ global $CFG;
 	
 	//Callback that draws the treemap.
 	function drawTreeMap() {
-		var data = new google.visualization.arrayToDataTable([
-          ['Location', 'Parent', 'Market trade volume (size)', 'Market increase/decrease (color)'],
-          ['Global',    null,                 0,                               0],
-          ['America',   'Global',             0,                               0],
-          ['Europe',    'Global',             0,                               0],
-          ['Asia',      'Global',             0,                               0],
-          ['Australia', 'Global',             0,                               0],
-          ['Africa',    'Global',             0,                               0],
-          ['Brazil',    'America',            11,                              10],
-          ['USA',       'America',            52,                              31],
-          ['Mexico',    'America',            24,                              12],
-          ['Canada',    'America',            16,                              -23],
-          ['France',    'Europe',             42,                              -11],
-          ['Germany',   'Europe',             31,                              -2],
-          ['Sweden',    'Europe',             22,                              -13],
-          ['Italy',     'Europe',             17,                              4],
-          ['UK',        'Europe',             21,                              -5],
-          ['China',     'Asia',               36,                              4],
-          ['Japan',     'Asia',               20,                              -12],
-          ['India',     'Asia',               40,                              63],
-          ['Laos',      'Asia',               4,                               34],
-          ['Mongolia',  'Asia',               1,                               -5],
-          ['Israel',    'Asia',               12,                              24],
-          ['Iran',      'Asia',               18,                              13],
-          ['Pakistan',  'Asia',               11,                              -52],
-          ['Egypt',     'Africa',             21,                              0],
-          ['S. Africa', 'Africa',             30,                              43],
-          ['Sudan',     'Africa',             12,                              2],
-          ['Congo',     'Africa',             10,                              12],
-          ['Zaire',     'Africa',             8,                               10]
-        ]);
+
+		var data = new google.visualization.arrayToDataTable([<?php echo $treemap_data; ?>]);
 		
 		tree = new google.visualization.TreeMap(document.getElementById('treemap'));
 
@@ -191,8 +162,14 @@ global $CFG;
           maxColor: '#0d0',
           headerHeight: 15,
           fontColor: 'black',
-          showScale: true
+          highlightOnMouseOver: true,
+		  title: 'TreeMap für die Anzahl der Klicks pro Datei. Rechtsklick, um eine Ebene nach oben zu gelangen.',
+		  generateTooltip: showTooltipTreemap
         });
+		
+		function showTooltipTreemap(row, size, value) {
+			return '<div style="background:#fd9; padding:10px; border-style:solid">' + ' Anzahl der Klicks: ' + size + ' </div>';
+		}
 
 	}
 	
@@ -322,7 +299,8 @@ global $CFG;
             $('#datepicker_3').val("");
             $('#datepicker_4').val("");
 			
-			//console.log(<?php echo $lineChart; ?>);
+			//var test = "<?php echo $allData ?>";
+			//console.log(test);
         });
 
 
@@ -379,6 +357,14 @@ global $CFG;
 			$('#html_btn_2').click(function() {
 				document.getElementById("download_form_2").submit();
 			});
+			
+			$('#html_btn_3').click(function() {
+				document.getElementById("download_form_3").submit();
+			});
+			
+			$('#html_btn_4').click(function() {
+				document.getElementById("download_form_4").submit();
+			});
         });
     </script>
 
@@ -420,7 +406,7 @@ global $CFG;
                         <a href="#chart3">not finished (heat map)</a>
                     </li>
                     <li class="tab" id="tab_treeMap">
-                        <a href="#chart4">not finished (tree map)</a>
+                        <a href="#chart4">Treemap</a>
                     </li>
                 </ul>
             </div>
@@ -477,12 +463,12 @@ global $CFG;
                                     <a href="<?php echo 'saved_datasets/'.$courseID.'_'.$userID.'/data_'.$courseID.'_'.$userID.'.json'; ?>" download="<?php echo 'activitygraph_data_'.$courseID.'_'.$userID.'.json'; ?>" class="btn waves-effect waves-light grey darken-3 button">Raw Data (JSON)</a>
 									-->
 									
-									<form action='create_html.php' method='post' id='download_form_2'>
+									<form action='create_html.php' method='post' id='download_form_3'>
 										<a class="btn waves-effect waves-light grey darken-3 button ajax" id="html_btn_2">HTML Download</a>
 										<!-- Variables that are to be posted to create_html.php.  -->
 										<input type='hidden' value='<?php echo $courseID ?>' name='id'>
 										<input type='hidden' value='<?php echo $userID ?>' name='userid'>
-										<input type='hidden' value='<?php echo $fullData ?>' name='data'>
+										<input type='hidden' value='<?php echo $allData ?>' name='data'>
 								    </form>
 									<!--
                                     <a href="#" download="test.html" class="btn waves-effect waves-light grey darken-3 button ajax" id="html_btn_2">Download HTML</a>
@@ -501,13 +487,17 @@ global $CFG;
                         <div id="options" class="col s3">
                             <div class="row">
                                 <div class="input-field col s12">
-                                    <input placeholder="Beginn" type="text" class="datepick " id="datepicker_5">
-                                    <input placeholder="Ende" type="text" class="datepick " id="datepicker_6">
-                                    <button class="btn waves-effect waves-light grey button" type="submit" name="action">Aktualisieren</button>
-                                    <button class="btn waves-effect waves-light grey button" type="submit" name="action">R&uuml;ckg&auml;ngig</button>
+                                    <button class="btn waves-effect waves-light grey button" type="submit" name="action" id="rst_btn_3">R&uuml;ckg&auml;ngig</button>
                                     <div class="divider"></div>
-                                    <a href="<?php echo 'saved_datasets/'.$courseID.'_'.$userID.'/data_'.$courseID.'_'.$userID.'.json'; ?>" download="<?php echo 'activitygraph_data_'.$courseID.'_'.$userID.'.json'; ?>"><button class="btn waves-effect waves-light grey button" type="submit" name="action" id="json_btn_3">JSON Download</button></a>
-                                    <a href="#" download="test.html" class="btn waves-effect waves-light grey button" id="html_btn_2"><!--HTML erzeugen-->Download HTML</a>
+                                    <p>Datensicherung:</p>
+									
+									<form action='create_html.php' method='post' id='download_form_2'>
+										<a class="btn waves-effect waves-light grey darken-3 button ajax" id="html_btn_3">HTML Download</a>
+										<!-- Variables that are to be posted to create_html.php.  -->
+										<input type='hidden' value='<?php echo $courseID ?>' name='id'>
+										<input type='hidden' value='<?php echo $userID ?>' name='userid'>
+										<input type='hidden' value='<?php echo $fullData ?>' name='data'>
+								    </form>
                                 </div>                               
                             </div>
                     </div>
@@ -521,13 +511,16 @@ global $CFG;
                         <div id="options" class="col s3">
                             <div class="row">
                                 <div class="input-field col s12">
-                                    <input placeholder="Beginn" type="text" class="datepick " id="datepicker_7">
-                                    <input placeholder="Ende" type="text" class="datepick " id="datepicker_8">
-                                    <button class="btn waves-effect waves-light grey button" type="submit" name="action">Aktualisieren</button>
-                                    <button class="btn waves-effect waves-light grey button" type="submit" name="action">R&uuml;ckg&auml;ngig</button>
                                     <div class="divider"></div>
-                                    <a href="<?php echo 'saved_datasets/'.$courseID.'_'.$userID.'/data_'.$courseID.'_'.$userID.'.json'; ?>" download="<?php echo 'activitygraph_data_'.$courseID.'_'.$userID.'.json'; ?>"><button class="btn waves-effect waves-light grey button" type="submit" name="action" id="json_btn_4">JSON Download</button></a>
-                                    <a href="<?php echo 'saved_datasets/data_'.$courseID.'_'.$userID.'.html'; ?>" download="<?php echo 'activitygraph_html_'.$courseID.'_'.$userID.'.html'; ?>"><button class="btn waves-effect waves-light grey button" type="submit" name="action" id="html_btn_4">HTML Download</button></a>
+                                    <p>Datensicherung:</p>
+									
+									<form action='create_html.php' method='post' id='download_form_4'>
+										<a class="btn waves-effect waves-light grey darken-3 button ajax" id="html_btn_4">HTML Download</a>
+										<!-- Variables that are to be posted to create_html.php.  -->
+										<input type='hidden' value='<?php echo $courseID ?>' name='id'>
+										<input type='hidden' value='<?php echo $userID ?>' name='userid'>
+										<input type='hidden' value='<?php echo $allData ?>' name='data'>
+								    </form>
                                 </div>                               
                             </div>
                     </div>
@@ -558,6 +551,7 @@ global $CFG;
 $(window).resize(function(){
   drawBarChart();
   drawLineChart();
+  drawTreeMap();
 });
 
 </script>
