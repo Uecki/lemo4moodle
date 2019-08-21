@@ -57,6 +57,11 @@ global $CFG;
 
     <!-- Google Icons -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	
+	<!-- Highcharts -->
+	<script src="https://code.highcharts.com/highcharts.js"></script>
+	<script src="https://code.highcharts.com/modules/heatmap.js"></script>
+	<script src="https://code.highcharts.com/modules/exporting.js"></script>
 
     <!-- activityGraph.css -->
     <link rel="stylesheet" href="activitygraph.css">
@@ -73,18 +78,8 @@ global $CFG;
       'packages': ['bar', 'line', 'treemap', 'corechart', 'controls']
   });
 
-
-
-	
-
-  // Draw the bar chart when Charts is loaded
-  google.charts.setOnLoadCallback(drawBarChart);
- 	
-  // Draw the line chart when Charts is loaded.
-  google.charts.setOnLoadCallback(drawLineChart);
-
-  // Draw the treemap chart when Charts is loaded.
-  google.charts.setOnLoadCallback(drawTreeMap);
+  // Draw all charts when Charts is loaded. (Even the Highchart, which is not a Google Charts).
+  google.charts.setOnLoadCallback(drawAllCharts);
 
 
   var activity_chart;
@@ -173,6 +168,66 @@ global $CFG;
 
 	}
 	
+	//Callback that draws the heatmap.
+	function drawHeatMap() {
+		Highcharts.chart('heatmap', {
+
+			chart: {
+				type: 'heatmap',
+				marginTop: 40,
+				marginBottom: 80,
+				plotBorderWidth: 1
+			},
+
+
+			title: {
+				text: 'Sales per employee per weekday'
+			},
+
+			xAxis: {
+				categories: ['Alexander', 'Marie', 'Maximilian', 'Sophia', 'Lukas', 'Maria', 'Leon', 'Anna', 'Tim', 'Laura']
+			},
+
+			yAxis: {
+				categories: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+				title: null
+			},
+
+			colorAxis: {
+				min: 0,
+				minColor: '#FFFFFF',
+				maxColor: Highcharts.getOptions().colors[0]
+			},
+
+			legend: {
+				align: 'right',
+				layout: 'vertical',
+				margin: 0,
+				verticalAlign: 'top',
+				y: 25,
+				symbolHeight: 280
+			},
+
+			tooltip: {
+				formatter: function () {
+					return '<b>' + this.series.xAxis.categories[this.point.x] + '</b> sold <br><b>' +
+						this.point.value + '</b> items on <br><b>' + this.series.yAxis.categories[this.point.y] + '</b>';
+				}
+			},
+
+			series: [{
+				name: 'Sales per employee',
+				borderWidth: 1,
+				data: [[0, 0, 10], [0, 1, 19], [0, 2, 8], [0, 3, 24], [0, 4, 67], [1, 0, 92], [1, 1, 58], [1, 2, 78], [1, 3, 117], [1, 4, 48], [2, 0, 35], [2, 1, 15], [2, 2, 123], [2, 3, 64], [2, 4, 52], [3, 0, 72], [3, 1, 132], [3, 2, 114], [3, 3, 19], [3, 4, 16], [4, 0, 38], [4, 1, 5], [4, 2, 8], [4, 3, 117], [4, 4, 115], [5, 0, 88], [5, 1, 32], [5, 2, 12], [5, 3, 6], [5, 4, 120], [6, 0, 13], [6, 1, 44], [6, 2, 88], [6, 3, 98], [6, 4, 96], [7, 0, 31], [7, 1, 1], [7, 2, 82], [7, 3, 32], [7, 4, 30], [8, 0, 85], [8, 1, 97], [8, 2, 123], [8, 3, 64], [8, 4, 84], [9, 0, 47], [9, 1, 114], [9, 2, 31], [9, 3, 48], [9, 4, 91]],
+				dataLabels: {
+					enabled: true,
+					color: '#000000'
+				}
+			}]
+
+		});
+	}
+	
 	
 	//Callback that draws all charts on tab change.
 	//To be optimized to only load chart for current tab.
@@ -180,14 +235,14 @@ global $CFG;
 		drawBarChart();
 		drawLineChart();
 		drawTreeMap();
+		drawHeatMap();
 	}
 	
+	//_________________________________________________________________________
+
 	
-  
 
-    
     </script>
-
 
     
     <script>
@@ -402,7 +457,7 @@ global $CFG;
                     <li class="tab" id="tab_activityChart">
                         <a href="#chart2">Activity Chart</a>
                     </li>
-                    <li class="tab disabled" id="tab_heatMap">
+                    <li class="tab" id="tab_heatMap">
                         <a href="#chart3">not finished (heat map)</a>
                     </li>
                     <li class="tab" id="tab_treeMap">
@@ -418,7 +473,6 @@ global $CFG;
                     <div id="options" class="col s3">
                         <div class="row">
                             <div class="input-field col s12">
-                                <div class="divider"></div>
                                 <p>Datensicherung:</p>
 								
                                 <!-- Button nicht mehr nötig.
@@ -482,13 +536,15 @@ global $CFG;
             <div id="chart3" class="col s12">
                 <div class="row">
                     <div class="col s9 chart">
-                       <!-- place chart here -->
+                       <div  id="heatmap" class="chart"></div>
                     </div>
                         <div id="options" class="col s3">
                             <div class="row">
                                 <div class="input-field col s12">
+									<!--
                                     <button class="btn waves-effect waves-light grey button" type="submit" name="action" id="rst_btn_3">R&uuml;ckg&auml;ngig</button>
                                     <div class="divider"></div>
+									-->
                                     <p>Datensicherung:</p>
 									
 									<form action='create_html.php' method='post' id='download_form_2'>
@@ -511,7 +567,6 @@ global $CFG;
                         <div id="options" class="col s3">
                             <div class="row">
                                 <div class="input-field col s12">
-                                    <div class="divider"></div>
                                     <p>Datensicherung:</p>
 									
 									<form action='create_html.php' method='post' id='download_form_4'>
