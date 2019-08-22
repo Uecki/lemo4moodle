@@ -257,6 +257,176 @@
 	}
 
 
+	#Query for heatmap. Only minor changes to activity chart query.
+
+	$query_heatmap = "SELECT  id, FROM_UNIXTIME(timecreated, '%W') AS 'weekday', FROM_UNIXTIME(timecreated, '%k') AS 'hour', COUNT(action) AS 'allHits',  COUNT(case when userid = $userID then $userID end) AS 'ownHits'
+	FROM `mdl_logstore_standard_log` 
+	WHERE (action = 'viewed' AND courseid = '".$courseID."')
+	GROUP BY hour";
+	
+	$heatmap = $DB->get_records_sql($query_heatmap);
+	//var_dump($heatmap);
+
+	#Create heatmap data
+	
+	$rowHeatmap = 0;
+	$colAllHeatmap = 0;
+	$colOwnHeatmap = 1;
+	$lengHeat  = count($heatmap);
+	$k = 1;
+	$heatmap_data = "[";
+	$heatmap_data_array = array();
+	
+		#Array for total number of weekday actions
+	$totalHits = array(
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+	);
+	
+		#Array for total  number of own weekday actions
+	$totalOwnHits = array(
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+		0,
+	);
+	
+	/*  Noch unsicher, was mit 'average' gemeint ist.
+	
+		#Array for average number of weekday actions
+	$avgHits = array(
+		0 = 0,
+		1 = 0,
+		2 = 0,
+		3 = 0,
+		4 = 0,
+		5 = 0,
+		6 = 0,
+	);
+	
+		#Array for average number of own weekday actions
+	$totalOwnHits = array(
+		0 = 0,
+		1 = 0,
+		2 = 0,
+		3 = 0,
+		4 = 0,
+		5 = 0,
+		6 = 0,
+	);
+	
+	*/
+	
+
+	
+	foreach($heatmap as $heat) {
+		
+		#link timespan to column in heatmap
+		if((int)$heat->hour >= 0  && (int)$heat->hour < 6) {
+			$colAllHeatmap = 0;
+			$colOwnHeatmap = 1;			
+		}
+		elseif((int)$heat->hour >= 6  && (int)$heat->hour < 12) {
+			$colAllHeatmap = 2;
+			$colOwnHeatmap = 3;			
+		}
+		elseif((int)$heat->hour >= 12  && (int)$heat->hour < 18) {
+			$colAllHeatmap = 4;
+			$colOwnHeatmap = 5;			
+		}
+		elseif((int)$heat->hour >= 18  && (int)$heat->hour < 24) {
+			$colAllHeatmap = 6;
+			$colOwnHeatmap = 7;			
+		}
+		
+		
+		#link weekday to row in heatmap
+		if($heat->weekday == 'Monday') {
+			$rowHeatmap = 0;
+			$totalHits[0]  += (int)$heat->allhits;
+			$totalOwnHits[0]  += (int)$heat->ownhits;
+		}
+		elseif($heat->weekday == 'Tuesday') {
+			$rowHeatmap = 1;
+			$totalHits[1]  += (int)$heat->allhits;
+			$totalOwnHits[1]  += (int)$heat->ownhits;
+		}
+		elseif($heat->weekday == 'Wednesday') {
+			$rowHeatmap = 2;
+			$totalHits[2]  += (int)$heat->allhits;
+			$totalOwnHits[2]  += (int)$heat->ownhits;
+		}
+		elseif($heat->weekday == 'Thrusday') {
+			$rowHeatmap = 3;
+			$totalHits[3]  += (int)$heat->allhits;
+			$totalOwnHits[3]  += (int)$heat->ownhits;
+		}
+		elseif($heat->weekday == 'Friday') {
+			$rowHeatmap = 4;
+			$totalHits[4]  += (int)$heat->allhits;
+			$totalOwnHits[4]  += (int)$heat->ownhits;
+		}
+		elseif($heat->weekday == 'Saturday') {
+			$rowHeatmap = 5;
+			$totalHits[5]  += (int)$heat->allhits;
+			$totalOwnHits[5]  += (int)$heat->ownhits;
+		}
+		elseif($heat->weekday == 'Sunday') {
+			$rowHeatmap = 6;
+			$totalHits[6]  += (int)$heat->allhits;
+			$totalOwnHits[6]  += (int)$heat->ownhits;
+		}
+		
+		$heatmap_data .= "[".$colAllHeatmap.", ".$rowHeatmap.", ".(int)$heat->allhits."], [".$colOwnHeatmap.", ".$rowHeatmap.", ".(int)$heat->ownhits."]";
+		$heatmap_data_array[] = array($colAllHeatmap, $rowHeatmap, (int)$heat->allhits);
+		$heatmap_data_array[] = array($colOwnHeatmap, $rowHeatmap, (int)$heat->ownhits);
+		
+		
+		#find last element of $heatmap
+		if($k < $lengHeat) {
+			$heatmap_data .= ", ";
+		}
+		else {
+			$x = 8; #for total and average hits
+			while($x <= 11) {
+				$y = 0; #for weekdays
+				while($y <= 6) {
+					if ($x == 8) {
+						$heatmap_data .= ", [".$x.", ".$y.", ".$totalHits[$y]."]";
+						$heatmap_data_array[] = array($x, $y, $totalHits[$y]);
+					}
+					elseif ($x == 9) {
+						$heatmap_data .= ", [".$x.", ".$y.", ".$totalOwnHits[$y]."]";
+						$heatmap_data_array[] = array($x, $y, $totalOwnHits[$y]);
+					}
+					elseif ($x == 10) {
+						$heatmap_data .= ", [".$x.", ".$y.", ".round(($totalHits[$y]/7.0), 2)."]";
+						$heatmap_data_array[] = array($x, $y, round(($totalHits[$y]/7.0), 2));
+					}
+					elseif ($x == 11) {
+						$heatmap_data .= ", [".$x.", ".$y.", ".round(($totalOwnHits[$y]/7.0), 2)."]";
+						$heatmap_data_array[] = array($x, $y, round(($totalOwnHits[$y]/7.0), 2));
+					}
+				$y++;
+				}
+			$x++;
+			}
+			
+			$heatmap_data.= "]";
+		}
+		$k++;
+	}
+
+	
+
 	#Use barchart query for treemap
 	$treemap = $barchart;
 	
@@ -265,10 +435,10 @@
 	$color = -50; #variable for node color
 	$i = 1;
 	$nodeTitle; #variable for node title
-	$leng2 = count($treemap);
+	$lengTree = count($treemap);
 	$treemap_data_array = array();
 	$treemap_data = 
-		"['Name', 'Parent', 'Size', 'Color'],
+		"[['Name', 'Parent', 'Size', 'Color'],
 			['Global', null, 0, 0],
 				['Dateien', 'Global', 0, 0],";
 
@@ -279,15 +449,15 @@
 		}
 		#else if ()...
 		
-		if ($i < $leng ){
+		if ($i < $lengTree ){
 			$treemap_data .= "['".$tree->name."', '".$nodeTitle."', ".$tree->counter_hits.", ".$color."],";
 		}
-		if($i == $leng ){
-			$treemap_data .= "['".$tree->name."', '".$nodeTitle."', ".$tree->counter_hits.", ".$color."]";
+		if($i == $lengTree ){
+			$treemap_data .= "['".$tree->name."', '".$nodeTitle."', ".$tree->counter_hits.", ".$color."]]";
 		}
 		$treemap_data_array[] = array($tree->name, $nodeTitle, $tree->counter_hits, $color);
 		$i++;
-		$color= $color+10;
+		$color = $color+10;
 	}
 	
 	# save data as JSON
@@ -297,6 +467,7 @@
 	$data_array[] = $lineChartArray;
 	$data_array[] = $barchart_data_array;
 	$data_array[] = $treemap_data_array;
+	$data_array[] = $heatmap_data_array;
 	
 	/*
 	# path to json file | filename

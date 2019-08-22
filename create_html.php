@@ -16,8 +16,6 @@ $courseID = $_POST["id"];
 $userID = $_POST["userid"];
 $allData = json_decode($_POST["data"], true);
 
-error_log($allData, 2, "test.txt");
-
 # get today's date 
 $heute = date("d.m.y");
 
@@ -40,6 +38,7 @@ $activity_array = array();
 $activity_array = $allData[0];
 $barchart_array = $allData[1];
 $treemap_array  = $allData[2];
+$heatmap_array = $allData[3];
 
 
 
@@ -86,10 +85,10 @@ foreach($barchart_array as $bar){
 #create treemap data
 $i = 1;
 $nodeTitle; #variable for node title
-$leng2 = count($treemap_array);
+$lengTree = count($treemap_array);
 $treemap_data_array = array();
 $treemap_data = 
-	"['Name', 'Parent', 'Size', 'Color'],
+	"[['Name', 'Parent', 'Size', 'Color'],
 		['Global', null, 0, 0],
 			['Dateien', 'Global', 0, 0],";
 
@@ -100,15 +99,30 @@ foreach($treemap_array as $tree){
 	}
 	#else if ()...
 	
-	if ($i < $leng ){
+	if ($i < $lengTree ){
 		$treemap_data .= "['".$tree[0]."', '".$tree[1]."', ".$tree[2].", ".$tree[3]."],";
 	}
-	if($i == $leng ){
-		$treemap_data .= "['".$tree[0]."', '".$tree[1]."', ".$tree[2].", ".$tree[3]."]";
+	if($i == $lengTree ){
+		$treemap_data .= "['".$tree[0]."', '".$tree[1]."', ".$tree[2].", ".$tree[3]."]]";
 	}
 	$i++;
 }
 
+
+#create heatmap data
+$k = 1;
+$lengHeat = count($heatmap_array);
+$heatmap_data = "[";
+
+foreach($heatmap_array as $heat) {
+	if ($k < $lengHeat){
+		$heatmap_data .= "[".$heat[0].", ".$heat[1].", ".$heat[2]."], ";
+	}
+	elseif ($k == $lengHeat) {
+		$heatmap_data .= "[".$heat[0].", ".$heat[1].", ".$heat[2]."]]";
+	}
+	$k++;
+}
 
 
 
@@ -218,10 +232,10 @@ $content = '<!DOCTYPE html>
             activity_chart.draw(data, options);
         }
 		
-		//Callback that draws the treemap.
+	//Callback that draws the treemap.
 	function drawTreeMap() {
 
-		var data = new google.visualization.arrayToDataTable(['.$treemap_data.']);
+		var data = new google.visualization.arrayToDataTable('.$treemap_data.');
 		
 		tree = new google.visualization.TreeMap(document.getElementById("treemap"));
 
@@ -256,15 +270,15 @@ $content = '<!DOCTYPE html>
 
 
 			title: {
-				text: "Sales per employee per weekday"
+				text: "Aktionen pro Tag pro Zeitraum"
 			},
 
 			xAxis: {
-				categories: ["Alexander", "Marie", "Maximilian", "Sophia", "Lukas", "Maria", "Leon", "Anna", "Tim", "Laura"]
+				categories: ["ALLE<br>00:00-06:00", "EIGENE<br>00:00-06:00", "ALLE<br>06:00-12:00", "EIGENE<br>06:00-12:00", "ALLE<br>12:00-18:00", "EIGENE<br>12:00-18:00","ALLE<br>18:00-24:00", "EIGENE<br>18:00-24:00",  "ALLE<br>Gesamt", "EIGENE<br>Gesamt", "ALLE<br>Durchschnitt", "EIGENE<br>Durchschnitt"]
 			},
 
 			yAxis: {
-				categories: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+				categories: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
 				title: null
 			},
 
@@ -282,18 +296,14 @@ $content = '<!DOCTYPE html>
 				y: 25,
 				symbolHeight: 280
 			},
-
-			tooltip: {
-				formatter: function () {
-					return "<b>" + this.series.xAxis.categories[this.point.x] + "</b> sold <br><b>" +
-						this.point.value + "</b> items on <br><b>" + this.series.yAxis.categories[this.point.y] + "</b>";
-				}
-			},
+			
+			tooltip: false,
+			
 
 			series: [{
-				name: "Sales per employee",
+				name: "Actions per day",
 				borderWidth: 1,
-				data: [[0, 0, 10], [0, 1, 19], [0, 2, 8], [0, 3, 24], [0, 4, 67], [1, 0, 92], [1, 1, 58], [1, 2, 78], [1, 3, 117], [1, 4, 48], [2, 0, 35], [2, 1, 15], [2, 2, 123], [2, 3, 64], [2, 4, 52], [3, 0, 72], [3, 1, 132], [3, 2, 114], [3, 3, 19], [3, 4, 16], [4, 0, 38], [4, 1, 5], [4, 2, 8], [4, 3, 117], [4, 4, 115], [5, 0, 88], [5, 1, 32], [5, 2, 12], [5, 3, 6], [5, 4, 120], [6, 0, 13], [6, 1, 44], [6, 2, 88], [6, 3, 98], [6, 4, 96], [7, 0, 31], [7, 1, 1], [7, 2, 82], [7, 3, 32], [7, 4, 30], [8, 0, 85], [8, 1, 97], [8, 2, 123], [8, 3, 64], [8, 4, 84], [9, 0, 47], [9, 1, 114], [9, 2, 31], [9, 3, 48], [9, 4, 91]],
+				data: '.$heatmap_data.',
 				dataLabels: {
 					enabled: true,
 					color: "#000000"
