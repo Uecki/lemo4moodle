@@ -228,12 +228,21 @@
 	}
 
 	# SQL Query for bar chart data
+	
+	/* This Query is not working as expected, a lot  of  unneccessary informations are included
 	$query_barchart_data = 
 	"SELECT RESOURCE.id, FILES.contextid, FILES.component, FILES.filearea, FILES.filename, name, counter_hits, counter_user 
 	FROM (SELECT contextid, courseid, objectid, userid, count(objectid) AS counter_hits, count(DISTINCT userid) AS counter_user FROM mdl_logstore_standard_log WHERE `action`='viewed' AND `target`='course_module' GROUP BY courseid, objectid) AS LOGS 
 	JOIN (SELECT contextid, component, filearea, itemid, filename FROM mdl_files WHERE `filename` != '.') AS FILES ON LOGS.contextid = FILES.contextid
 	JOIN (SELECT id FROM mdl_course) AS COURSE ON LOGS.courseid = COURSE.id
 	JOIN (SELECT mdl_resource.id, name, timemodified FROM mdl_resource) AS RESOURCE ON LOGS.objectid = RESOURCE.id WHERE `courseid` = '".$courseID."'";
+	*/
+	
+	$query_barchart_data = "SELECT RESOURCE.id, name, counter_hits, counter_user 
+	FROM (SELECT contextid, courseid, objectid, userid, count(objectid) AS counter_hits, count(DISTINCT userid) AS counter_user FROM mdl_logstore_standard_log WHERE `action`='viewed' AND `target`='course_module' GROUP BY courseid, objectid) AS LOGS 
+	JOIN (SELECT id FROM mdl_course) AS COURSE ON LOGS.courseid = COURSE.id
+	JOIN (SELECT mdl_resource.id, name, timemodified FROM mdl_resource) AS RESOURCE ON LOGS.objectid = RESOURCE.id WHERE `courseid` = '".$courseID."'";
+	
 	
 	# perform SQL-Query 
 	$barchart = $DB->get_records_sql($query_barchart_data);
@@ -434,19 +443,21 @@
 	#create treemap data
 	$color = -50; #variable for node color
 	$i = 1;
-	$nodeTitle; #variable for node title
+	$nodeTitle = 'Global'; #variable for node title
 	$lengTree = count($treemap);
 	$treemap_data_array = array();
 	$treemap_data = 
 		"[['Name', 'Parent', 'Size', 'Color'],
-			['Global', null, 0, 0],
-				['Dateien', 'Global', 0, 0],";
+			['Global', null, 0, 0],";
+				#['Dateien', 'Global', 0, 0],";
 
 	foreach($treemap as $tree){
 		#if-clause for node title. (Maybe) To be expanded for forum, chat and assignments.
+		/*
 		if ($tree->filearea == 'content') {
 			$nodeTitle = 'Dateien';
 		}
+		*/
 		#else if ()...
 		
 		if ($i < $lengTree ){
