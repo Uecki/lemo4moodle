@@ -546,7 +546,7 @@ global $CFG;
 										<!-- Variables that are to be posted to create_html.php.  -->
 										<input type='hidden' value='<?php echo $courseID ?>' name='id'>
 										<input type='hidden' value='<?php echo $userID ?>' name='userid'>
-										<input type='hidden' value='<?php echo $fullData ?>' name='data'>
+										<input type='hidden' value='<?php echo $allData ?>' name='data'>
 								    </form>
                                 </div>                               
                             </div>
