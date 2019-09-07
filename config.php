@@ -7,9 +7,13 @@ const DB_USER = 'root';
 const DB_PASS = '';
 const DB_NAME = 'moodle';
 
-# path to moodle files
+# path to moodle files (variable value assigned to constant 'moodle_path')
 
-const moodle_path = 'D:/XAMPP/htdocs/moodle';
+$dir = dirname(__FILE__);
+$shortenedPath = str_replace("blocks\activitygraph", "", $dir);
+$realPath = str_replace("\\", "/", $shortenedPath);
+define('moodle_path', $realPath);	
+//const moodle_path = 'D:/XAMPP/htdocs/moodle';
 
 # web url to moodle page (HWR : www.moodle.hwr-berlin.de)
 const moodle_url = 'http://localhost:8080/moodle';
