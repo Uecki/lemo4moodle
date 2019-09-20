@@ -262,6 +262,7 @@ global $CFG;
 			var datum = Date.parse(strDate);
 			return datum/1000;
 		}
+		
         $(document).ready(function() {
             $('#dp_button_2').click(function() {
                 var start = document.getElementById('datepicker_3').value;

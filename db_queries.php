@@ -424,11 +424,23 @@
 						$heatmap_data .= ", [".$x.", ".$y.", ".round(($totalOwnHits[$y]/7.0), 2)."]";
 						$heatmap_data_array[] = array($x, $y, round(($totalOwnHits[$y]/7.0), 2));
 					}
-				$y++;
+					$y++;
 				}
-			$x++;
+				$x++;
 			}
 			
+			/* Not working as planned, colours of cells not added until mouseover.
+			#filler for missing days
+			$counterRow = 0;
+			while($counterRow <= 6) {
+				$counterCol = 0;
+				while($counterCol <= 11) {
+					$heatmap_data .= ", [".$counterCol.",".$counterRow.",0]";
+					$heatmap_data_array[] = array($counterCol, $counterRow, 0);
+					$counterCol++;
+				}
+				$counterRow++;
+			}*/
 			$heatmap_data.= "]";
 		}
 		$k++;
