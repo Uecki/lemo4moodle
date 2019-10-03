@@ -66,81 +66,81 @@ global $CFG;
     <!-- activityGraph.css -->
     <link rel="stylesheet" href="activitygraph.css">
 
-      <!-- report_styles.css -->
-      <link rel="stylesheet" href="styles.css">
-
-    <!-- Google Charts - Draw Charts -->
+	<!-- report_styles.css -->
+	<link rel="stylesheet" href="styles.css">
+	
+	<!-- Google Charts - Draw Charts -->
     <script>
 
     
         // Load Charts and the corechart package.
-  google.charts.load('current', {
-      'packages': ['bar', 'line', 'treemap', 'corechart', 'controls']
-  });
+	google.charts.load('current', {
+	  'packages': ['bar', 'line', 'treemap', 'corechart', 'controls']
+	});
 
-  // Draw all charts when Charts is loaded. (Even the Highchart, which is not a Google Charts).
-  google.charts.setOnLoadCallback(drawAllCharts);
+	// Draw all charts when Charts is loaded. (Even the Highchart, which is not a Google Charts).
+	google.charts.setOnLoadCallback(drawAllCharts);
 
 
-  var activity_chart;
-  
-  
-  // Callback that draws the bar chart
-  function drawBarChart(){
+	var activity_chart;
+
+
+	// Callback that draws the bar chart
+	function drawBarChart(){
 	var data = google.visualization.arrayToDataTable(<?php echo $bar_chart_data; ?>);
-                
-                        var materialOptions_BarChart = {
-                          chart: {
-                            title: 'Zugriffe und Nutzer pro Datei'
-                          },
-                          axes: {
-                            x: {
-                                distance: {label: 'Dateiname'} // bottom x-axis.
-                            },
-                            y: {
-                                distance: {label: 'Zugriffe'} // Left y-axis.
-                            }
-                          },
-        				  legend: {
-        					position: 'none'
-        					 
-        				  },
-						  bars: 'horizontal'
-                        };
-                
-                        // Instantiate and draw the bar chart 
-        				var materialBarChart = new google.charts.Bar(document.getElementById('bar_chart'));
-                        materialBarChart.draw(data, google.charts.Bar.convertOptions(materialOptions_BarChart));
-  
-  }
+				
+		var materialOptions_BarChart = {
+			chart: {
+				title: 'Zugriffe und Nutzer pro Datei'
+			},
+			axes: {
+				x: {
+					distance: {label: 'Dateiname'} // bottom x-axis.
+				},
+				y: {
+					distance: {label: 'Zugriffe'} // Left y-axis.
+				}
+			},
+			legend: {
+				position: 'none'
+			 
+			},
+			bars: 'horizontal'
+		};
 
-    
+		// Instantiate and draw the bar chart 
+		var materialBarChart = new google.charts.Bar(document.getElementById('bar_chart'));
+		materialBarChart.draw(data, google.charts.Bar.convertOptions(materialOptions_BarChart));
 
-  // Callback that draws the activity chart
-  function drawLineChart() {
+	}
+
+
+
+	// Callback that draws the activity chart
+	function drawLineChart() {
 	  
-	  var data = new google.visualization.DataTable();
-      data.addColumn('date', 'Datum');
-      data.addColumn('number', 'Zugriffe');
-      data.addColumn('number', 'eigene Zugriffe')
-	  data.addColumn('number', 'Nutzer');
-      data.addRows([<?php echo $lineChart; ?>]);
-      //  echo $line_chart_data; ?>
+		var data = new google.visualization.DataTable();
+		data.addColumn('date', 'Datum');
+		data.addColumn('number', 'Zugriffe');
+		data.addColumn('number', 'eigene Zugriffe')
+		data.addColumn('number', 'Nutzer');
+		data.addRows([<?php echo $lineChart; ?>]);
+		//  echo $line_chart_data; ?>
 
-      var options = {
-        chart: {
-          title: 'Zugriffe und Nutzer pro Tag'
-        },
-        hAxis: {
-          title: 'Datum',
+		var options = {
+		chart: {
+		  title: 'Zugriffe und Nutzer pro Tag'
+		},
+		hAxis: {
+		  title: 'Datum',
 		  format:'d.M.yy'
-        }
-       
-        
-      };
+		}
 
-      activity_chart = new google.visualization.LineChart(document.getElementById('line_chart'));
-      activity_chart.draw(data, options);
+
+		};
+
+		activity_chart = new google.visualization.LineChart(document.getElementById('line_chart'));
+		activity_chart.draw(data, options);
 	  
     }
 	
@@ -939,7 +939,7 @@ global $CFG;
 			});
         });
     </script>
-
+	
 
 </head>
 
@@ -1110,35 +1110,35 @@ global $CFG;
                     </div>
                 </div>
             </div>
-    </div>
-	
-    <div id="report">
-        <ul class="collapsible z-depth-0" data-collapsible="accordion">
-            <li>
-                <div class="collapsible-header">
-                    <i class="material-icons right">expand_more</i>Kursaktivität (Moodle Bericht)</div>
-                <div class="collapsible-body">
-                    <span>
-                        <?php   
-                            echo $OUTPUT->container(get_string('computedfromlogs', 'admin', userdate($minlog)) , 'loginfo');
-                            echo html_writer::table($outlinetable);
-                        ?>
-                    </span>
-                </div>
-            </li>
-        </ul>
-    </div>
-</div>
+		</div>
+		
+		<div id="report">
+			<ul class="collapsible z-depth-0" data-collapsible="accordion">
+				<li>
+					<div class="collapsible-header">
+						<i class="material-icons right">expand_more</i>Kursaktivität (Moodle Bericht)</div>
+					<div class="collapsible-body">
+						<span>
+							<?php   
+								echo $OUTPUT->container(get_string('computedfromlogs', 'admin', userdate($minlog)) , 'loginfo');
+								echo html_writer::table($outlinetable);
+							?>
+						</span>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</div>
 
-<!-- make charts responsive -->
-<script>
-$(window).resize(function(){
-  drawBarChart();
-  drawLineChart();
-  drawTreeMap();
-});
+	<!-- make charts responsive -->
+	<script>
+	$(window).resize(function(){
+	  drawBarChart();
+	  drawLineChart();
+	  drawTreeMap();
+	});
 
-</script>
+	</script>
 </body>
 </html>
 
