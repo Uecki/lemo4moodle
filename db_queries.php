@@ -268,13 +268,440 @@
 
 	#Query for heatmap. Only minor changes to activity chart query.
 
-	$query_heatmap = "SELECT  id, FROM_UNIXTIME(timecreated, '%W') AS 'weekday', FROM_UNIXTIME(timecreated, '%k') AS 'hour', COUNT(action) AS 'allHits',  COUNT(case when userid = $userID then $userID end) AS 'ownHits'
+	$query_heatmap = "SELECT  id, timecreated, FROM_UNIXTIME(timecreated, '%W') AS 'weekday', FROM_UNIXTIME(timecreated, '%k') AS 'hour', COUNT(action) AS 'allHits',  COUNT(case when userid = $userID then $userID end) AS 'ownHits'
 	FROM `mdl_logstore_standard_log` 
 	WHERE (action = 'viewed' AND courseid = '".$courseID."')
-	GROUP BY hour";
+	GROUP BY timecreated"; //group by hour
 	
 	$heatmap = $DB->get_records_sql($query_heatmap);
-	//var_dump($heatmap);
+
+
+		#Create heatmap data
+	$timespan;
+	$heatmap_data = "[";
+	$counterWeekday = array("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday");
+	
+		#Array for total number of weekday actions
+	$totalHits = array(
+		"Monday"  => 0,
+		"Tuesday"  => 0,
+		"Wednesday"  => 0,
+		"Thursday"  => 0,
+		"Friday"  => 0,
+		"Saturday"  => 0,
+		"Sunday"  => 0,
+	);
+	
+		#Array for total  number of own weekday actions
+	$totalOwnHits = array(
+		"Monday"  => 0,
+		"Tuesday"  => 0,
+		"Wednesday"  => 0,
+		"Thursday"  => 0,
+		"Friday"  => 0,
+		"Saturday"  => 0,
+		"Sunday"  => 0,
+	);
+	
+	{#Array to assign the query results (inside curly braces to hide block)
+	$weekdays = array(
+		"Monday" => array(
+			"0to6" => array(
+				"all" => array(
+					"col"  => 0,
+					"value" => 0,
+				),
+				"own" => array(
+					"col"  => 1,
+					"value" => 0,
+				),
+			),
+			"6to12" => array(
+				"all" => array(
+					"col"  => 2,
+					"value" => 0,
+				),
+				"own" => array(
+					"col"  => 3,
+					"value" => 0,
+				),
+			),
+				
+			"12to18" => array(
+				"all" => array(
+					"col"  => 4,
+					"value" => 0,
+				),
+				"own" => array(
+					"col"  => 5,
+					"value" => 0,
+				),
+			),
+				
+			"18to24" => array(
+				"all" => array(
+					"col"  => 6,
+					"value" => 0,
+				),
+				"own" => array(
+					"col"  => 7,
+					"value" => 0,
+				),
+			),
+			"row" => 0,
+		), 
+		"Tuesday" => array(
+			"0to6" => array(
+				"all" => array(
+					"col"  => 0,
+					"value" => 0,
+				),
+				"own" => array(
+					"col"  => 1,
+					"value" => 0,
+				),
+			),
+			"6to12" => array(
+				"all" => array(
+					"col"  => 2,
+					"value" => 0,
+				),
+				"own" => array(
+					"col"  => 3,
+					"value" => 0,
+				),
+			),
+				
+			"12to18" => array(
+				"all" => array(
+					"col"  => 4,
+					"value" => 0,
+				),
+				"own" => array(
+					"col"  => 5,
+					"value" => 0,
+				),
+			),
+				
+			"18to24" => array(
+				"all" => array(
+					"col"  => 6,
+					"value" => 0,
+				),
+				"own" => array(
+					"col"  => 7,
+					"value" => 0,
+				),
+			),
+			"row" => 1,
+		), 
+		"Wednesday" => array(
+			"0to6" => array(
+				"all" => array(
+					"col"  => 0,
+					"value" => 0,
+				),
+				"own" => array(
+					"col"  => 1,
+					"value" => 0,
+				),
+			),
+			"6to12" => array(
+				"all" => array(
+					"col"  => 2,
+					"value" => 0,
+				),
+				"own" => array(
+					"col"  => 3,
+					"value" => 0,
+				),
+			),
+				
+			"12to18" => array(
+				"all" => array(
+					"col"  => 4,
+					"value" => 0,
+				),
+				"own" => array(
+					"col"  => 5,
+					"value" => 0,
+				),
+			),
+				
+			"18to24" => array(
+				"all" => array(
+					"col"  => 6,
+					"value" => 0,
+				),
+				"own" => array(
+					"col"  => 7,
+					"value" => 0,
+				),
+			),
+			"row" => 2,
+		), 
+		"Thursday" => array(
+			"0to6" => array(
+				"all" => array(
+					"col"  => 0,
+					"value" => 0,
+				),
+				"own" => array(
+					"col"  => 1,
+					"value" => 0,
+				),
+			),
+			"6to12" => array(
+				"all" => array(
+					"col"  => 2,
+					"value" => 0,
+				),
+				"own" => array(
+					"col"  => 3,
+					"value" => 0,
+				),
+			),
+				
+			"12to18" => array(
+				"all" => array(
+					"col"  => 4,
+					"value" => 0,
+				),
+				"own" => array(
+					"col"  => 5,
+					"value" => 0,
+				),
+			),
+				
+			"18to24" => array(
+				"all" => array(
+					"col"  => 6,
+					"value" => 0,
+				),
+				"own" => array(
+					"col"  => 7,
+					"value" => 0,
+				),
+			),
+			"row" => 3,
+		), 
+		"Friday" => array(
+			"0to6" => array(
+				"all" => array(
+					"col"  => 0,
+					"value" => 0,
+				),
+				"own" => array(
+					"col"  => 1,
+					"value" => 0,
+				),
+			),
+			"6to12" => array(
+				"all" => array(
+					"col"  => 2,
+					"value" => 0,
+				),
+				"own" => array(
+					"col"  => 3,
+					"value" => 0,
+				),
+			),
+				
+			"12to18" => array(
+				"all" => array(
+					"col"  => 4,
+					"value" => 0,
+				),
+				"own" => array(
+					"col"  => 5,
+					"value" => 0,
+				),
+			),
+				
+			"18to24" => array(
+				"all" => array(
+					"col"  => 6,
+					"value" => 0,
+				),
+				"own" => array(
+					"col"  => 7,
+					"value" => 0,
+				),
+			),
+			"row" => 4,
+		), 
+		"Saturday" => array(
+			"0to6" => array(
+				"all" => array(
+					"col"  => 0,
+					"value" => 0,
+				),
+				"own" => array(
+					"col"  => 1,
+					"value" => 0,
+				),
+			),
+			"6to12" => array(
+				"all" => array(
+					"col"  => 2,
+					"value" => 0,
+				),
+				"own" => array(
+					"col"  => 3,
+					"value" => 0,
+				),
+			),
+				
+			"12to18" => array(
+				"all" => array(
+					"col"  => 4,
+					"value" => 0,
+				),
+				"own" => array(
+					"col"  => 5,
+					"value" => 0,
+				),
+			),
+				
+			"18to24" => array(
+				"all" => array(
+					"col"  => 6,
+					"value" => 0,
+				),
+				"own" => array(
+					"col"  => 7,
+					"value" => 0,
+				),
+			),
+			"row" => 5,
+		), 
+		"Sunday" => array(
+			"0to6" => array(
+				"all" => array(
+					"col"  => 0,
+					"value" => 0,
+				),
+				"own" => array(
+					"col"  => 1,
+					"value" => 0,
+				),
+			),
+			"6to12" => array(
+				"all" => array(
+					"col"  => 2,
+					"value" => 0,
+				),
+				"own" => array(
+					"col"  => 3,
+					"value" => 0,
+				),
+			),
+				
+			"12to18" => array(
+				"all" => array(
+					"col"  => 4,
+					"value" => 0,
+				),
+				"own" => array(
+					"col"  => 5,
+					"value" => 0,
+				),
+			),
+				
+			"18to24" => array(
+				"all" => array(
+					"col"  => 6,
+					"value" => 0,
+				),
+				"own" => array(
+					"col"  => 7,
+					"value" => 0,
+				),
+			),
+			"row" => 6,
+		), 
+	);
+	}
+	
+	foreach ($heatmap as $heat) {
+		
+		#link timespan to column in heatmap
+		if((int)$heat->hour >= 0  && (int)$heat->hour < 6) {
+			$timespan = "0to6";		
+		}
+		elseif((int)$heat->hour >= 6  && (int)$heat->hour < 12) {
+			$timespan = "6to12";			
+		}
+		elseif((int)$heat->hour >= 12  && (int)$heat->hour < 18) {
+			$timespan = "12to18";				
+		}
+		elseif((int)$heat->hour >= 18  && (int)$heat->hour < 24) {
+			$timespan = "18to24";			
+		}
+		
+			#Data for specific day
+		$weekdays[$heat->weekday][$timespan]["all"]["value"] += (int)$heat->allhits;
+		$weekdays[$heat->weekday][$timespan]["own"]["value"] += (int)$heat->ownhits;
+		
+			#Data for overall clicks
+		$totalHits[$heat->weekday] += (int)$heat->allhits;
+		$totalOwnHits[$heat->weekday] += (int)$heat->ownhits;
+		
+	}
+	
+		#Put data of each weekdayfield into suitable format for the chart.
+	$counter = 0;
+	while($counter <= 6) {
+		
+		$heatmap_data .= "[".$weekdays[$counterWeekday[$counter]]['0to6']['all']['col'].", ".$weekdays[$counterWeekday[$counter]]['row'].", ".$weekdays[$counterWeekday[$counter]]['0to6']['all']['value']."], ";
+		
+		$heatmap_data .= "[".$weekdays[$counterWeekday[$counter]]['0to6']['own']['col'].", ".$weekdays[$counterWeekday[$counter]]['row'].", ".$weekdays[$counterWeekday[$counter]]['0to6']['own']['value']."], ";
+		
+		$heatmap_data .= "[".$weekdays[$counterWeekday[$counter]]['6to12']['all']['col'].", ".$weekdays[$counterWeekday[$counter]]['row'].", ".$weekdays[$counterWeekday[$counter]]['6to12']['all']['value']."], ";
+		
+		$heatmap_data .= "[".$weekdays[$counterWeekday[$counter]]['6to12']['own']['col'].", ".$weekdays[$counterWeekday[$counter]]['row'].", ".$weekdays[$counterWeekday[$counter]]['6to12']['own']['value']."], ";
+		
+		$heatmap_data .= "[".$weekdays[$counterWeekday[$counter]]['12to18']['all']['col'].", ".$weekdays[$counterWeekday[$counter]]['row'].", ".$weekdays[$counterWeekday[$counter]]['12to18']['all']['value']."], ";
+		
+		$heatmap_data .= "[".$weekdays[$counterWeekday[$counter]]['12to18']['own']['col'].", ".$weekdays[$counterWeekday[$counter]]['row'].", ".$weekdays[$counterWeekday[$counter]]['12to18']['own']['value']."], ";
+		
+		$heatmap_data .= "[".$weekdays[$counterWeekday[$counter]]['18to24']['all']['col'].", ".$weekdays[$counterWeekday[$counter]]['row'].", ".$weekdays[$counterWeekday[$counter]]['18to24']['all']['value']."], ";
+		
+		$heatmap_data .= "[".$weekdays[$counterWeekday[$counter]]['18to24']['own']['col'].", ".$weekdays[$counterWeekday[$counter]]['row'].", ".$weekdays[$counterWeekday[$counter]]['18to24']['own']['value']."], ";
+
+		$counter++;
+	}
+	
+		#Put data of overall clicks into suitable format for the chart.
+	$x = 8; #for total and average hits
+	while($x <= 11) {
+		$y = 0; #for weekdays
+		while($y <= 6) {
+			if ($x == 8) {
+				$heatmap_data .= "[".$x.", ".$y.", ".$totalHits[$counterWeekday[$y]]."]";
+			}
+			elseif ($x == 9) {
+				$heatmap_data .= "[".$x.", ".$y.", ".$totalOwnHits[$counterWeekday[$y]]."]";
+			}
+			elseif ($x == 10) {
+				$heatmap_data .= "[".$x.", ".$y.", ".round(($totalHits[$counterWeekday[$y]]/7.0), 2)."]";
+			}
+			elseif ($x == 11) {
+				$heatmap_data .= "[".$x.", ".$y.", ".round(($totalOwnHits[$counterWeekday[$y]]/7.0), 2)."]";
+			}
+			
+			if ($x < 11 || $y < 6) {
+			$heatmap_data .= ", ";
+			}
+			
+			$y++;
+		}
+		$x++;
+	}
+	
+	$heatmap_data .= "]";
+
+/*
 
 	#Create heatmap data
 	
@@ -307,6 +734,7 @@
 		0,
 		0,
 	);
+	*/
 	
 	/*  Noch unsicher, was mit 'average' gemeint ist.
 	
@@ -335,7 +763,7 @@
 	*/
 	
 
-	
+	/*
 	foreach($heatmap as $heat) {
 		
 		#link timespan to column in heatmap
@@ -373,7 +801,7 @@
 			$totalHits[2]  += (int)$heat->allhits;
 			$totalOwnHits[2]  += (int)$heat->ownhits;
 		}
-		elseif($heat->weekday == 'Thrusday') {
+		elseif($heat->weekday == 'Thursday') {
 			$rowHeatmap = 3;
 			$totalHits[3]  += (int)$heat->allhits;
 			$totalOwnHits[3]  += (int)$heat->ownhits;
@@ -428,7 +856,7 @@
 				}
 				$x++;
 			}
-			
+			*/
 			/* Not working as planned, colours of cells not added until mouseover.
 			#filler for missing days
 			$counterRow = 0;
@@ -441,11 +869,13 @@
 				}
 				$counterRow++;
 			}*/
+			/*
 			$heatmap_data.= "]";
 		}
 		$k++;
 	}
 
+*/
 	
 
 	#Use barchart query for treemap
@@ -490,7 +920,6 @@
 	$data_array[] = $lineChartArray;
 	$data_array[] = $barchart_data_array;
 	$data_array[] = $treemap_data_array;
-	$data_array[] = $heatmap_data_array;
 	
 	/*
 	# path to json file | filename
