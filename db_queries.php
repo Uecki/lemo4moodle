@@ -279,6 +279,7 @@
 		#Create heatmap data
 	$timespan;
 	$heatmap_data = "[";
+	#$heatmap_data_array = array();
 	$counterWeekday = array("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday");
 	
 		#Array for total number of weekday actions
@@ -653,6 +654,7 @@
 	$counter = 0;
 	while($counter <= 6) {
 		
+		#Data for index.php
 		$heatmap_data .= "[".$weekdays[$counterWeekday[$counter]]['0to6']['all']['col'].", ".$weekdays[$counterWeekday[$counter]]['row'].", ".$weekdays[$counterWeekday[$counter]]['0to6']['all']['value']."], ";
 		
 		$heatmap_data .= "[".$weekdays[$counterWeekday[$counter]]['0to6']['own']['col'].", ".$weekdays[$counterWeekday[$counter]]['row'].", ".$weekdays[$counterWeekday[$counter]]['0to6']['own']['value']."], ";
@@ -919,7 +921,9 @@
 	$data_array = array();
 	$data_array[] = $lineChartArray;
 	$data_array[] = $barchart_data_array;
+	$data_array[] = $heatmap_data;
 	$data_array[] = $treemap_data_array;
+	$data_array[] = $heatmap;
 	
 	/*
 	# path to json file | filename
