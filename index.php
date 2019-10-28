@@ -61,7 +61,6 @@ global $CFG;
 	<!-- Highcharts -->
 	<script src="https://code.highcharts.com/highcharts.js"></script>
 	<script src="https://code.highcharts.com/modules/heatmap.js"></script>
-	<script src="https://code.highcharts.com/modules/exporting.js"></script>
 
     <!-- activityGraph.css -->
     <link rel="stylesheet" href="activitygraph.css">
