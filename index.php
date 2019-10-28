@@ -845,23 +845,9 @@ global $CFG;
 			//Line Chart - reset button
         $('#rst_btn_2').click(function() {
             var data = new google.visualization.DataTable();
-				data.addColumn('date', 'Datum');
-				data.addColumn('number', 'Zugriffe');
-                data.addColumn('number', 'eigene Zugriffe')
-			   	data.addColumn('number', 'Nutzer');
-				data.addRows([<?php echo $lineChart; ?>]);
-            var options = {
-                chart: {
-                    title: 'Zugriffe und Nutzer pro Tag'
-                },
-                hAxis: {
-                    title: 'Datum',
-		            format:'d/M/yy'
-                }
-            };
-			activity_chart.draw(data, options); 
-            $('#datepicker_3').val("");
-            $('#datepicker_4').val("");
+			drawLineChart();
+			$("#datepicker_3").val("");
+			$("#datepicker_4").val("");
 			
 			//var test = "<?php echo $allData ?>";
 			//console.log(test);
@@ -870,8 +856,8 @@ global $CFG;
 		//Heatmap - reset button
         $('#rst_btn_3').click(function() {
 			drawHeatMap();
-			$('#datepicker_3').val("");
-            $('#datepicker_4').val("");
+			$('#datepicker_5').val("");
+            $('#datepicker_6').val("");
 			
         });
 
