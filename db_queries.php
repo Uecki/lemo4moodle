@@ -686,10 +686,10 @@
 				$heatmap_data .= "[".$x.", ".$y.", ".$totalOwnHits[$counterWeekday[$y]]."]";
 			}
 			elseif ($x == 10) {
-				$heatmap_data .= "[".$x.", ".$y.", ".round(($totalHits[$counterWeekday[$y]]/7.0), 2)."]";
+				$heatmap_data .= "[".$x.", ".$y.", ".round(($totalHits[$counterWeekday[$y]]/4.0), 2)."]";
 			}
 			elseif ($x == 11) {
-				$heatmap_data .= "[".$x.", ".$y.", ".round(($totalOwnHits[$counterWeekday[$y]]/7.0), 2)."]";
+				$heatmap_data .= "[".$x.", ".$y.", ".round(($totalOwnHits[$counterWeekday[$y]]/4.0), 2)."]";
 			}
 			
 			if ($x < 11 || $y < 6) {
