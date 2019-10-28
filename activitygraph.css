@@ -38,13 +38,24 @@
 }
 
 #bar_chart {
-    width: 100% !important; 
+    width: 90% !important;
+	height: 90% !important;
     min-height: 500px !important;
 }
 
 #line_chart {
     width: 100% !important; 
     min-height: 500px !important;
+}
+
+#treemap {
+	width:  100% !important;
+	min-height: 500px !important;
+}
+
+#heatmap {
+	width:  100% !important;
+	min-height: 500px !important;
 }
 
 .col .s9 {

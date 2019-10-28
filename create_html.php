@@ -922,22 +922,7 @@ $content = '<!DOCTYPE html>
         $(document).ready(function () {
             /* Bar Chart - reset button */
             $("#rst_btn_2").click(function () {
-                var data = new google.visualization.DataTable();
-                data.addColumn("date", "Datum");
-                data.addColumn("number", "Zugriffe");
-                data.addColumn("number", "eigene Zugriffe")
-                data.addColumn("number", "Nutzer");
-                data.addRows([".$lineChart."]);
-                var options = {
-                    chart: {
-                        title: "Zugriffe und Nutzer pro Tag"
-                    },
-                    hAxis: {
-                        title: "Datum",
-                        format: "d/M/yy"
-                    }
-                };
-                activity_chart.draw(data, options);
+                drawLineChart();
                 $("#datepicker_3").val("");
                 $("#datepicker_4").val("");
             });
@@ -945,8 +930,8 @@ $content = '<!DOCTYPE html>
 			//Heatmap - reset button
 			$("#rst_btn_3").click(function() {
 			drawHeatMap();
-			$("#datepicker_3").val("");
-            $("#datepicker_4").val("");
+			$("#datepicker_5").val("");
+            $("#datepicker_6").val("");
 			
         });
 
@@ -1020,15 +1005,26 @@ $content = '<!DOCTYPE html>
             margin-bottom: 10px;
         }
 
-        #bar_chart {
-            width: 100% !important;
-            min-height: 500px !important;
-        }
+		#bar_chart {
+			width: 90% !important;
+			height: 90% !important;
+			min-height: 500px !important;
+		}
 
-        #line_chart {
-            width: 100% !important;
-            min-height: 500px !important;
-        }
+		#line_chart {
+			width: 100% !important; 
+			min-height: 500px !important;
+		}
+
+		#treemap {
+			width:  100% !important;
+			min-height: 500px !important;
+		}
+
+		#heatmap {
+			width:  100% !important;
+			min-height: 500px !important;
+		}
 
         .col .s9 {
             min-height: 500px !important;
@@ -1068,9 +1064,12 @@ $content = '<!DOCTYPE html>
 <body>
     <div class="container-fluid">
         <div class="col s12 yellow darken-1 announcement">
-            <p class="center-align">
+            <p class="center-align" id="announcement">
                 <i class="material-icons">announcement</i>
-                Internetverbindung erforderlich! Lokale Version (Daten nur bis '.$heute.') Aktuelle Daten unter:
+                Für die Darstellung ist eine Internetverbindung notwendig!
+				<br>
+				Lokale Version (Daten sind nur bis zum '.$heute.' in dieser Datei gespeichert.) 
+				Aktuelle Daten unter:
                 <a href="https://moodle.hwr-berlin.de/" class="announcement-link">moodle.hwr-berlin.de</a>
             </p>
         </div>
@@ -1099,7 +1098,7 @@ $content = '<!DOCTYPE html>
                         <a href="#chart2">Activity Chart</a>
                     </li>
                     <li class="tab" id="tab_heatMap">
-                        <a href="#chart3">not finished (heat map)</a>
+                        <a href="#chart3">Heatmap</a>
                     </li>
                     <li class="tab" id="tab_treeMap">
                         <a href="#chart4">TreeMap</a>
