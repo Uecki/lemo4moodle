@@ -931,7 +931,7 @@
     */
 
 	# encode data_array as JSON !JSON_NUMERIC_CHECK
-	# gets encoded only to be decoded in create_html.php,decode probably not necessary
+	# gets encoded only to be decoded in lemo_create_html.php,decode probably not necessary
 	$allData = json_encode($data_array, JSON_NUMERIC_CHECK);
 
 	/*

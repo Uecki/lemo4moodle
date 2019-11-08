@@ -10,7 +10,7 @@ const DB_NAME = 'moodle';
 # path to moodle files (variable value assigned to constant 'moodle_path')
 
 $dir = dirname(__FILE__);
-$shortenedPath = str_replace("blocks\activitygraph", "", $dir);
+$shortenedPath = str_replace("blocks\lemo4moodle", "", $dir);
 $realPath = str_replace("\\", "/", $shortenedPath);
 define('moodle_path', $realPath);	
 //const moodle_path = 'D:/XAMPP/htdocs/moodle';

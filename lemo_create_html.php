@@ -1,5 +1,5 @@
 <?php
-#create_html.php creates a html file containing the recent data and provides a download link for it
+#lemo_create_html.php creates a html file containing the recent data and provides a download link for it
 
 # include the config 
 include 'config.php';
@@ -127,7 +127,7 @@ $content = '<!DOCTYPE html>
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ActivityGraph</title>
+    <title>lemo4moodle</title>
 
     <!-- Datepicker jQuery -->
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
@@ -1075,7 +1075,7 @@ $content = '<!DOCTYPE html>
         <nav>
             <div class="nav-wrapper">
                 <a onClick="window.location.reload()" class="brand-logo">
-                    <i class="material-icons">insert_chart</i>ActivityGraph</a>
+                    <i class="material-icons">insert_chart</i>lemo4moodle</a>
                 <ul id="nav" class="right hide-on-med-and-down">
                     <li>
                         <a href="http://www.hwr-berlin.de/home/" class="waves-effect waves-light btn white red-text" id="btn_hwr" target="_blank">www.hwr-berlin.de
@@ -1206,7 +1206,7 @@ $content = '<!DOCTYPE html>
 
 
 header("Content-type: text/html");
-header("Content-Disposition: attachment; filename=activitygraph_".$heute_filename.".html");
+header("Content-Disposition: attachment; filename=lemo4moodle_".$heute_filename.".html");
 echo $content;
 ?>
 

@@ -1,7 +1,7 @@
 ﻿<?php
-  class block_activitygraph extends block_list {
+  class block_lemo4moodle extends block_base {
     public function init() {
-        $this->title = 'Activity Graph';
+        $this->title = 'Lemo4Moodle';
     }
 
     public function get_content() {
@@ -19,7 +19,7 @@
       global $USER;
 
       /* add text to plugin body */ 
-      $this->content->footer = '<a href= "'.$CFG->wwwroot.'/blocks/activitygraph/index.php?id='.$COURSE->id.'&user='.$USER->id.'" target="_blank"><img src="'.$CFG->wwwroot.'/blocks/activitygraph/images/logo_180.png"/></a>';
+      $this->content->footer = '<a href= "'.$CFG->wwwroot.'/blocks/lemo4moodle/index.php?id='.$COURSE->id.'&user='.$USER->id.'" target="_blank"><img src="'.$CFG->wwwroot.'/blocks/lemo4moodle/images/logo_180.png"/></a>';
       
       /* return content */ 
       return $this->content;

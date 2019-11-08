@@ -15,7 +15,7 @@ error_reporting(E_ALL | E_STRICT);
 ini_set('display_errors', 1);
 $courseID = $_GET['id'];
 $userID = $_GET['user'];
-include_once ('db_queries.php');
+include_once ('lemo_db_queries.php');
 
 /* "Import" global variables from the Moodle Config (config.php) */
 global $COURSE;
@@ -34,7 +34,7 @@ global $CFG;
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ActivityGraph</title>
+    <title>lemo4moodle</title>
 
 
 
@@ -61,9 +61,10 @@ global $CFG;
 	<!-- Highcharts -->
 	<script src="https://code.highcharts.com/highcharts.js"></script>
 	<script src="https://code.highcharts.com/modules/heatmap.js"></script>
+	
 
-    <!-- activityGraph.css -->
-    <link rel="stylesheet" href="activitygraph.css">
+    <!-- lemo4moodle.css -->
+    <link rel="stylesheet" href="lemo4moodle.css">
 
 	<!-- report_styles.css -->
 	<link rel="stylesheet" href="styles.css">
@@ -895,7 +896,7 @@ global $CFG;
 		    $('.ajax').click(function(){
                 $.ajax({
                     type: 'POST',
-                    url: 'create_html.php',
+                    url: 'lemo_create_html.php',
                     data: {id: '<?php echo $courseID?>', userid:'<?php echo $userID?>'},
                     success: function (response) {//response is value returned from php (for your example it's "bye bye"
                         
@@ -933,11 +934,13 @@ global $CFG;
         <nav>
             <div class="nav-wrapper">
                 <a onClick="window.location.reload()" class="brand-logo">
-                    <i class="material-icons medium">insert_chart</i>ActivityGraph</a>
+                    <i class="material-icons medium">insert_chart</i>lemo4moodle</a>
                 <ul id="nav" class="right hide-on-med-and-down">
-                    <li>
+                    <!--
+					<li>
                         <a href="http://www.hwr-berlin.de/home/" class="waves-effect waves-light btn white red-text" id="btn_hwr" target="_blank">www.hwr-berlin.de</a>
                     </li>
+					-->
                     <li>
                         <a href="#" class="waves-effect waves-light btn white red-text" id="btn_manual">Hilfe</a>
                     </li>
@@ -987,19 +990,19 @@ global $CFG;
                                 <p>Datensicherung:</p>
 								
                                 <!-- Button nicht mehr nötig.
-								<a href="<?php echo 'saved_datasets/'.$courseID.'_'.$userID.'/data_'.$courseID.'_'.$userID.'.json'; ?>" download="<?php echo 'activitygraph_data_'.$courseID.'_'.$userID.'.json'; ?>" class="btn waves-effect waves-light grey darken-3 button">Raw Data (JSON)</a>
+								<a href="<?php echo 'saved_datasets/'.$courseID.'_'.$userID.'/data_'.$courseID.'_'.$userID.'.json'; ?>" download="<?php echo 'lemo4moodle_data_'.$courseID.'_'.$userID.'.json'; ?>" class="btn waves-effect waves-light grey darken-3 button">Raw Data (JSON)</a>
 								-->
 								
-                                <form action='create_html.php' method='post' id='download_form_1'>
+                                <form action='lemo_create_html.php' method='post' id='download_form_1'>
 									<a class="btn waves-effect waves-light grey darken-3 button ajax" id="html_btn_1">HTML Download</a>
-									<!-- Variables that are to be posted to create_html.php.  -->
+									<!-- Variables that are to be posted to lemo_create_html.php.  -->
 									<input type='hidden' value='<?php echo $courseID ?>' name='id'>
 									<input type='hidden' value='<?php echo $userID ?>' name='userid'>
 									<input type='hidden' value='<?php echo $allData ?>' name='data'>
 									
 								</form>
 								<!--
-								<a href="create_html.php" download="test.html" class="btn waves-effect waves-light grey darken-3 button ajax" id="html_btn_1">HTML Download</a>
+								<a href="lemo_create_html.php" download="test.html" class="btn waves-effect waves-light grey darken-3 button ajax" id="html_btn_1">HTML Download</a>
 								-->
                                 <div class="divider"></div>
                             </div>                               
@@ -1025,12 +1028,12 @@ global $CFG;
                                     <p>Datensicherung:</p>
 									
 									<!-- Button nicht mehr nötig.
-                                    <a href="<?php echo 'saved_datasets/'.$courseID.'_'.$userID.'/data_'.$courseID.'_'.$userID.'.json'; ?>" download="<?php echo 'activitygraph_data_'.$courseID.'_'.$userID.'.json'; ?>" class="btn waves-effect waves-light grey darken-3 button">Raw Data (JSON)</a>
+                                    <a href="<?php echo 'saved_datasets/'.$courseID.'_'.$userID.'/data_'.$courseID.'_'.$userID.'.json'; ?>" download="<?php echo 'lemo4moodle_data_'.$courseID.'_'.$userID.'.json'; ?>" class="btn waves-effect waves-light grey darken-3 button">Raw Data (JSON)</a>
 									-->
 									
-									<form action='create_html.php' method='post' id='download_form_3'>
+									<form action='lemo_create_html.php' method='post' id='download_form_3'>
 										<a class="btn waves-effect waves-light grey darken-3 button ajax" id="html_btn_2">HTML Download</a>
-										<!-- Variables that are to be posted to create_html.php.  -->
+										<!-- Variables that are to be posted to lemo_create_html.php.  -->
 										<input type='hidden' value='<?php echo $courseID ?>' name='id'>
 										<input type='hidden' value='<?php echo $userID ?>' name='userid'>
 										<input type='hidden' value='<?php echo $allData ?>' name='data'>
@@ -1061,9 +1064,9 @@ global $CFG;
                                     <div class="divider"></div>
                                     <p>Datensicherung:</p>
 									
-									<form action='create_html.php' method='post' id='download_form_2'>
+									<form action='lemo_create_html.php' method='post' id='download_form_2'>
 										<a class="btn waves-effect waves-light grey darken-3 button ajax" id="html_btn_3">HTML Download</a>
-										<!-- Variables that are to be posted to create_html.php.  -->
+										<!-- Variables that are to be posted to lemo_create_html.php.  -->
 										<input type='hidden' value='<?php echo $courseID ?>' name='id'>
 										<input type='hidden' value='<?php echo $userID ?>' name='userid'>
 										<input type='hidden' value='<?php echo $allData ?>' name='data'>
@@ -1083,9 +1086,9 @@ global $CFG;
                                 <div class="input-field col s12">
                                     <p>Datensicherung:</p>
 									
-									<form action='create_html.php' method='post' id='download_form_4'>
+									<form action='lemo_create_html.php' method='post' id='download_form_4'>
 										<a class="btn waves-effect waves-light grey darken-3 button ajax" id="html_btn_4">HTML Download</a>
-										<!-- Variables that are to be posted to create_html.php.  -->
+										<!-- Variables that are to be posted to lemo_create_html.php.  -->
 										<input type='hidden' value='<?php echo $courseID ?>' name='id'>
 										<input type='hidden' value='<?php echo $userID ?>' name='userid'>
 										<input type='hidden' value='<?php echo $allData ?>' name='data'>
@@ -1120,6 +1123,7 @@ global $CFG;
 	$(window).resize(function(){
 	  drawBarChart();
 	  drawLineChart();
+	  drawHeatMap();
 	  drawTreeMap();
 	});
 
