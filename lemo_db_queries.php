@@ -226,6 +226,8 @@
 		$lineChartArray[] = array("new Date(".$fO->datum.")", $fO->zugriffe, $fO->ownHits, $fO->nutzer, $fO->timestamp);
 		$f++;
 	}
+	
+	$lineChart .="";
 
 	# SQL Query for bar chart data
 	
