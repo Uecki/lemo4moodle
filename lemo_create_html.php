@@ -120,243 +120,196 @@ $heatmap_data = $heatmap_array;
 $js_activity = json_encode($activity_array, JSON_NUMERIC_CHECK);
 $js_heatmap = json_encode($heatmap, JSON_NUMERIC_CHECK);
 
+#initializing content variable
+$content = "";
 
-$content = '<!DOCTYPE html>
-<html lang="de">
+if ($_POST['allCharts'] == 'true') {
+	/* For later implementation --> remove need to include changes twice, in index.php and in this file
+	$indexString = file_get_contents('index.php');
+	$trimmedIndexString = substr($indexString, strrpos($indexString, '<!-- Start'), (strrpos($indexString, '<!-- End')-strrpos($indexString, '<!-- Start')));
+	*/
+	$content =
+	'<!DOCTYPE html>
+	<html lang="de">
 
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>lemo4moodle</title>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Lemo4Moodle</title>
 
-    <!-- Datepicker jQuery -->
-    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+		<!-- Datepicker jQuery-->
+		<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+		<!-- Materialize CSS Framework - minified CSS -->
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+
+		<!-- Google Icons -->
+		<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+		
+		<!-- lemo4moodle.css -->
+		<style>'.file_get_contents('lemo4moodle_download.css').'</style>
+
+		<!-- report_styles.css -->
+		<style>'.file_get_contents('styles.css').'</style>
+		
+	</head>';
+	
+
+	//$content .=$trimmedIndexString;
+	$content .= 
+	'
+<body>
+    <div class="container-fluid">
+        <nav>
+            <div class="nav-wrapper">
+                <a onClick="window.location.reload()" class="brand-logo">
+                    <i class="material-icons medium">insert_chart</i>Lemo4Moodle</a>
+                <ul id="nav" class="right hide-on-med-and-down">
+                    <li>
+                        <a href="#" class="waves-effect waves-light btn white red-text" id="btn_manual">Hilfe</a>
+                    </li>
+                    <li>
+                        <a onClick="window.close();" class="waves-effect waves-light btn white red-text" id="btn_close">Schließen</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <div class="row">
+            <div class="col s12">
+                <ul class="tabs" id="tabs">
+                    <li class="tab disabled">
+                        <a href="#">Lokale Version erstellt: '.$heute.'</a>
+                    </li>
+                    <li class="tab" id="tab_barChart">
+                        <a class="active" id="tab1" href="#chart1" >Barchart</a>
+                    </li>
+                    <li class="tab" id="tab_activityChart">
+                        <a id="tab2" href="#chart2">Activity Chart</a>
+                    </li>
+                    <li class="tab" id="tab_heatMap">
+                        <a id="tab3" href="#chart3">Heatmap</a>
+                    </li>
+                    <li class="tab" id="tab_treeMap">
+                        <a id="tab4" href="#chart4">Treemap</a>
+                    </li>
+                </ul>
+            </div>
+            <div id="chart1" class="col s12">
+                <div class="row">
+                    <div class="col s9 chart">
+                        <div id="barchart" class="chart"></div>
+                    </div>
+                    <div id="options" class="col s3">
+                        <div class="row">
+                            <div class="input-field col s12">
+                                <div class="divider"></div>
+                            </div>                               
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="chart2" class="col s12">
+                <div class="row">
+                    <div class="col s9 chart">
+                        <div id="linechart" class="chart"></div>
+                    </div>
+                        <div id="options" class="col s3">
+                            <div class="row">
+                                <div class="input-field col s12">
+                                    <div class="divider"></div>
+                                    <p>Filter:</p>
+                                    <input placeholder="Beginn" type="text" class="datepick " id="datepicker_3">
+                                    <input placeholder="Ende" type="text" class="datepick " id="datepicker_4">
+                                    <button class="btn waves-effect waves-light grey darken-3 button" type="submit" name="action" id="dp_button_2">Aktualisieren</button>
+                                    <button class="btn waves-effect waves-light grey darken-3 button" type="submit" name="action" id="rst_btn_2">R&uuml;ckg&auml;ngig</button>
+                                    <div class="divider"></div>
+                                    <div class="divider"></div>
+                                </div>                               
+                            </div>
+                        </div>
+                </div>
+            </div>
+            <div id="chart3" class="col s12">
+                <div class="row">
+                    <div class="col s9 chart">
+                       <div  id="heatmap" class="chart"></div>
+                    </div>
+                        <div id="options" class="col s3">
+                            <div class="row">
+                                <div class="input-field col s12">
+									<div class="divider"></div>
+									<p>Filter:</p>
+                                    <input placeholder="Beginn" type="text" class="datepick " id="datepicker_5">
+                                    <input placeholder="Ende" type="text" class="datepick " id="datepicker_6">
+                                    <button class="btn waves-effect waves-light grey darken-3 button" type="submit" name="action" id="dp_button_3">Aktualisieren</button>
+                                    <button class="btn waves-effect waves-light grey darken-3 button" type="submit" name="action" id="rst_btn_3">R&uuml;ckg&auml;ngig</button>
+                                    <div class="divider"></div>
+                                </div>                               
+                            </div>
+                    </div>
+                </div>    
+            </div>
+            <div id="chart4" class="col s12">
+                <div class="row">
+                    <div class="col s9 chart">
+                        <div  id="treemap" class="chart"></div>
+                    </div>
+                        <div id="options" class="col s3">
+                            <div class="row">
+                                <div class="input-field col s12">
+                                </div>                               
+                            </div>
+                    </div>
+                </div>
+            </div>
+		</div>
+		
+		<div id="report">
+			<ul class="collapsible z-depth-0" data-collapsible="accordion">
+				<li>
+					<div class="collapsible-header">
+						<i class="material-icons right">expand_more</i>Kursaktivität (Moodle Bericht)</div>
+					<div class="collapsible-body">
+						<span>
+							<?php '  
+								.$table.
+							'?>
+						</span>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</div>
+	
+	<!-- JQuery and JQuery Datepicker -->
+	<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-
-    <!-- Google Charts -->
+	
+	<!-- Google Charts -->
     <script src="https://www.gstatic.com/charts/loader.js"></script>
     <script src="https://www.google.com/jsapi"></script>
-
-    <!-- Materialize CSS Compiled and minified CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 	
-	<!-- Materialize CSS  Compiled and minified JavaScript -->
+	<!-- Materialize CSS Framework - minified - JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
-
-		<!-- Highcharts -->
+	
+	<!-- Highcharts, Heatmap-->
 	<script src="https://code.highcharts.com/highcharts.js"></script>
-	<script src="https://code.highcharts.com/modules/heatmap.js"></script>
-		
-    <!-- Google Charts - Draw Charts -->
-    <script>
-
-
-        // Load Charts and the corechart package.
-        google.charts.load("current", { "packages": ["bar", "line", "treemap", "corechart", "controls"] });
-
-        // Draw all charts when Charts is loaded. (Even the Highchart, which is not a Google Charts).
-		google.charts.setOnLoadCallback(drawAllCharts);
-
-
-
-        var activity_chart;
-
-        // Callback that draws the bar chart
-        function drawBarChart() {
-            var data = google.visualization.arrayToDataTable('.$bar_chart_data.');
-
-            var materialOptions_BarChart = {
-                chart: {
-                    title: "Zugriffe und Nutzer pro Datei"
-                },
-                axes: {
-                    x: {
-                        distance: { label: "Dateiname" } // bottom x-axis.
-                    },
-                    y: {
-                        distance: { label: "Zugriffe" } // Left y-axis.
-                    }
-                },
-                legend: {
-                    position: "none"
-
-                },
-                bars: "horizontal"
-            };
-
-            // Instantiate and draw the bar chart 
-            var materialBarChart = new google.charts.Bar(document.getElementById("bar_chart"));
-            materialBarChart.draw(data, google.charts.Bar.convertOptions(materialOptions_BarChart));
-
-        }
-
-
-
-        // Callback that draws the activity chart
-        function drawLineChart() {
-
-            var data = new google.visualization.DataTable();
-            data.addColumn("date", "Datum");
-            data.addColumn("number", "Zugriffe");
-            data.addColumn("number", "eigene Zugriffe")
-            data.addColumn("number", "Nutzer");
-            data.addRows(['.$lineChart.']);
-
-            //  echo $line_chart_data; ?>
-
-            var options = {
-                chart: {
-                    title: "Zugriffe und Nutzer pro Tag"
-                },
-                hAxis: {
-                    title: "Datum",
-                    format: "d.M.yy"
-                }
-
-
-            };
-
-            activity_chart = new google.visualization.LineChart(document.getElementById("line_chart"));
-            activity_chart.draw(data, options);
-        }
-		
-	//Callback that draws the treemap.
-	function drawTreeMap() {
-
-		var data = new google.visualization.arrayToDataTable('.$treemap_data.');
-		
-		tree = new google.visualization.TreeMap(document.getElementById("treemap"));
-
-        tree.draw(data, {
-          minColor: "#f00",
-          midColor: "#ddd",
-          maxColor: "#0d0",
-          headerHeight: 15,
-          fontColor: "black",
-          highlightOnMouseOver: true,
-		  title: "TreeMap für die Anzahl der Klicks pro Datei. Rechtsklick, um eine Ebene nach oben zu gelangen.",
-		  generateTooltip: showTooltipTreemap
-        });
-		
-		function showTooltipTreemap(row, size, value) {
-			return "<div style='."'background:#fd9; padding:10px; border-style:solid'".'>" + " Anzahl der Klicks: " + size + " </div>";
-		}
-
-	}
+	<script src="https://code.highcharts.com/modules/heatmap.js"></script>';
 	
-	
-	//Callback that draws the heatmap.
-	function drawHeatMap() {
-		Highcharts.chart("heatmap", {
-
-			chart: {
-				type: "heatmap",
-				marginTop: 40,
-				marginBottom: 80,
-				plotBorderWidth: 1
-			},
-
-
-			title: {
-				text: "Aktionen pro Tag pro Zeitraum"
-			},
-
-			xAxis: {
-				categories: ["ALLE<br>00:00-06:00", "EIGENE<br>00:00-06:00", "ALLE<br>06:00-12:00", "EIGENE<br>06:00-12:00", "ALLE<br>12:00-18:00", "EIGENE<br>12:00-18:00","ALLE<br>18:00-24:00", "EIGENE<br>18:00-24:00",  "ALLE<br>Gesamt", "EIGENE<br>Gesamt", "ALLE<br>Durchschnitt", "EIGENE<br>Durchschnitt"]
-			},
-
-			yAxis: {
-				categories: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
-				title: null
-			},
-
-			colorAxis: {
-				min: 0,
-				minColor: "#FFFFFF",
-				maxColor: Highcharts.getOptions().colors[0]
-			},
-
-			legend: {
-				align: "right",
-				layout: "vertical",
-				margin: 0,
-				verticalAlign: "top",
-				y: 25,
-				symbolHeight: 280
-			},
-			
-			tooltip: false,
-			
-
-			series: [{
-				name: "Actions per day",
-				borderWidth: 1,
-				data: '.$heatmap_data.',
-				dataLabels: {
-					enabled: true,
-					color: "#000000"
-				}
-			}]
-
-		});
-	}
-	
-	
-	//Callback that draws all charts on tab change.
-	//To be optimized to only load chart for current tab.
-	function drawAllCharts() {
-		drawBarChart();
-		drawLineChart();
-		drawTreeMap();
-		drawHeatMap();
-	}
-
-
-
-    </script>
-
-
-
-    <script>
-
-        $(function () {
-            $(".datepick").datepicker({
-                /*dateFormat: "mm/dd/yy"*/
-                dateFormat: "dd.mm.yy"
-            });
-
-        });
-
-    </script>
-
-    <script>
-        var js_activity = ['.$lineChartArray.'];
-		var js_heatmap = Object.entries('.$js_heatmap.');;
-
-        function toTimestamp(strDate) {
-            var datum = Date.parse(strDate);
-            return datum / 1000;
-        }
-        $(document).ready(function () {
-            $("#dp_button_2").click(function () {
-                var start = document.getElementById("datepicker_3").value;
-                var end = document.getElementById("datepicker_4").value;
-                /* rewrite date */
-                var s = start.split(".");
-                start = s[1] + "/" + s[0] + "/" + s[2];
-                /* rewrite date */
-                var e = end.split(".");
-                end = e[1] + "/" + e[0] + "/" + e[2];
-                start += " 00:00:00";
-                end += " 23:59:59";
-               
-                var tp_start = toTimestamp(start);
-                var tp_end = toTimestamp(end);
-               
-                if (tp_start <= tp_end) {
-                    var activity_data = [];
+	//js-file needs adaptation to work as download. !Doesn't look good, but is functional.
+	$linechart_js_string = str_replace(
+	'var activity_data = [];
+			js_activity.forEach(function(item) {
+				if (item.timestamp >= tp_start && item.timestamp <= tp_end) {
+					activity_data.push({
+						date: item.datum,
+						accesses: item.zugriffe,
+						ownhits: item.ownHits,
+						users: item.nutzer
+					});
+				}		
+			})',
+	'var activity_data = [];
                     js_activity.forEach(function (item) {
                         
 						var myDate=item[0];
@@ -377,831 +330,197 @@ $content = '<!DOCTYPE html>
                                 users: item[3]
                                 });
                         }
-                    });
-                    console.log(activity_data);
-                    var chartData = activity_data.map(function (it) {
-                        var str = it.date;
-                        var r = str.split(", ");
-                        return [new Date(r[0], r[1], r[2]), it.accesses, it.ownhits, it.users];
-                    });
-                    console.log(chartData);
-                    var data = new google.visualization.DataTable();
-                    data.addColumn("date", "Datum");
-                    data.addColumn("number", "Zugriffe");
-                    data.addColumn("number", "eigene Zugriffe");
-                    data.addColumn("number", "Nutzer");
-                    data.addRows(chartData);
-                    var options = {
-                        chart: {
-                            title: "Zugriffe und Nutzer pro Tag"
-                        },
-                        hAxis: {
-                            title: "Datum",
-                            format: "d.M.yy"
-                        }
-                    };
-                    activity_chart.draw(data, options);
-                } else {
-                    // Materialize.toast(message, displayLength, className, completeCallback);
-                    Materialize.toast("Überprüfen Sie ihre Auswahl (Beginn < Ende)", 3000) // 4000 is the duration of the toast
-                    $("#datepicker_3").val("");
-                    $("#datepicker_4").val("");
-                }
-
-            });
-        });
-		
-		$(document).ready(function() {
-            $("#dp_button_3").click(function() {
-				
-                var start = document.getElementById("datepicker_5").value;
-        		var end = document.getElementById("datepicker_6").value;
-                /* rewrite date */
-                var s = start.split(".");
-                start = s[1]+"/"+s[0]+"/"+s[2];
-                /* rewrite date */
-                var e = end.split(".");
-                end = e[1]+"/"+e[0]+"/"+e[2];
-				start += " 00:00:00";
-				end += " 23:59:59";
-				var tp_start = toTimestamp(start);
-				var tp_end = toTimestamp(end);
-                if (tp_start <= tp_end){
-					
-						//Create heatmap data
-					var timespan;
-					//var heatmap_data_filtered = "[";
-					var heatmap_data_filtered = [];
-					var counterWeekday = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
-					
-						//Associative array (object) for total number of weekday actions
-					var totalHits = {
-						"Monday"  : 0,
-						"Tuesday"  : 0,
-						"Wednesday"  : 0,
-						"Thursday"  : 0,
-						"Friday"  : 0,
-						"Saturday"  : 0,
-						"Sunday"  : 0
-					};
-					
-						//Associative array (object) for total  number of own weekday actions
-					var totalOwnHits = {
-						"Monday"  : 0,
-						"Tuesday"  : 0,
-						"Wednesday"  : 0,
-						"Thursday"  : 0,
-						"Friday"  : 0,
-						"Saturday"  : 0,
-						"Sunday"  : 0
-					};
-					
-					//Associative array (object) to assign the query results
-					var weekdays = {
-						"Monday" : {
-							"0to6" : {
-								"all" : {
-									"col"  : 0,
-									"value" : 0,
-								},
-								"own" : {
-									"col"  : 1,
-									"value" : 0,
-								},
-							},
-							"6to12" : {
-								"all" : {
-									"col"  : 2,
-									"value" : 0,
-								},
-								"own" : {
-									"col"  : 3,
-									"value" : 0,
-								},
-							},
-								
-							"12to18" : {
-								"all" : {
-									"col"  : 4,
-									"value" : 0,
-								},
-								"own" : {
-									"col"  : 5,
-									"value" : 0,
-								},
-							},
-								
-							"18to24" : {
-								"all" : {
-									"col"  : 6,
-									"value" : 0,
-								},
-								"own" : {
-									"col"  : 7,
-									"value" : 0,
-								},
-							},
-							"row" : 0,
-						}, 
-						"Tuesday" : {
-							"0to6" : {
-								"all" : {
-									"col"  : 0,
-									"value" : 0,
-								},
-								"own" : {
-									"col"  : 1,
-									"value" : 0,
-								},
-							},
-							"6to12" : {
-								"all" : {
-									"col"  : 2,
-									"value" : 0,
-								},
-								"own" : {
-									"col"  : 3,
-									"value" : 0,
-								},
-							},
-								
-							"12to18" : {
-								"all" : {
-									"col"  : 4,
-									"value" : 0,
-								},
-								"own" : {
-									"col"  : 5,
-									"value" : 0,
-								},
-							},
-								
-							"18to24" : {
-								"all" : {
-									"col"  : 6,
-									"value" : 0,
-								},
-								"own" : {
-									"col"  : 7,
-									"value" : 0,
-								},
-							},
-							"row" : 1,
-						}, 
-						"Wednesday" : {
-							"0to6" : {
-								"all" : {
-									"col"  : 0,
-									"value" : 0,
-								},
-								"own" : {
-									"col"  : 1,
-									"value" : 0,
-								},
-							},
-							"6to12" : {
-								"all" : {
-									"col"  : 2,
-									"value" : 0,
-								},
-								"own" : {
-									"col"  : 3,
-									"value" : 0,
-								},
-							},
-								
-							"12to18" : {
-								"all" : {
-									"col"  : 4,
-									"value" : 0,
-								},
-								"own" : {
-									"col"  : 5,
-									"value" : 0,
-								},
-							},
-								
-							"18to24" : {
-								"all" : {
-									"col"  : 6,
-									"value" : 0,
-								},
-								"own" : {
-									"col"  : 7,
-									"value" : 0,
-								},
-							},
-							"row" : 2,
-						}, 
-						"Thursday" : {
-							"0to6" : {
-								"all" : {
-									"col"  : 0,
-									"value" : 0,
-								},
-								"own" : {
-									"col"  : 1,
-									"value" : 0,
-								},
-							},
-							"6to12" : {
-								"all" : {
-									"col"  : 2,
-									"value" : 0,
-								},
-								"own" : {
-									"col"  : 3,
-									"value" : 0,
-								},
-							},
-								
-							"12to18" : {
-								"all" : {
-									"col"  : 4,
-									"value" : 0,
-								},
-								"own" : {
-									"col"  : 5,
-									"value" : 0,
-								},
-							},
-								
-							"18to24" : {
-								"all" : {
-									"col"  : 6,
-									"value" : 0,
-								},
-								"own" : {
-									"col"  : 7,
-									"value" : 0,
-								},
-							},
-							"row" : 3,
-						}, 
-						"Friday" : {
-							"0to6" : {
-								"all" : {
-									"col"  : 0,
-									"value" : 0,
-								},
-								"own" : {
-									"col"  : 1,
-									"value" : 0,
-								},
-							},
-							"6to12" : {
-								"all" : {
-									"col"  : 2,
-									"value" : 0,
-								},
-								"own" : {
-									"col"  : 3,
-									"value" : 0,
-								},
-							},
-								
-							"12to18" : {
-								"all" : {
-									"col"  : 4,
-									"value" : 0,
-								},
-								"own" : {
-									"col"  : 5,
-									"value" : 0,
-								},
-							},
-								
-							"18to24" : {
-								"all" : {
-									"col"  : 6,
-									"value" : 0,
-								},
-								"own" : {
-									"col"  : 7,
-									"value" : 0,
-								},
-							},
-							"row" : 4,
-						}, 
-						"Saturday" : {
-							"0to6" : {
-								"all" : {
-									"col"  : 0,
-									"value" : 0,
-								},
-								"own" : {
-									"col"  : 1,
-									"value" : 0,
-								},
-							},
-							"6to12" : {
-								"all" : {
-									"col"  : 2,
-									"value" : 0,
-								},
-								"own" : {
-									"col"  : 3,
-									"value" : 0,
-								},
-							},
-								
-							"12to18" : {
-								"all" : {
-									"col"  : 4,
-									"value" : 0,
-								},
-								"own" : {
-									"col"  : 5,
-									"value" : 0,
-								},
-							},
-								
-							"18to24" : {
-								"all" : {
-									"col"  : 6,
-									"value" : 0,
-								},
-								"own" : {
-									"col"  : 7,
-									"value" : 0,
-								},
-							},
-							"row" : 5,
-						}, 
-						"Sunday" : {
-							"0to6" : {
-								"all" : {
-									"col"  : 0,
-									"value" : 0,
-								},
-								"own" : {
-									"col"  : 1,
-									"value" : 0,
-								},
-							},
-							"6to12" : {
-								"all" : {
-									"col"  : 2,
-									"value" : 0,
-								},
-								"own" : {
-									"col"  : 3,
-									"value" : 0,
-								},
-							},
-								
-							"12to18" : {
-								"all" : {
-									"col"  : 4,
-									"value" : 0,
-								},
-								"own" : {
-									"col"  : 5,
-									"value" : 0,
-								},
-							},
-								
-							"18to24" : {
-								"all" : {
-									"col"  : 6,
-									"value" : 0,
-								},
-								"own" : {
-									"col"  : 7,
-									"value" : 0,
-								},
-							},
-							"row" : 6,
-						}, 
-					};
-					
-						//Iterate through each element of the original query.
-					js_heatmap.forEach(function(item) {
-						
-							//Check, if the timestamp is included in the filter.
-						if (item[1].timecreated >= tp_start && item[1].timecreated <= tp_end) {
-						
-								//link timespan to column in heatmap
-							if(parseInt(item[1].hour) >= 0  && parseInt(item[1].hour) < 6) {
-								timespan = "0to6";		
-							}
-							else if(parseInt(item[1].hour) >= 6  && parseInt(item[1].hour) < 12) {
-								timespan = "6to12";			
-							}
-							else if(parseInt(item[1].hour) >= 12  && parseInt(item[1].hour) < 18) {
-								timespan = "12to18";				
-							}
-							else if(parseInt(item[1].hour) >= 18  && parseInt(item[1].hour) < 24) {
-								timespan = "18to24";			
-							}
-							
-								//Data for specific day
-							weekdays[item[1].weekday][timespan]["all"]["value"] += parseInt(item[1].allhits);
-							weekdays[item[1].weekday][timespan]["own"]["value"] += parseInt(item[1].ownhits);
-							
-								//Data for overall clicks
-							totalHits[item[1].weekday] += parseInt(item[1].allhits);
-							totalOwnHits[item[1].weekday] += parseInt(item[1].ownhits);
-
-
-						}
-					});
-					
-						//Put data of each weekdayfield into suitable format for the chart.
-					var counter = 0;
-					while (counter <= 6) {
-						
-						heatmap_data_filtered.push([weekdays[counterWeekday[counter]]["0to6"]["all"]["col"],weekdays[counterWeekday[counter]]["row"],weekdays[counterWeekday[counter]]["0to6"]["all"]["value"]]);
-						
-						heatmap_data_filtered.push([weekdays[counterWeekday[counter]]["0to6"]["own"]["col"],weekdays[counterWeekday[counter]]["row"],weekdays[counterWeekday[counter]]["0to6"]["own"]["value"]]);
-						
-						heatmap_data_filtered.push([weekdays[counterWeekday[counter]]["6to12"]["all"]["col"],weekdays[counterWeekday[counter]]["row"],weekdays[counterWeekday[counter]]["6to12"]["all"]["value"]]);
-						
-						heatmap_data_filtered.push([weekdays[counterWeekday[counter]]["6to12"]["own"]["col"],weekdays[counterWeekday[counter]]["row"],weekdays[counterWeekday[counter]]["6to12"]["own"]["value"]]);
-						
-						heatmap_data_filtered.push([weekdays[counterWeekday[counter]]["12to18"]["all"]["col"],weekdays[counterWeekday[counter]]["row"],weekdays[counterWeekday[counter]]["12to18"]["all"]["value"]]);
-						
-						heatmap_data_filtered.push([weekdays[counterWeekday[counter]]["12to18"]["own"]["col"],weekdays[counterWeekday[counter]]["row"],weekdays[counterWeekday[counter]]["12to18"]["own"]["value"]]);
-						
-						heatmap_data_filtered.push([weekdays[counterWeekday[counter]]["18to24"]["all"]["col"],weekdays[counterWeekday[counter]]["row"],weekdays[counterWeekday[counter]]["18to24"]["all"]["value"]]);
-						
-						heatmap_data_filtered.push([weekdays[counterWeekday[counter]]["18to24"]["own"]["col"],weekdays[counterWeekday[counter]]["row"],weekdays[counterWeekday[counter]]["18to24"]["own"]["value"]]);
-						
-						counter = counter + 1;
-					}
-					
-						//Put data of overall clicks into suitable format for the chart.
-					var x = 8; //for total and average hits
-					while(x <= 11) {
-						var y = 0; //for weekdays
-						while(y <= 6) {
-							if (x == 8) {
-								heatmap_data_filtered.push([x, y, totalHits[counterWeekday[y]]]);
-							}
-							else if (x == 9) {
-								heatmap_data_filtered.push([x, y, totalOwnHits[counterWeekday[y]]]);
-							}
-							else if (x == 10) {
-								heatmap_data_filtered.push([x, y, Math.round(totalHits[counterWeekday[y]]/7.0)]);
-							}
-							else if (x == 11) {
-								heatmap_data_filtered.push([x, y, Math.round(totalOwnHits[counterWeekday[y]]/7.0)]);
-							}
-							
-							y  = y+1;
-						}
-						x = x+1;
-					}
-					
-					
-                    Highcharts.chart("heatmap", {
-
-						chart: {
-							type: "heatmap",
-							marginTop: 40,
-							marginBottom: 80,
-							plotBorderWidth: 1
-						},
-
-
-						title: {
-							text: "Aktionen pro Tag pro Zeitraum"
-						},
-
-						xAxis: {
-							categories: ["ALLE<br>00:00-06:00", "EIGENE<br>00:00-06:00", "ALLE<br>06:00-12:00", "EIGENE<br>06:00-12:00", "ALLE<br>12:00-18:00", "EIGENE<br>12:00-18:00","ALLE<br>18:00-24:00", "EIGENE<br>18:00-24:00",  "ALLE<br>Gesamt", "EIGENE<br>Gesamt", "ALLE<br>Durchschnitt", "EIGENE<br>Durchschnitt"]
-						},
-
-						yAxis: {
-							categories: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
-							title: null
-						},
-
-						colorAxis: {
-							min: 0,
-							minColor: "#FFFFFF",
-							maxColor: Highcharts.getOptions().colors[0]
-						},
-
-						legend: {
-							align: "right",
-							layout: "vertical",
-							margin: 0,
-							verticalAlign: "top",
-							y: 25,
-							symbolHeight: 280
-						},
-						
-						tooltip: false,
-						
-
-						series: [{
-							name: "Actions per day",
-							borderWidth: 1,
-							data: heatmap_data_filtered, //convert data string to array
-							dataLabels: {
-								enabled: true,
-								color: "#000000"
-							}
-						}]
-
-					}); 
-                }else{
-                    // Materialize.toast(message, displayLength, className, completeCallback);
-                    Materialize.toast("Überprüfen Sie ihre Auswahl (Beginn < Ende)", 3000) // 4000 is the duration of the toast
-                    $("#datepicker_5").val("");
-                    $("#datepicker_6").val("");
-                }
-				
-            });
-        });
-    </script>
-    <!-- Reset Charts (BarChart, LineChart) -->
-    <script>
-        $(document).ready(function () {
-            /* Bar Chart - reset button */
-            $("#rst_btn_2").click(function () {
-                drawLineChart();
-                $("#datepicker_3").val("");
-                $("#datepicker_4").val("");
-            });
+                    });',
+	file_get_contents('js/lemo_linechart.js')
+	);
+	
+	$content .=
+	'<script>'.file_get_contents('js/lemo_barchart.js').'</script>
+	<script>'.$linechart_js_string.'</script>
+	<script>'.file_get_contents('js/lemo_heatmap.js').'</script>
+	<script>'.file_get_contents('js/lemo_treemap.js').'</script>
+	<script>
 			
-			//Heatmap - reset button
-			$("#rst_btn_3").click(function() {
-			drawHeatMap();
-			$("#datepicker_5").val("");
-            $("#datepicker_6").val("");
-			
-        });
-
-
-        });
-    </script>
-
-    <!-- redraw charts when its tab is clicked -->
-    <script>
-        $(document).ready(function () {
-            $(document).ready(function() {
-        
-				//Minimalize tabs are being initialized, callback function "drawAllCharts"is executed on tab change
-				$("#tabs").tabs({ "onShow": drawAllCharts });
+		<!-- Data-variables from lemo_dq_queries.php made usable for the js-files. -->
+		var barchart_data = '.$bar_chart_data.';
+		var linechart_data = ['.$lineChart.'];
+		var heatmap_data = '.$heatmap_data.';
+		var treemap_data = '.$treemap_data.';
 		
-			});
+		var js_activity = ['.$lineChartArray.'];
+		var js_heatmap = Object.entries('.$js_heatmap.');
+	</script>
+	<!-- General functions of the plugin. Must be included after the JS-files of the charts. -->
+		<script>'.file_get_contents('js/lemo_view.js').'</script>
+	</body>
+	</html>';
+}
 
+else if ($_POST['allCharts'] == 'false') {
+	$content = 
+	'<!DOCTYPE html>
+	<html lang="de">
 
-		});
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Lemo4Moodle</title>
 
-    </script>
+		<!-- Datepicker jQuery-->
+		<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
-    <style>
-        .brand-logo {
-            margin-left: 25px;
-        }
+		<!-- Materialize CSS Framework - minified CSS -->
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
 
+		<!-- Google Icons -->
+		<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+		
+		<!-- lemo4moodle.css -->
+		<style>'.file_get_contents('lemo4moodle_download.css').'</style>
 
+		<!-- report_styles.css -->
+		<style>'.file_get_contents('styles.css').'</style>
+		
+	</head>
 
-        .nav-wrapper {
-            background-color: #D92425;
-        }
-
-        .tabs .tab a {
-            color: #D92425;
-            background-color: #ffffff;
-        }
-
-        /*text color*/
-
-        .tabs .tab a:hover {
-
-            color: #000;
-        }
-
-        /*Text color on hover*/
-
-        .tabs .tab a.active {
-
-            color: #D92425;
-        }
-
-        /*Background and text color when a tab is active*/
-
-        .tabs .indicator {
-            background-color: #D92425;
-        }
-
-        /*Color of underline*/
-
-        .tabs .tab.disabled a {
-            color: #D92425;
-        }
-
-        .tabs .tab.disabled a:hover {
-            color: #D92425;
-        }
-
-        button {
-            margin-top: 10px;
-            margin-bottom: 10px;
-        }
-
-		#bar_chart {
-			width: 90% !important;
-			height: 90% !important;
-			min-height: 500px !important;
+	<body>
+		<div class="container-fluid">
+			<nav>
+				<div class="nav-wrapper">
+					<a onClick="window.location.reload()" class="brand-logo">
+						<i class="material-icons medium">insert_chart</i>Lemo4Moodle</a>
+					<ul id="nav" class="right hide-on-med-and-down">
+						<!--
+						<li>
+							<a href="http://www.hwr-berlin.de/home/" class="waves-effect waves-light btn white red-text" id="btn_hwr" target="_blank">www.hwr-berlin.de</a>
+						</li>
+						-->
+						<li>
+							<a href="#" class="waves-effect waves-light btn white red-text" id="btn_manual">Hilfe</a>
+						</li>
+						<li>
+							<a onClick="window.close();" class="waves-effect waves-light btn white red-text" id="btn_close">Schließen</a>
+						</li>
+					</ul>
+				</div>
+			</nav>
+			<div class="row">
+				<div class="col s12">
+					<ul class="tabs" id="tabs">
+						<li class="tab" id="tab_chart">
+							<a class="active" href="#chart1" >'.$_POST['chart'].'</a>
+						</li>
+					</ul>
+				</div>
+				<div id="chart1" class="col s12">
+					<div class="row">
+						<div class="col s9 chart">
+							<div id="'.$_POST['chart'].'" class="chart"></div>
+						</div>
+						<div id="options" class="col s3">
+							<div class="row">
+								<div class="input-field col s12">';
+									if($_POST['chart'] == 'linechart') {
+										$content .=
+										'<div class="divider"></div>
+											<p>Filter:</p>
+											<input placeholder="Beginn" type="text" class="datepick " id="datepicker_3">
+											<input placeholder="Ende" type="text" class="datepick " id="datepicker_4">
+											<button class="btn waves-effect waves-light grey darken-3 button" type="submit" name="action" id="dp_button_2">Aktualisieren</button>
+											<button class="btn waves-effect waves-light grey darken-3 button" type="submit" name="action" id="rst_btn_2">R&uuml;ckg&auml;ngig</button>
+										<div class="divider"></div>';
+									}
+									else if($_POST['chart'] == 'heatmap') {
+										$content .=
+										'<div class="divider"></div>
+											<p>Filter:</p>
+											<input placeholder="Beginn" type="text" class="datepick " id="datepicker_5">
+											<input placeholder="Ende" type="text" class="datepick " id="datepicker_6">
+											<button class="btn waves-effect waves-light grey darken-3 button" type="submit" name="action" id="dp_button_3">Aktualisieren</button>
+											<button class="btn waves-effect waves-light grey darken-3 button" type="submit" name="action" id="rst_btn_3">R&uuml;ckg&auml;ngig</button>
+										<div class="divider"></div>';
+									}
+	$content .=
+								'</div>                               
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div id="report">
+				<ul class="collapsible z-depth-0" data-collapsible="accordion">
+					<li>
+						<div class="collapsible-header">
+							<i class="material-icons right">expand_more</i>Kursaktivität (Moodle Bericht)</div>
+						<div class="collapsible-body">
+							<span>
+								'.$table.'
+							</span>
+						</div>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<!-- JQuery and JQuery Datepicker -->
+		<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+		<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+		
+		<!-- Google Charts -->
+		<script src="https://www.gstatic.com/charts/loader.js"></script>
+		<script src="https://www.google.com/jsapi"></script>
+		
+		<!-- Materialize CSS Framework - minified - JavaScript -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+		
+		<!-- Highcharts, Heatmap-->
+		<script src="https://code.highcharts.com/highcharts.js"></script>
+		<script src="https://code.highcharts.com/modules/heatmap.js"></script>
+		<script>';
+			if ($_POST['chart'] == 'barchart') {
+			$content .= 'var barchart_data = '.$bar_chart_data.';';
+			}
+			else if ($_POST['chart'] == 'linechart') {
+				$content .= 'var linechart_data = ['.$lineChart.'];
+				var js_activity = ['.$lineChartArray.'];';
+			}
+			else if ($_POST['chart'] == 'heatmap') {
+				$content .= 'var heatmap_data = '.$heatmap_data.';
+				var js_heatmap = Object.entries('.$js_heatmap.');';
+			}
+			else if ($_POST['chart'] == 'treemap') {
+				$content .= 'var treemap_data = '.$treemap_data.';';
+			}
+			
+			
+			
+			
+			
+			
+		$content .= '</script>
+		<!-- Barchart, linechart, heatmap and treemap are loaded. Must be included after the data-variables.-->';
+		if ($_POST['chart'] == 'barchart') {
+			$content .= '<script>'.file_get_contents('js/lemo_barchart.js').'</script>';
 		}
-
-		#line_chart {
-			width: 100% !important; 
-			min-height: 500px !important;
+		else if ($_POST['chart'] == 'linechart') {
+			$content .= '<script>'.$linechart_js_string.'</script>';
 		}
-
-		#treemap {
-			width:  100% !important;
-			min-height: 500px !important;
+		else if ($_POST['chart'] == 'heatmap') {
+			$content .= '<script>'.file_get_contents('js/lemo_heatmap.js').'</script>';
 		}
-
-		#heatmap {
-			width:  100% !important;
-			min-height: 500px !important;
+		else if ($_POST['chart'] == 'treemap') {
+			$content .= '<script>'.file_get_contents('js/lemo_treemap.js').'</script>';
 		}
+		
+		$content .= '
+		<!-- General functions of the plugin. Must be included after the JS-files of the charts. -->
+		<script>'.file_get_contents('js/lemo_view.js').'</script>
+	</body>
+	</html>';
+}
 
-        .col .s9 {
-            min-height: 500px !important;
-        }
 
-        #chart_div {
-            width: 100% !important;
-            min-height: 500px !important;
-        }
 
-        h3 {
-            font-family: Arial, Helvetica, sans-serif;
-            font-size: 15px;
-            font-weight: bold;
-        }
 
-        .chart {
-            max-width: 100%;
-            min-height: 450px;
-        }
-
-        .announcement {
-            margin: 0px;
-            padding: 5px;
-        }
-
-        .announcement-link {
-            color: #0d47a1;
-        }
-
-        .red-text {
-            color: #D92425;
-        }
-    </style>
-</head>
-
-<body>
-    <div class="container-fluid">
-        <div class="col s12 yellow darken-1 announcement">
-            <p class="center-align" id="announcement">
-                <i class="material-icons">announcement</i>
-                Für die Darstellung ist eine Internetverbindung notwendig!
-				<br>
-				Lokale Version (Daten sind nur bis zum '.$heute.' in dieser Datei gespeichert.) 
-				Aktuelle Daten unter:
-                <a href="https://moodle.hwr-berlin.de/" class="announcement-link">moodle.hwr-berlin.de</a>
-            </p>
-        </div>
-        <nav>
-            <div class="nav-wrapper">
-                <a onClick="window.location.reload()" class="brand-logo">
-                    <i class="material-icons">insert_chart</i>lemo4moodle</a>
-                <ul id="nav" class="right hide-on-med-and-down">
-                    <li>
-                        <a href="http://www.hwr-berlin.de/home/" class="waves-effect waves-light btn white red-text" id="btn_hwr" target="_blank">www.hwr-berlin.de
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
-        <div class="row">
-            <div class="col s12">
-                <ul class="tabs" id="tabs">
-                    <li class="tab disabled">
-                        <a href="#">Lokale Version erstellt: '.$heute.'</a>
-                    </li>
-                    <li class="tab" id="tab_barChart">
-                        <a class="active" href="#chart1">Bar Chart</a>
-                    </li>
-                    <li class="tab" id="tab_activityChart">
-                        <a href="#chart2">Activity Chart</a>
-                    </li>
-                    <li class="tab" id="tab_heatMap">
-                        <a href="#chart3">Heatmap</a>
-                    </li>
-                    <li class="tab" id="tab_treeMap">
-                        <a href="#chart4">TreeMap</a>
-                    </li>
-                </ul>
-            </div>
-            <div id="chart1" class="col s12">
-                <div class="row">
-                    <div class="col s9 chart">
-                        <div id="bar_chart" class="chart"></div>
-                    </div>
-                    <div id="options" class="col s3">
-                        <div class="row">
-                            <div class="input-field col s12">
-                                <!-- place filter options here -->
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div id="chart2" class="col s12">
-                <div class="row">
-                    <div class="col s9 chart">
-                        <div id="line_chart" class="chart"></div>
-                    </div>
-                    <div id="options" class="col s3">
-                        <div class="row">
-                            <div class="input-field col s12">
-                                <p>Filter:</p>
-                                <input placeholder="Beginn" type="text" class="datepick " id="datepicker_3">
-                                <input placeholder="Ende" type="text" class="datepick " id="datepicker_4">
-                                <button class="btn waves-effect waves-light grey darken-3 button" type="submit" name="action" id="dp_button_2">Aktualisieren</button>
-                                <button class="btn waves-effect waves-light grey darken-3 button" type="submit" name="action" id="rst_btn_2">R&uuml;ckg&auml;ngig</button>
-                                <div class="divider"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div id="chart3" class="col s12">
-                <div class="row">
-                    <div class="col s9 chart">
-                        <div  id="heatmap" class="chart"></div>
-                    </div>
-                    <div id="options" class="col s3">
-                        <div class="row">
-                            <div class="input-field col s12">
-                                <div class="divider"></div>
-								<p>Filter:</p>
-								<input placeholder="Beginn" type="text" class="datepick " id="datepicker_5">
-								<input placeholder="Ende" type="text" class="datepick " id="datepicker_6">
-								<button class="btn waves-effect waves-light grey darken-3 button" type="submit" name="action" id="dp_button_3">Aktualisieren</button>
-								<button class="btn waves-effect waves-light grey darken-3 button" type="submit" name="action" id="rst_btn_3">R&uuml;ckg&auml;ngig</button>
-								<div class="divider"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div id="chart4" class="col s12">
-                <div class="row">
-                    <div class="col s9 chart">
-                        <div  id="treemap" class="chart"></div>
-                    </div>
-                    <div id="options" class="col s3">
-                        <div class="row">
-                            <div class="input-field col s12">
-                                <!-- place filter here -->
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div id="report">
-            <ul class="collapsible z-depth-0" data-collapsible="accordion">
-                <li>
-                    <div class="collapsible-header">
-                        <i class="material-icons right">expand_more</i>Kursaktivität (Moodle Bericht)</div>
-                    <div class="collapsible-body">
-                        <span>
-                        '.$table.'
-                        </span>
-                    </div>
-                </li>
-            </ul>
-        </div>
-    </div>
-
-    <!-- make charts responsive -->
-    <script>
-        $(window).resize(function () {
-            drawBarChart();
-            drawLineChart();
-			drawTreeMap();
-        });
-
-    </script>
-</body>
-
-</html>';
-
-//file_put_contents($pathForHTML, $content);
-//echo $pathForHTML;
 
 
 
@@ -1209,8 +528,6 @@ header("Content-type: text/html");
 header("Content-Disposition: attachment; filename=lemo4moodle_".$heute_filename.".html");
 echo $content;
 ?>
-
-
 
 
 

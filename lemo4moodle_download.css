@@ -1,0 +1,103 @@
+.col .s9 {
+	min-height: 500px !important;
+}
+
+#chart_div {
+	width: 100% !important;
+	min-height: 500px !important;
+}
+
+h3 {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 15px;
+	font-weight: bold;
+}
+
+.chart {
+	max-width: 100%;
+	min-height: 450px;
+}
+
+.announcement {
+	margin: 0px;
+	padding: 5px;
+}
+
+.announcement-link {
+	color: #0d47a1;
+}
+
+.red-text {
+	color: #D92425;
+}
+
+.brand-logo {
+	margin-left: 25px;
+}
+
+
+
+.nav-wrapper {
+	background-color: #D92425;
+}
+
+.tabs .tab a {
+	color: #D92425;
+	background-color: #ffffff;
+}
+
+/*text color*/
+
+.tabs .tab a:hover {
+
+	color: #000;
+}
+
+/*Text color on hover*/
+
+.tabs .tab a.active {
+
+	color: #D92425;
+}
+
+/*Background and text color when a tab is active*/
+
+.tabs .indicator {
+	background-color: #D92425;
+}
+
+/*Color of underline*/
+
+.tabs .tab.disabled a {
+	color: #D92425;
+}
+
+.tabs .tab.disabled a:hover {
+	color: #D92425;
+}
+
+button {
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+#bar_chart {
+	width: 90% !important;
+	height: 90% !important;
+	min-height: 500px !important;
+}
+
+#line_chart {
+	width: 100% !important; 
+	min-height: 500px !important;
+}
+
+#heatmap {
+	width:  100% !important;
+	min-height: 500px !important;
+}
+
+#treemap {
+	width:  100% !important;
+	min-height: 500px !important;
+}

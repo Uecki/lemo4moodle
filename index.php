@@ -23,6 +23,7 @@ global $DB;
 global $CFG;
 
 ?>
+
 <!DOCTYPE html>
 <html lang="de">
 
@@ -48,18 +49,16 @@ global $CFG;
 	
 </head>
 
+<!-- Start (for lemo_create_html.php) -->
+
 <body>
+	<div id = "dialog" title = "Auswahl">Möchten Sie nur diesen Graphen oder alle Graphen herunterladen?</div>
     <div class="container-fluid">
         <nav>
             <div class="nav-wrapper">
                 <a onClick="window.location.reload()" class="brand-logo">
                     <i class="material-icons medium">insert_chart</i>Lemo4Moodle</a>
                 <ul id="nav" class="right hide-on-med-and-down">
-                    <!--
-					<li>
-                        <a href="http://www.hwr-berlin.de/home/" class="waves-effect waves-light btn white red-text" id="btn_hwr" target="_blank">www.hwr-berlin.de</a>
-                    </li>
-					-->
                     <li>
                         <a href="#" class="waves-effect waves-light btn white red-text" id="btn_manual">Hilfe</a>
                     </li>
@@ -76,53 +75,38 @@ global $CFG;
                         <a href="#">Logdaten seit: <?php echo userdate($minlog);?></a>
                     </li>
                     <li class="tab" id="tab_barChart">
-                        <a class="active" href="#chart1" >Bar Chart</a>
+                        <a class="active" id="tab1" href="#chart1" >Barchart</a>
                     </li>
                     <li class="tab" id="tab_activityChart">
-                        <a href="#chart2">Activity Chart</a>
+                        <a id="tab2" href="#chart2">Activity Chart</a>
                     </li>
                     <li class="tab" id="tab_heatMap">
-                        <a href="#chart3">Heatmap</a>
+                        <a id="tab3" href="#chart3">Heatmap</a>
                     </li>
                     <li class="tab" id="tab_treeMap">
-                        <a href="#chart4">Treemap</a>
+                        <a id="tab4" href="#chart4">Treemap</a>
                     </li>
                 </ul>
             </div>
             <div id="chart1" class="col s12">
                 <div class="row">
                     <div class="col s9 chart">
-                        <div id="bar_chart" class="chart"></div>
+                        <div id="barchart" class="chart"></div>
                     </div>
                     <div id="options" class="col s3">
                         <div class="row">
                             <div class="input-field col s12">
-							<!--
-								<div class="divider"></div>
-								<p>Filter:</p>
-                                    <input placeholder="Beginn" type="text" class="datepick " id="datepicker_1">
-                                    <input placeholder="Ende" type="text" class="datepick " id="datepicker_2">
-                                    <button class="btn waves-effect waves-light grey darken-3 button" type="submit" name="action" id="dp_button_1">Aktualisieren</button>
-                                    <button class="btn waves-effect waves-light grey darken-3 button" type="submit" name="action" id="rst_btn_1">R&uuml;ckg&auml;ngig</button>
-                                    <div class="divider"></div>
-								-->
-                                <p>Datensicherung:</p>
-								
-                                <!-- Button nicht mehr nötig.
-								<a href="<?php echo 'saved_datasets/'.$courseID.'_'.$userID.'/data_'.$courseID.'_'.$userID.'.json'; ?>" download="<?php echo 'lemo4moodle_data_'.$courseID.'_'.$userID.'.json'; ?>" class="btn waves-effect waves-light grey darken-3 button">Raw Data (JSON)</a>
-								-->
-								
+                                <p>Datensicherung:</p>								
                                 <form action='lemo_create_html.php' method='post' id='download_form_1'>
 									<a class="btn waves-effect waves-light grey darken-3 button ajax" id="html_btn_1">HTML Download</a>
 									<!-- Variables that are to be posted to lemo_create_html.php.  -->
 									<input type='hidden' value='<?php echo $courseID ?>' name='id'>
 									<input type='hidden' value='<?php echo $userID ?>' name='userid'>
 									<input type='hidden' value='<?php echo $allData ?>' name='data'>
+									<input type='hidden' value='barchart' name='chart'>
+									<input type='hidden' value='' name='allCharts' id="allCharts1">
 									
 								</form>
-								<!--
-								<a href="lemo_create_html.php" download="test.html" class="btn waves-effect waves-light grey darken-3 button ajax" id="html_btn_1">HTML Download</a>
-								-->
                                 <div class="divider"></div>
                             </div>                               
                         </div>
@@ -132,7 +116,7 @@ global $CFG;
             <div id="chart2" class="col s12">
                 <div class="row">
                     <div class="col s9 chart">
-                        <div id="line_chart" class="chart"></div>
+                        <div id="linechart" class="chart"></div>
                     </div>
                         <div id="options" class="col s3">
                             <div class="row">
@@ -145,21 +129,15 @@ global $CFG;
                                     <button class="btn waves-effect waves-light grey darken-3 button" type="submit" name="action" id="rst_btn_2">R&uuml;ckg&auml;ngig</button>
                                     <div class="divider"></div>
                                     <p>Datensicherung:</p>
-									
-									<!-- Button nicht mehr nötig.
-                                    <a href="<?php echo 'saved_datasets/'.$courseID.'_'.$userID.'/data_'.$courseID.'_'.$userID.'.json'; ?>" download="<?php echo 'lemo4moodle_data_'.$courseID.'_'.$userID.'.json'; ?>" class="btn waves-effect waves-light grey darken-3 button">Raw Data (JSON)</a>
-									-->
-									
-									<form action='lemo_create_html.php' method='post' id='download_form_3'>
+									<form action='lemo_create_html.php' method='post' id='download_form_2'>
 										<a class="btn waves-effect waves-light grey darken-3 button ajax" id="html_btn_2">HTML Download</a>
 										<!-- Variables that are to be posted to lemo_create_html.php.  -->
 										<input type='hidden' value='<?php echo $courseID ?>' name='id'>
 										<input type='hidden' value='<?php echo $userID ?>' name='userid'>
 										<input type='hidden' value='<?php echo $allData ?>' name='data'>
+										<input type='hidden' value='linechart' name='chart'>
+										<input type='hidden' value='' name='allCharts' id="allCharts2">
 								    </form>
-									<!--
-                                    <a href="#" download="test.html" class="btn waves-effect waves-light grey darken-3 button ajax" id="html_btn_2">Download HTML</a>
-									-->
                                     <div class="divider"></div>
                                 </div>                               
                             </div>
@@ -183,12 +161,14 @@ global $CFG;
                                     <div class="divider"></div>
                                     <p>Datensicherung:</p>
 									
-									<form action='lemo_create_html.php' method='post' id='download_form_2'>
+									<form action='lemo_create_html.php' method='post' id='download_form_3'>
 										<a class="btn waves-effect waves-light grey darken-3 button ajax" id="html_btn_3">HTML Download</a>
 										<!-- Variables that are to be posted to lemo_create_html.php.  -->
 										<input type='hidden' value='<?php echo $courseID ?>' name='id'>
 										<input type='hidden' value='<?php echo $userID ?>' name='userid'>
 										<input type='hidden' value='<?php echo $allData ?>' name='data'>
+										<input type='hidden' value='heatmap' name='chart'>
+										<input type='hidden' value='' name='allCharts' id="allCharts3">
 								    </form>
                                 </div>                               
                             </div>
@@ -211,6 +191,8 @@ global $CFG;
 										<input type='hidden' value='<?php echo $courseID ?>' name='id'>
 										<input type='hidden' value='<?php echo $userID ?>' name='userid'>
 										<input type='hidden' value='<?php echo $allData ?>' name='data'>
+										<input type='hidden' value='treemap' name='chart'>
+										<input type='hidden' value='' name='allCharts' id="allCharts4">
 								    </form>
                                 </div>                               
                             </div>
@@ -251,6 +233,8 @@ global $CFG;
 	<!-- Highcharts, Heatmap-->
 	<script src="https://code.highcharts.com/highcharts.js"></script>
 	<script src="https://code.highcharts.com/modules/heatmap.js"></script>
+	
+	<!-- End (for lemo_create_html.php) -->
 	
 	<script>
 		

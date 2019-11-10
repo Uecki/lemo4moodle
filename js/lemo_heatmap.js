@@ -516,7 +516,8 @@ $(document).ready(function() {
 	
 	//Download button for heatmap tab.
 	$('#html_btn_3').click(function() {
-		document.getElementById("download_form_3").submit();
+		//Opens dialog box.
+		$( "#dialog" ).dialog( "open" );
 	});
 });
 

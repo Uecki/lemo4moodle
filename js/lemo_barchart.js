@@ -9,7 +9,8 @@ $(document).ready(function() {
 	
 	//Download button for barchart tab.
 	$('#html_btn_1').click(function() {
-		document.getElementById("download_form_1").submit();
+		//Opens dialog box.
+		$( "#dialog" ).dialog( "open" );
 	});
 
 });
@@ -38,7 +39,7 @@ var data = google.visualization.arrayToDataTable(barchart_data);
 	};
 
 	// Instantiate and draw the bar chart.
-	var materialBarChart = new google.charts.Bar(document.getElementById('bar_chart'));
+	var materialBarChart = new google.charts.Bar(document.getElementById('barchart'));
 	materialBarChart.draw(data, google.charts.Bar.convertOptions(materialOptions_BarChart));
 
 }

@@ -9,7 +9,8 @@ $(document).ready(function() {
 	
 	//Download button for treemap tab.
 	$('#html_btn_4').click(function() {
-		document.getElementById("download_form_4").submit();
+		//Opens dialog box.
+		$( "#dialog" ).dialog( "open" );
 	});
 
 });

@@ -72,7 +72,8 @@ $(document).ready(function() {
 	
 	//Download button for linechart tab.
 	$('#html_btn_2').click(function() {
-		document.getElementById("download_form_2").submit();
+		//Opens dialog box.
+		$( "#dialog" ).dialog( "open" );
 	});
 	
 });
@@ -99,7 +100,7 @@ function drawLineChart() {
 
 	};
 
-	activity_chart = new google.visualization.LineChart(document.getElementById('line_chart'));
+	activity_chart = new google.visualization.LineChart(document.getElementById('linechart'));
 	activity_chart.draw(data, options);
   
 }
