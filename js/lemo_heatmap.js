@@ -29,7 +29,6 @@ $(document).ready(function() {
 			
 				//Create heatmap data
 			var timespan;
-			//var heatmap_data_filtered = "[";
 			var heatmap_data_filtered = [];
 			var counterWeekday = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 			
@@ -453,6 +452,7 @@ $(document).ready(function() {
 			}
 			
 			
+			//initialize heatmap chart
 			Highcharts.chart('heatmap', {
 
 				chart: {
@@ -524,6 +524,7 @@ $(document).ready(function() {
 
 
 //Callback that draws the heatmap.
+//See highcharts documentation for heatmap.
 function drawHeatMap() {
 	Highcharts.chart('heatmap', {
 

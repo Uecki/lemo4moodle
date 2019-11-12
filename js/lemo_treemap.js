@@ -16,6 +16,7 @@ $(document).ready(function() {
 });
 
 //Callback that draws the treemap.
+//See google charts  documentation for treemap.
 function drawTreeMap() {
 
 	var data = new google.visualization.arrayToDataTable(treemap_data);

@@ -1,50 +1,45 @@
 <?php
-#lemo_create_html.php creates a html file containing the recent data and provides a download link for it
+/*lemo_create_html.php creates a html file containing the recent data and provides a download link for it*/
 
-# include the config 
+// include the config 
 include 'config.php';
 
 
-# include once moodle/report/outline/index.php and prevent any display function
+// include once moodle/report/outline/index.php and prevent any display function
 ob_start();
 include_once (moodle_path.'/report/outline/index.php');
 include_once (moodle_path.'/config.php');
 ob_end_clean();
 
-#get courseID, userID and allData (encoded data-arrays in JSON-format)
+//get courseID, userID and allData (encoded data-arrays in JSON-format)
 $courseID = $_POST["id"];
 $userID = $_POST["userid"];
 $allData = json_decode($_POST["data"], true);
 
-# get today's date 
+// get today's date 
 $heute = date("d.m.y");
 
-# get date for Filename
+// get date for Filename
 $heute_filename = date("Y_m_d");
 
-# set path for html file (to save it and to provide a download link)
+// set path for html file (to save it and to provide a download link)
 $pathForHTML = "saved_datasets/".$courseID."_".$userID."/data_".$courseID."_".$userID.".html";
 
-# get data from moodle/report/activity_report (access possible through /report/outline/index.php)
+// get data from moodle/report/activity_report (access possible through /report/outline/index.php)
 $table = html_writer::table($outlinetable);
 
-/*
-# load json file (located on web server)
-$file = 'saved_datasets/'.$courseID.'_'.$userID.'/data_'.$courseID.'_'.$userID.'.json';
-$existingData = json_decode(file_get_contents($file), true);
-*/
-
+// get each dataset from the data array
 $activity_array = array();
 $activity_array = $allData[0];
 $barchart_array = $allData[1];
 $heatmap_array = $allData[2];
 $treemap_array  = $allData[3];
-$heatmap = $allData[4];
+$heatmap = $allData[4]; #two heatmap datasets, because of filter function
 
 
 
 
-# create lineChart data
+// create lineChart data
 $lineChart = '';
 $lineChartArray = '';
 $test2 = '';
@@ -68,7 +63,7 @@ foreach($activity_array as $fO){
 
 
 
-#create bar chart data
+//create bar chart data
 $j = 1;
 $leng = count($barchart_array);
 $barchart_data_array = array();
@@ -84,7 +79,7 @@ foreach($barchart_array as $bar){
 }
 
 
-#create treemap data
+//create treemap data
 $i = 1;
 $nodeTitle; #variable for node title
 $lengTree = count($treemap_array);
@@ -111,18 +106,19 @@ foreach($treemap_array as $tree){
 }
 
 
-#create heatmap data
+//create heatmap data
 $heatmap_data = $heatmap_array;
 
 
 
-# filter array
+// filter array
 $js_activity = json_encode($activity_array, JSON_NUMERIC_CHECK);
 $js_heatmap = json_encode($heatmap, JSON_NUMERIC_CHECK);
 
-#initializing content variable
+//initializing content variable
 $content = "";
 
+// setting the content, depending on if the users wants all charts or only one
 if ($_POST['allCharts'] == 'true') {
 	/* For later implementation --> remove need to include changes twice, in index.php and in this file
 	$indexString = file_get_contents('index.php');
@@ -147,15 +143,13 @@ if ($_POST['allCharts'] == 'true') {
 		<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 		
 		<!-- lemo4moodle.css -->
-		<style>'.file_get_contents('lemo4moodle_download.css').'</style>
+		<style>'.file_get_contents('css/lemo4moodle_download.css').'</style>
 
 		<!-- report_styles.css -->
-		<style>'.file_get_contents('styles.css').'</style>
+		<style>'.file_get_contents('css/styles.css').'</style>
 		
 	</head>';
 	
-
-	//$content .=$trimmedIndexString;
 	$content .= 
 	'
 <body>
@@ -356,6 +350,7 @@ if ($_POST['allCharts'] == 'true') {
 	</html>';
 }
 
+//if only one chart should be downloaded
 else if ($_POST['allCharts'] == 'false') {
 	$content = 
 	'<!DOCTYPE html>
@@ -523,7 +518,7 @@ else if ($_POST['allCharts'] == 'false') {
 
 
 
-
+//set filename and type of file for the download
 header("Content-type: text/html");
 header("Content-Disposition: attachment; filename=lemo4moodle_".$heute_filename.".html");
 echo $content;

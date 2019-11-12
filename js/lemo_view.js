@@ -77,7 +77,7 @@ google.charts.load('current', {
 // Draw all charts when Charts is loaded. (Even the Highchart, which is not from Google Charts).
 google.charts.setOnLoadCallback(drawAllCharts);
 
-
+//JQuery datepicker funtion (for filter)
 $(function () {
 	$(".datepick").datepicker({
 		/*dateFormat: 'mm/dd/yy'*/

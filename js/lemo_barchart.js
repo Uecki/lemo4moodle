@@ -16,6 +16,7 @@ $(document).ready(function() {
 });
 
 // Callback that draws the bar chart (google charts).
+//See the google charts documentation for linechart.
 function drawBarChart(){
 var data = google.visualization.arrayToDataTable(barchart_data);
 			

@@ -1,10 +1,9 @@
 <?php
-# include config.php
+// include config.php
 include 'config.php';
-#define Moodle Path
-#$moodle_path = 'E:/xampp/htdocs/moodle';
 /* include once moodle/report/outline/index.php and prevent any display function  */
 ob_start();
+//moodle_path from config.php
 include_once (moodle_path.'/report/outline/index.php');
 
 include_once (moodle_path.'/config.php');
@@ -13,6 +12,7 @@ ob_end_clean();
 /* defining PHP errorstatement */
 error_reporting(E_ALL | E_STRICT);
 ini_set('display_errors', 1);
+
 $courseID = $_GET['id'];
 $userID = $_GET['user'];
 include_once ('lemo_db_queries.php');
@@ -42,17 +42,19 @@ global $CFG;
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 	
     <!-- lemo4moodle.css -->
-    <link rel="stylesheet" href="lemo4moodle.css">
+    <link rel="stylesheet" href="css/lemo4moodle.css">
 
 	<!-- report_styles.css -->
-	<link rel="stylesheet" href="styles.css">
+	<link rel="stylesheet" href="css/styles.css">
 	
 </head>
 
 <!-- Start (for lemo_create_html.php) -->
 
 <body>
+	<!-- Dialog box -->
 	<div id = "dialog" title = "Auswahl">Möchten Sie nur diesen Graphen oder alle Graphen herunterladen?</div>
+	<!-- Header -->
     <div class="container-fluid">
         <nav>
             <div class="nav-wrapper">
@@ -68,6 +70,7 @@ global $CFG;
                 </ul>
             </div>
         </nav>
+		<!-- Tabs -->
         <div class="row">
             <div class="col s12">
                 <ul class="tabs" id="tabs">
@@ -88,6 +91,7 @@ global $CFG;
                     </li>
                 </ul>
             </div>
+			<!-- Barchart -->
             <div id="chart1" class="col s12">
                 <div class="row">
                     <div class="col s9 chart">
@@ -113,6 +117,7 @@ global $CFG;
                     </div>
                 </div>
             </div>
+			<!-- Linechart/activity chart -->
             <div id="chart2" class="col s12">
                 <div class="row">
                     <div class="col s9 chart">
@@ -144,6 +149,7 @@ global $CFG;
                         </div>
                 </div>
             </div>
+			<!-- Heatmap -->
             <div id="chart3" class="col s12">
                 <div class="row">
                     <div class="col s9 chart">
@@ -175,6 +181,7 @@ global $CFG;
                     </div>
                 </div>    
             </div>
+			<!-- Treemap -->
             <div id="chart4" class="col s12">
                 <div class="row">
                     <div class="col s9 chart">
@@ -209,6 +216,7 @@ global $CFG;
 					<div class="collapsible-body">
 						<span>
 							<?php   
+								//footer of the page, general information about the course
 								echo $OUTPUT->container(get_string('computedfromlogs', 'admin', userdate($minlog)) , 'loginfo');
 								echo html_writer::table($outlinetable);
 							?>
@@ -245,6 +253,7 @@ global $CFG;
 		var treemap_data = <?php echo $treemap_data; ?>;
 		
 		<?php
+			//js variables needed for the filter
 			$js_activity = json_encode($finalLineChartObject, JSON_NUMERIC_CHECK);
 			echo "var js_activity = ". $js_activity . ";\n";
 			$js_heatmap = json_encode($heatmap, JSON_NUMERIC_CHECK);

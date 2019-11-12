@@ -1,7 +1,5 @@
 /*JS-file for everything that can be seen on or is related to the linechart-tab.*/
 
-// Variable for ...
-var activity_chart;
 
 $(document).ready(function() {
 	
@@ -79,6 +77,7 @@ $(document).ready(function() {
 });
 
 // Callback that draws the activity chart.
+//See the google charts documentation for linechart.
 function drawLineChart() {
   
 	var data = new google.visualization.DataTable();

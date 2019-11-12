@@ -1,6 +1,7 @@
 <?php
 
 # Database access data (Login Details for Moodle Database)
+# Change these as needed.
 
 const DB_HOST = 'localhost';
 const DB_USER = 'root';
@@ -8,7 +9,6 @@ const DB_PASS = '';
 const DB_NAME = 'moodle';
 
 # path to moodle files (variable value assigned to constant 'moodle_path')
-
 $dir = dirname(__FILE__);
 $shortenedPath = str_replace("blocks\lemo4moodle", "", $dir);
 $realPath = str_replace("\\", "/", $shortenedPath);
