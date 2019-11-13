@@ -159,9 +159,11 @@ if ($_POST['allCharts'] == 'true') {
                 <a onClick="window.location.reload()" class="brand-logo">
                     <i class="material-icons medium">insert_chart</i>Lemo4Moodle</a>
                 <ul id="nav" class="right hide-on-med-and-down">
-                    <li>
+                    <!--
+					<li>
                         <a href="#" class="waves-effect waves-light btn white red-text" id="btn_manual">Hilfe</a>
                     </li>
+					-->
                     <li>
                         <a onClick="window.close();" class="waves-effect waves-light btn white red-text" id="btn_close">Schließen</a>
                     </li>
@@ -371,10 +373,10 @@ else if ($_POST['allCharts'] == 'false') {
 		<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 		
 		<!-- lemo4moodle.css -->
-		<style>'.file_get_contents('lemo4moodle_download.css').'</style>
+		<style>'.file_get_contents('css/lemo4moodle_download.css').'</style>
 
 		<!-- report_styles.css -->
-		<style>'.file_get_contents('styles.css').'</style>
+		<style>'.file_get_contents('css/styles.css').'</style>
 		
 	</head>
 
@@ -389,10 +391,11 @@ else if ($_POST['allCharts'] == 'false') {
 						<li>
 							<a href="http://www.hwr-berlin.de/home/" class="waves-effect waves-light btn white red-text" id="btn_hwr" target="_blank">www.hwr-berlin.de</a>
 						</li>
-						-->
+						
 						<li>
 							<a href="#" class="waves-effect waves-light btn white red-text" id="btn_manual">Hilfe</a>
 						</li>
+						-->
 						<li>
 							<a onClick="window.close();" class="waves-effect waves-light btn white red-text" id="btn_close">Schließen</a>
 						</li>
