@@ -115,6 +115,44 @@ $heatmap_data = $heatmap_array;
 $js_activity = json_encode($activity_array, JSON_NUMERIC_CHECK);
 $js_heatmap = json_encode($heatmap, JSON_NUMERIC_CHECK);
 
+//lemo_linechart.js-file needs adaptation to work as download. !Doesn't look good, but is functional.
+$linechart_js_string = str_replace(
+'var activity_data = [];
+		js_activity.forEach(function(item) {
+			if (item.timestamp >= tp_start && item.timestamp <= tp_end) {
+				activity_data.push({
+					date: item.datum,
+					accesses: item.zugriffe,
+					ownhits: item.ownHits,
+					users: item.nutzer
+				});
+			}		
+		})',
+'var activity_data = [];
+				js_activity.forEach(function (item) {
+					
+					var myDate=item[0];
+					myDate=myDate.split(", ");
+					//console.log(myDate);
+					//console.log(myDate[1]);
+					myDate[1]=parseInt(myDate[1])+1;
+					console.log(myDate[1]);
+					myDate[1]=myDate[1].toString();
+					var newDate=myDate[1]+"/"+myDate[2]+"/"+myDate[0];
+					var nd = toTimestamp(newDate);
+					//console.log(nd);
+					if (nd >= tp_start && nd <= tp_end) {
+						activity_data.push({
+							date: item[0],
+							accesses: item[1],
+							ownhits: item[2],
+							users: item[3]
+							});
+					}
+				});',
+file_get_contents('js/lemo_linechart.js')
+);
+
 //initializing content variable
 $content = "";
 
@@ -292,44 +330,6 @@ if ($_POST['allCharts'] == 'true') {
 	<!-- Highcharts, Heatmap-->
 	<script src="https://code.highcharts.com/highcharts.js"></script>
 	<script src="https://code.highcharts.com/modules/heatmap.js"></script>';
-	
-	//js-file needs adaptation to work as download. !Doesn't look good, but is functional.
-	$linechart_js_string = str_replace(
-	'var activity_data = [];
-			js_activity.forEach(function(item) {
-				if (item.timestamp >= tp_start && item.timestamp <= tp_end) {
-					activity_data.push({
-						date: item.datum,
-						accesses: item.zugriffe,
-						ownhits: item.ownHits,
-						users: item.nutzer
-					});
-				}		
-			})',
-	'var activity_data = [];
-                    js_activity.forEach(function (item) {
-                        
-						var myDate=item[0];
-						myDate=myDate.split(", ");
-						//console.log(myDate);
-						//console.log(myDate[1]);
-						myDate[1]=parseInt(myDate[1])+1;
-						console.log(myDate[1]);
-						myDate[1]=myDate[1].toString();
-						var newDate=myDate[1]+"/"+myDate[2]+"/"+myDate[0];
-						var nd = toTimestamp(newDate);
-						//console.log(nd);
-                        if (nd >= tp_start && nd <= tp_end) {
-                            activity_data.push({
-                                date: item[0],
-                                accesses: item[1],
-                                ownhits: item[2],
-                                users: item[3]
-                                });
-                        }
-                    });',
-	file_get_contents('js/lemo_linechart.js')
-	);
 	
 	$content .=
 	'<script>'.file_get_contents('js/lemo_barchart.js').'</script>
