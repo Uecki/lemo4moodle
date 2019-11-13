@@ -163,10 +163,11 @@ if ($_POST['allCharts'] == 'true') {
 					<li>
                         <a href="#" class="waves-effect waves-light btn white red-text" id="btn_manual">Hilfe</a>
                     </li>
-					-->
+					
                     <li>
                         <a onClick="window.close();" class="waves-effect waves-light btn white red-text" id="btn_close">Schließen</a>
                     </li>
+					-->
                 </ul>
             </div>
         </nav>
@@ -395,10 +396,11 @@ else if ($_POST['allCharts'] == 'false') {
 						<li>
 							<a href="#" class="waves-effect waves-light btn white red-text" id="btn_manual">Hilfe</a>
 						</li>
-						-->
+						
 						<li>
 							<a onClick="window.close();" class="waves-effect waves-light btn white red-text" id="btn_close">Schließen</a>
 						</li>
+						-->
 					</ul>
 				</div>
 			</nav>
