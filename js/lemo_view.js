@@ -2,7 +2,7 @@
 
 
 $(document).ready(function() {
-	
+
 	// Redraw charts when page is resized.
 	$(window).resize(function(){
 		drawAllCharts();
@@ -12,13 +12,13 @@ $(document).ready(function() {
 	$('#btn_close').click(function(){
 		window.close();
 	});
-	
+
 	//Minimalize tabs are being initialized, callback function 'drawAllCharts' is executed on tab change
 	$('#tabs').tabs({ 'onShow': drawAllCharts });
-	
+
 	//Initializing the dialog box shown before the download.
 	$( "#dialog" ).dialog({
-		autoOpen: false, 
+		autoOpen: false,
 		buttons: [
 			{
 				text: "Dieser Graph",
@@ -45,7 +45,7 @@ $(document).ready(function() {
 			{
 				text: "Alle Graphen",
 				click: function() {
-					$(this).dialog("close");	
+					$(this).dialog("close");
 					if ($(".active").attr('id') == 'tab1'){
 						document.getElementById("allCharts1").value = 'true';
 						document.getElementById("download_form_1").submit();
@@ -66,7 +66,7 @@ $(document).ready(function() {
 			}
 		]
 	});
-	
+
 });
 
 // Load Charts and the corechart package.
@@ -106,4 +106,110 @@ function drawAllCharts() {
 	if (typeof drawTreeMap === "function") {
 		drawTreeMap();
 	}
+}
+
+//Variables for filemerging
+var barchart_data_test = "[";
+var linechart_data_test = "";
+var heatmap_data_test = "[";
+var treemap_data_test = "[";
+
+//Funktion for filemerging
+$('#mergeButton').click(function() {
+	fileInput = document.querySelector('#filemerger');
+	var files =	fileInput.files;
+	var fileString;
+	//const charttype = ["barchart_data", "linechart_data", "heatmap_data", "treemap_data"];
+	const charttype = ["linechart_data"];
+
+	//Variable to keep track of loop (for callback).
+	var loop=0;
+
+	//Iterate trough each selected file
+	for (i=0; i<files.length; i++) {
+		//Callback function
+		readFile(files[i], function(e) {
+			fileString = e.target.result;
+			//Iterate through each charttype
+			charttype.forEach(function(it){
+				//Get the data from the file as an array of strings
+				var start = fileString.indexOf("[", fileString.indexOf("var "+ it +" ="));
+				var end = fileString.indexOf(";", fileString.indexOf("var " + it + " ="));
+				var rawData = fileString.substring(start, end);
+				var data = rawData.substring(2, rawData.lastIndexOf("]]"));
+				var dataArray;
+				if (it == "linechart_data") {
+					dataArray = data.split("],[");
+				}
+				else if(it == "heatmap_data"){
+					dataArray = data.split("], [");
+				}
+				dataArray.forEach( function(item){
+					/* Not yet functional
+					//Collect barchart data
+					if(it == "barchart_data") {
+						var lala = fileString.indexOf("Lokale Version erstellt: ");
+						var datum = fileString.substring(lala+25, lala+33)
+						//console.log();
+						if (!(barchart_data_test).includes(item.toString())){
+							barchart_data_test += "[" + item.toString() + "],";
+						}
+						//Replace last index with ']' if last element is reached.
+						if (dataArray[dataArray.length-1] == item && loop == (files.length-1)){
+							barchart_data_test = barchart_data_test.replace(/,([^,]*)$/, "]$1");
+						}
+					}
+					*/
+
+					//Collect linechart data
+					if(it == "linechart_data" && item.toString().length > 2) { //filter out the empty data
+						if (!(linechart_data_test).includes(item.toString())){
+							linechart_data_test += "[" + item.toString() + "],";
+						}
+						//Replace last index with ']' if last element is reached.
+						if (dataArray[dataArray.length-1] == item && loop == (files.length-1)){
+							//linechart_data_test = linechart_data_test.replace(/,([^,]*)$/, "$1");
+							linechart_data_test = linechart_data_test.substring(1, linechart_data_test.lastIndexOf("],"));
+							var linechart_data_array = new Array();
+							var tempArray = linechart_data_test.split("],[");
+							tempArray.forEach(function(it){
+								var tempElements1 = it.split(",");
+								var tempElements2 = [it.substring(1, it.lastIndexOf(")")), tempElements1[3], tempElements1[4], tempElements1[5]];
+								linechart_data_array.push(tempElements2);
+							});
+							console.log(linechart_data_test);
+							console.log(linechart_data_array);
+							var jsonArray = JSON.stringify(linechart_data_array);
+							document.getElementById("allCharts1").value = 'true';
+							document.getElementById("mergeData1").value = jsonArray;
+							document.getElementById("download_form_1").submit();
+							document.getElementById("mergeData1").value = '';
+						}
+					}
+					/* Not yet functional
+					//Collect heatmap data
+					if(it == "heatmap_data" && item.toString().length > 2) { //filter out the empty data
+						var subArray = item.toString().split(", ");
+
+						if (!(heatmap_data_test).includes(item.toString())){
+							heatmap_data_test += "[" + item.toString() + "],";
+						}
+						//Replace last index with ']' if last element is reached.
+						if (dataArray[dataArray.length-1] == item && loop == (files.length-1)){
+							heatmap_data_test = heatmap_data_test.replace(/,([^,]*)$/, "]$1");
+						}
+					}*/
+				});
+			});
+			//console.log(linechart_data_test);
+			loop++;
+		});
+	}
+});
+
+//Callback for the FileReader
+function readFile (file, onLoadCallback){
+	var reader = new FileReader();
+	reader.onload = onLoadCallback;
+	reader.readAsText(file);
 }

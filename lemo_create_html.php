@@ -1,7 +1,7 @@
 <?php
 /*lemo_create_html.php creates a html file containing the recent data and provides a download link for it*/
 
-// include the config 
+// include the config
 include 'config.php';
 
 
@@ -16,7 +16,7 @@ $courseID = $_POST["id"];
 $userID = $_POST["userid"];
 $allData = json_decode($_POST["data"], true);
 
-// get today's date 
+// get today's date
 $heute = date("d.m.y");
 
 // get date for Filename
@@ -29,8 +29,20 @@ $pathForHTML = "saved_datasets/".$courseID."_".$userID."/data_".$courseID."_".$u
 $table = html_writer::table($outlinetable);
 
 // get each dataset from the data array
-$activity_array = array();
-$activity_array = $allData[0];
+if($_POST["mergeData"] == "") {
+  $activity_array = $allData[0];
+}
+else{
+  $activity_array = JSON_decode($_POST["mergeData"], true);
+  function compare_date($a, $b)
+  {
+    return strnatcmp($a[0], $b[0]);
+  }
+
+  // sort alphabetically by name
+  usort($activity_array, 'compare_date');
+  var_dump($activity_array);
+}
 $barchart_array = $allData[1];
 $heatmap_array = $allData[2];
 $treemap_array  = $allData[3];
@@ -56,7 +68,7 @@ foreach($activity_array as $fO){
         $lineChart .= "[(".$fO[0]."), ".$fO[1].", ".$fO[2].", ".$fO[3]."]";
         $lineChartArray .= "['".$replacement."', ".$fO[1].", ".$fO[2].", ".$fO[3]."]";
     }
-    
+
     $f++;
 }
 
@@ -84,7 +96,7 @@ $i = 1;
 $nodeTitle; #variable for node title
 $lengTree = count($treemap_array);
 $treemap_data_array = array();
-$treemap_data = 
+$treemap_data =
 	"[['Name', 'Parent', 'Size', 'Color'],
 		['Global', null, 0, 0],
 			['Dateien', 'Global', 0, 0],";
@@ -95,7 +107,7 @@ foreach($treemap_array as $tree){
 		$nodeTitle = 'Dateien';
 	}
 	#else if ()...
-	
+
 	if ($i < $lengTree ){
 		$treemap_data .= "['".$tree[0]."', '".$tree[1]."', ".$tree[2].", ".$tree[3]."],";
 	}
@@ -126,11 +138,11 @@ $linechart_js_string = str_replace(
 						ownhits: item.ownHits,
 						users: item.nutzer
 					});
-				}		
+				}
 			});',
 'var activity_data = [];
 js_activity.forEach(function (item) {
-	
+
 	var myDate=item[0];
 	myDate=myDate.split(", ");
 	//console.log(myDate);
@@ -179,16 +191,16 @@ if ($_POST['allCharts'] == 'true') {
 
 		<!-- Google Icons -->
 		<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-		
+
 		<!-- lemo4moodle.css -->
 		<style>'.file_get_contents('css/lemo4moodle_download.css').'</style>
 
 		<!-- report_styles.css -->
 		<style>'.file_get_contents('css/styles.css').'</style>
-		
+
 	</head>';
-	
-	$content .= 
+
+	$content .=
 	'
 <body>
     <div class="container-fluid">
@@ -201,7 +213,7 @@ if ($_POST['allCharts'] == 'true') {
 					<li>
                         <a href="#" class="waves-effect waves-light btn white red-text" id="btn_manual">Hilfe</a>
                     </li>
-					
+
                     <li>
                         <a onClick="window.close();" class="waves-effect waves-light btn white red-text" id="btn_close">Schließen</a>
                     </li>
@@ -238,7 +250,7 @@ if ($_POST['allCharts'] == 'true') {
                         <div class="row">
                             <div class="input-field col s12">
                                 <div class="divider"></div>
-                            </div>                               
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -259,7 +271,7 @@ if ($_POST['allCharts'] == 'true') {
                                     <button class="btn waves-effect waves-light grey darken-3 button" type="submit" name="action" id="rst_btn_2">R&uuml;ckg&auml;ngig</button>
                                     <div class="divider"></div>
                                     <div class="divider"></div>
-                                </div>                               
+                                </div>
                             </div>
                         </div>
                 </div>
@@ -279,10 +291,10 @@ if ($_POST['allCharts'] == 'true') {
                                     <button class="btn waves-effect waves-light grey darken-3 button" type="submit" name="action" id="dp_button_3">Aktualisieren</button>
                                     <button class="btn waves-effect waves-light grey darken-3 button" type="submit" name="action" id="rst_btn_3">R&uuml;ckg&auml;ngig</button>
                                     <div class="divider"></div>
-                                </div>                               
+                                </div>
                             </div>
                     </div>
-                </div>    
+                </div>
             </div>
             <div id="chart4" class="col s12">
                 <div class="row">
@@ -292,13 +304,13 @@ if ($_POST['allCharts'] == 'true') {
                         <div id="options" class="col s3">
                             <div class="row">
                                 <div class="input-field col s12">
-                                </div>                               
+                                </div>
                             </div>
                     </div>
                 </div>
             </div>
 		</div>
-		
+
 		<div id="report">
 			<ul class="collapsible z-depth-0" data-collapsible="accordion">
 				<li>
@@ -306,7 +318,7 @@ if ($_POST['allCharts'] == 'true') {
 						<i class="material-icons right">expand_more</i>Kursaktivität (Moodle Bericht)</div>
 					<div class="collapsible-body">
 						<span>
-							<?php '  
+							<?php '
 								.$table.
 							'?>
 						</span>
@@ -315,35 +327,35 @@ if ($_POST['allCharts'] == 'true') {
 			</ul>
 		</div>
 	</div>
-	
+
 	<!-- JQuery and JQuery Datepicker -->
 	<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-	
+
 	<!-- Google Charts -->
     <script src="https://www.gstatic.com/charts/loader.js"></script>
     <script src="https://www.google.com/jsapi"></script>
-	
+
 	<!-- Materialize CSS Framework - minified - JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
-	
+
 	<!-- Highcharts, Heatmap-->
 	<script src="https://code.highcharts.com/highcharts.js"></script>
 	<script src="https://code.highcharts.com/modules/heatmap.js"></script>';
-	
+
 	$content .=
 	'<script>'.file_get_contents('js/lemo_barchart.js').'</script>
 	<script>'.$linechart_js_string.'</script>
 	<script>'.file_get_contents('js/lemo_heatmap.js').'</script>
 	<script>'.file_get_contents('js/lemo_treemap.js').'</script>
 	<script>
-			
+
 		<!-- Data-variables from lemo_dq_queries.php made usable for the js-files. -->
 		var barchart_data = '.$bar_chart_data.';
 		var linechart_data = ['.$lineChart.'];
 		var heatmap_data = '.$heatmap_data.';
 		var treemap_data = '.$treemap_data.';
-		
+
 		var js_activity = ['.$lineChartArray.'];
 		var js_heatmap = Object.entries('.$js_heatmap.');
 	</script>
@@ -355,7 +367,7 @@ if ($_POST['allCharts'] == 'true') {
 
 //if only one chart should be downloaded
 else if ($_POST['allCharts'] == 'false') {
-	$content = 
+	$content =
 	'<!DOCTYPE html>
 	<html lang="de">
 
@@ -372,13 +384,13 @@ else if ($_POST['allCharts'] == 'false') {
 
 		<!-- Google Icons -->
 		<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-		
+
 		<!-- lemo4moodle.css -->
 		<style>'.file_get_contents('css/lemo4moodle_download.css').'</style>
 
 		<!-- report_styles.css -->
 		<style>'.file_get_contents('css/styles.css').'</style>
-		
+
 	</head>
 
 	<body>
@@ -392,11 +404,11 @@ else if ($_POST['allCharts'] == 'false') {
 						<li>
 							<a href="http://www.hwr-berlin.de/home/" class="waves-effect waves-light btn white red-text" id="btn_hwr" target="_blank">www.hwr-berlin.de</a>
 						</li>
-						
+
 						<li>
 							<a href="#" class="waves-effect waves-light btn white red-text" id="btn_manual">Hilfe</a>
 						</li>
-						
+
 						<li>
 							<a onClick="window.close();" class="waves-effect waves-light btn white red-text" id="btn_close">Schließen</a>
 						</li>
@@ -441,7 +453,7 @@ else if ($_POST['allCharts'] == 'false') {
 										<div class="divider"></div>';
 									}
 	$content .=
-								'</div>                               
+								'</div>
 							</div>
 						</div>
 					</div>
@@ -464,14 +476,14 @@ else if ($_POST['allCharts'] == 'false') {
 		<!-- JQuery and JQuery Datepicker -->
 		<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 		<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-		
+
 		<!-- Google Charts -->
 		<script src="https://www.gstatic.com/charts/loader.js"></script>
 		<script src="https://www.google.com/jsapi"></script>
-		
+
 		<!-- Materialize CSS Framework - minified - JavaScript -->
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
-		
+
 		<!-- Highcharts, Heatmap-->
 		<script src="https://code.highcharts.com/highcharts.js"></script>
 		<script src="https://code.highcharts.com/modules/heatmap.js"></script>
@@ -490,12 +502,12 @@ else if ($_POST['allCharts'] == 'false') {
 			else if ($_POST['chart'] == 'treemap') {
 				$content .= 'var treemap_data = '.$treemap_data.';';
 			}
-			
-			
-			
-			
-			
-			
+
+
+
+
+
+
 		$content .= '</script>
 		<!-- Barchart, linechart, heatmap and treemap are loaded. Must be included after the data-variables.-->';
 		if ($_POST['chart'] == 'barchart') {
@@ -510,7 +522,7 @@ else if ($_POST['allCharts'] == 'false') {
 		else if ($_POST['chart'] == 'treemap') {
 			$content .= '<script>'.file_get_contents('js/lemo_treemap.js').'</script>';
 		}
-		
+
 		$content .= '
 		<!-- General functions of the plugin. Must be included after the JS-files of the charts. -->
 		<script>'.file_get_contents('js/lemo_view.js').'</script>
@@ -528,12 +540,3 @@ header("Content-type: text/html");
 header("Content-Disposition: attachment; filename=lemo4moodle_".$heute_filename.".html");
 echo $content;
 ?>
-
-
-
-
-
-
-
-
-
