@@ -23,26 +23,27 @@ $heute = date("d.m.y");
 $heute_filename = date("Y_m_d");
 
 // set path for html file (to save it and to provide a download link)
-$pathForHTML = "saved_datasets/".$courseID."_".$userID."/data_".$courseID."_".$userID.".html";
+//$pathForHTML = "saved_datasets/".$courseID."_".$userID."/data_".$courseID."_".$userID.".html";
 
 // get data from moodle/report/activity_report (access possible through /report/outline/index.php)
 $table = html_writer::table($outlinetable);
 
 // get each dataset from the data array
-if($_POST["mergeData"] == "") {
-  $activity_array = $allData[0];
-}
-else{
+//if($_POST["mergeData"] == "") {
+//  $activity_array = $allData[0];
+//}
+//else{
   $activity_array = JSON_decode($_POST["mergeData"], true);
-  function compare_date($a, $b)
-  {
+  //$activity_array_test = $_POST["mergeData"];
+  var_dump($activity_array);
+  function compare_date($a, $b){
     return strnatcmp($a[0], $b[0]);
   }
 
   // sort alphabetically by name
   usort($activity_array, 'compare_date');
   var_dump($activity_array);
-}
+//  }
 $barchart_array = $allData[1];
 $heatmap_array = $allData[2];
 $treemap_array  = $allData[3];

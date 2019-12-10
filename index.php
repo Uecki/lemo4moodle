@@ -61,11 +61,28 @@ global $CFG;
                     <i class="material-icons medium">insert_chart</i>Lemo4Moodle</a>
                 <ul id="nav" class="right hide-on-med-and-down">
                   <li>
-        						<input type="file" accept=".html" id="filemerger" multiple>
-        					</li>
-        					<li>
-        						<button class="btn waves-effect waves-light grey darken-3 button" id="mergeButton">Dateien zusammenfügen</button>
-        					</li>
+                    <!-- Modal Trigger -->
+                   <a class="waves-effect waves-light grey darken-3 btn modal-trigger" href="#modal1">Dateien zusammenfügen</a>
+
+                   <!-- Modal Structure -->
+                   <div id="modal1" class="modal modal-fixed-footer">
+                     <div class="modal-content">
+                       <h4 class="black-text">Dateien zusammenfügen</h4>
+                       <!--
+                       <p class="black-text">W&auml;hlen Sie zuerst eine zuvor heruntergeladene Datei, welche alle Charts beinhaltet. <b>Diese wird anschließend mit den zusammengef&uuml;gten Daten überschrieben!</b></p>
+                        <p class="red-text" id="modal_error1"></p>
+                        <input type="file" accept=".html" id="file_container">
+                        <div class="divider"></div>
+                        -->
+                        <p class="black-text"> W&auml;hlen Sie jetzt die Dateien, von denen die Daten zusammengefügt werden sollen.</p>
+                        <p class="red-text" id="modal_error2"></p>
+                        <input type="file" accept=".html" id="file_merge" multiple>
+                        <br>
+                        <br>
+                        <button class="btn waves-effect waves-light grey darken-3 button" id="mergeButton">Dateien zusammenfügen</button>
+                     </div>
+                   </div>
+                  </li>
                     <!--
 					<li>
                         <a href="#" class="waves-effect waves-light btn white red-text" id="btn_manual">Hilfe</a>

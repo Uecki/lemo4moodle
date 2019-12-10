@@ -108,16 +108,34 @@ function drawAllCharts() {
 	}
 }
 
+//Initialize the Materialize Modal (PopUp)
+$(document).ready(function(){
+	 $('.modal').modal();
+ });
+
 //Variables for filemerging
 var barchart_data_test = "[";
 var linechart_data_test = "";
 var heatmap_data_test = "[";
 var treemap_data_test = "[";
 
-//Funktion for filemerging
+//Function for filemerging
 $('#mergeButton').click(function() {
-	fileInput = document.querySelector('#filemerger');
-	var files =	fileInput.files;
+	//$("#modal_error1").text("");
+	$("#modal_error2").text("");
+	//fileContainer = document.querySelector('#file_container');
+	var fileMerge = document.querySelector('#file_merge');
+/*
+	if(fileContainer.files.length == 0){
+		$("#modal_error1").text("Bitte eine zu überschreibende Datei auswählen.");
+		return;
+	}
+	*/
+	if(fileMerge.files.length < 2){
+		$("#modal_error2").text ("Bitte mindestens zwei Dateien zum Zusammenfügen auswählen.");
+		return;
+	}
+	var files =	fileMerge.files;
 	var fileString;
 	//const charttype = ["barchart_data", "linechart_data", "heatmap_data", "treemap_data"];
 	const charttype = ["linechart_data"];
@@ -177,13 +195,16 @@ $('#mergeButton').click(function() {
 								var tempElements2 = [it.substring(1, it.lastIndexOf(")")), tempElements1[3], tempElements1[4], tempElements1[5]];
 								linechart_data_array.push(tempElements2);
 							});
-							console.log(linechart_data_test);
-							console.log(linechart_data_array);
+							//linechart_data_test = "";
+							//console.log(linechart_data_test);
+							//console.log(linechart_data_array);
 							var jsonArray = JSON.stringify(linechart_data_array);
-							document.getElementById("allCharts1").value = 'true';
-							document.getElementById("mergeData1").value = jsonArray;
-							document.getElementById("download_form_1").submit();
-							document.getElementById("mergeData1").value = '';
+							//console.log(jsonArray);
+							$("#allCharts1").val('true');
+							$("#mergeData1").val(jsonArray);
+							$("#download_form_1").submit();
+							$("#mergeData1").value = '';
+							//console.log($("#mergeData1").val());
 						}
 					}
 					/* Not yet functional
