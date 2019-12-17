@@ -195,7 +195,7 @@ $('#mergeButton').click(function() {
 								var tempElements2 = [it.substring(1, it.lastIndexOf(")")), tempElements1[3], tempElements1[4], tempElements1[5]];
 								linechart_data_array.push(tempElements2);
 							});
-							//linechart_data_test = "";
+							linechart_data_test = "";
 							//console.log(linechart_data_test);
 							//console.log(linechart_data_array);
 							var jsonArray = JSON.stringify(linechart_data_array);
