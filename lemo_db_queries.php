@@ -1,33 +1,18 @@
 <?php
 
 	# load configuration file
-	require_once 'config.php';
-
-	#$courseID = $_GET['id'];
-	#$userID = $_GET['user'];
-
-	# initialisation of the database with individual login details
-	# make a connection to the database
-    $dbLink = mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME);
-
-    # check if the connection worked out
-    if (!$dbLink){
-    	die("Keine Verbindung zur Datenbank möglich: ".mysql_error());
-	}
+	require_once '../../config.php';
 
 
 	# SQL Query -> ActivityChart (date, hits, user counter)
-	$query = "SELECT  FROM_UNIXTIME (timecreated, '%d-%m-%Y') AS 'date', COUNT(action) AS 'allHits', count(DISTINCT userid) AS 'users', COUNT(case when userid = $userID then $userID end) AS 'ownHits'
-	FROM `mdl_logstore_standard_log`
+	$query_linechart_data = "SELECT  FROM_UNIXTIME (timecreated, '%d-%m-%Y') AS 'date', COUNT(action) AS 'allHits', count(DISTINCT userid) AS 'users', COUNT(case when userid = $userID then $userID end) AS 'ownHits'
+	FROM {logstore_standard_log}
 	WHERE (action = 'viewed' AND courseid = '".$courseID."')
-	#GROUP BY FROM_UNIXTIME (timecreated, '%m-%d-%y')
 	GROUP BY FROM_UNIXTIME (timecreated, '%y-%m-%d')
 	ORDER BY 'Datum'"; #Warum 'Datum' statt 'date'?--> aber kein Unterschied zu sehen.
 
 	#Alternative: exchange overall actions with only Logins --> WHERE action='loggedin'
-
-
-	$result = mysqli_query($dbLink, $query) or die ("Error: ".mysqli_error($dbLink));
+	$result = $DB->get_records_sql($query_linechart_data);
 
 	# create array to save fetched results | create Object
 	$activity = array();
@@ -41,13 +26,13 @@
 	}
 
 	# fetch results
-	while ($row = mysqli_fetch_array($result, MYSQLI_BOTH))  {
-		if (!empty($row["allHits"])) {
+	foreach($result as $row)  {
+		if (!empty($row->allhits)) {
 			# new Object
 			${"activity".$counter} = new Activity;
 
 			#split date
-			$teile = explode("-", $row["date"]);
+			$teile = explode("-", $row->date);
 			$tag = $teile[0];
 			$monat = $teile[1]-1;
 			$jahr = $teile[2];
@@ -57,20 +42,20 @@
 			${"activity".$counter}->datum = $zsmDatum;
 
 			# $activity.$counter->zugriffe
-			${"activity".$counter}->zugriffe = $row["allHits"];
+			${"activity".$counter}->zugriffe = $row->allhits;
 
 			# $activity.$counter->nutzer
-			${"activity".$counter}->nutzer = $row["users"];
+			${"activity".$counter}->nutzer = $row->users;
 
 			#create timestamp
-			$preTimestamp = $row["date"].' 08:00:00';
+			$preTimestamp = $row->date.' 08:00:00';
 			$createTimestamp = strtotime($preTimestamp);
 
 			#${"activity".$counter}->timestamp
 			${"activity".$counter}->timestamp = $createTimestamp;
 
 			#${"activity".$counter}->ownHits
-			${"activity".$counter}->ownHits = $row["ownHits"];
+			${"activity".$counter}->ownHits = $row->ownhits;
 
 			# write created object to array
 			$activity[] = ${"activity".$counter};
@@ -214,12 +199,12 @@
 
 	#Query for heatmap. Only minor changes to activity chart query.
 
-	$query_heatmap = "SELECT  id, timecreated, FROM_UNIXTIME(timecreated, '%W') AS 'weekday', FROM_UNIXTIME(timecreated, '%k') AS 'hour', COUNT(action) AS 'allHits',  COUNT(case when userid = $userID then $userID end) AS 'ownHits'
-	FROM `mdl_logstore_standard_log`
+	$query_heatmap_data = "SELECT  id, timecreated, FROM_UNIXTIME(timecreated, '%W') AS 'weekday', FROM_UNIXTIME(timecreated, '%k') AS 'hour', COUNT(action) AS 'allHits',  COUNT(case when userid = $userID then $userID end) AS 'ownHits'
+	FROM {logstore_standard_log}
 	WHERE (action = 'viewed' AND courseid = '".$courseID."')
 	GROUP BY timecreated"; //group by hour
 
-	$heatmap = $DB->get_records_sql($query_heatmap);
+	$heatmap = $DB->get_records_sql($query_heatmap_data);
 
 
 		#Create heatmap data
@@ -697,8 +682,3 @@
 	# encode data_array as JSON !JSON_NUMERIC_CHECK
 	# gets encoded only to be decoded in lemo_create_html.php,decode probably not necessary
 	$allData = json_encode($data_array, JSON_NUMERIC_CHECK);
-
-
-
-	#disconnect from the database
-	mysqli_close($dbLink);

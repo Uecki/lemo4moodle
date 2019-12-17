@@ -1,12 +1,10 @@
 <?php
-// include config.php
-include 'config.php';
 /* include once moodle/report/outline/index.php and prevent any display function  */
 ob_start();
 //moodle_path from config.php
-include_once (moodle_path.'/report/outline/index.php');
+require_once '../../report/outline/index.php';
 
-include_once (moodle_path.'/config.php');
+require_once '../../config.php';
 
 ob_end_clean();
 /* defining PHP errorstatement */

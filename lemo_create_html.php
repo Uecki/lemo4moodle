@@ -1,14 +1,11 @@
 <?php
 /*lemo_create_html.php creates a html file containing the recent data and provides a download link for it*/
 
-// include the config
-include 'config.php';
-
 
 // include once moodle/report/outline/index.php and prevent any display function
 ob_start();
-include_once (moodle_path.'/report/outline/index.php');
-include_once (moodle_path.'/config.php');
+require_once '../../report/outline/index.php';
+require_once '../../config.php';
 ob_end_clean();
 
 //get courseID, userID and allData (encoded data-arrays in JSON-format)
@@ -35,14 +32,14 @@ $table = html_writer::table($outlinetable);
 //else{
   $activity_array = JSON_decode($_POST["mergeData"], true);
   //$activity_array_test = $_POST["mergeData"];
-  var_dump($activity_array);
+  //var_dump($activity_array);
   function compare_date($a, $b){
     return strnatcmp($a[0], $b[0]);
   }
 
   // sort alphabetically by name
   usort($activity_array, 'compare_date');
-  var_dump($activity_array);
+  //var_dump($activity_array);
 //  }
 $barchart_array = $allData[1];
 $heatmap_array = $allData[2];
