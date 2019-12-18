@@ -2,18 +2,18 @@
 
 
 $(document).ready(function() {
-	
+
 	//Line Chart - reset button
 	$('#rst_btn_2').click(function() {
 		var data = new google.visualization.DataTable();
 		drawLineChart();
 		$("#datepicker_3").val("");
 		$("#datepicker_4").val("");
-		
+
 		//var test = "<?php echo $allData ?>";
 		//console.log(test);
 	});
-	
+
 	//Filter for Linechart
 	$('#dp_button_2').click(function() {
 		var start = document.getElementById('datepicker_3').value;
@@ -38,7 +38,7 @@ $(document).ready(function() {
 						ownhits: item.ownHits,
 						users: item.nutzer
 					});
-				}		
+				}
 			});
 			var chartData = activity_data.map(function(it){
 				var str = it.date;
@@ -58,28 +58,29 @@ $(document).ready(function() {
 				hAxis: {
 					title: 'Datum',
 					format:'d.M.yy'
-				}
+				},
+				interpolateNulls: false
 			};
-			activity_chart.draw(data, options);   
+			activity_chart.draw(data, options);
 		}else{
 			Materialize.toast('Überprüfen Sie ihre Auswahl (Beginn < Ende)', 3000) // 3000 is the duration of the toast
 			$('#datepicker_3').val("");
 			$('#datepicker_4').val("");
-		}	
+		}
 	});
-	
+
 	//Download button for linechart tab.
 	$('#html_btn_2').click(function() {
 		//Opens dialog box.
 		$( "#dialog" ).dialog( "open" );
 	});
-	
+
 });
 
 // Callback that draws the activity chart.
 //See the google charts documentation for linechart.
 function drawLineChart() {
-  
+
 	var data = new google.visualization.DataTable();
 	data.addColumn('date', 'Datum');
 	data.addColumn('number', 'Zugriffe');
@@ -101,5 +102,5 @@ function drawLineChart() {
 
 	activity_chart = new google.visualization.LineChart(document.getElementById('linechart'));
 	activity_chart.draw(data, options);
-  
+
 }

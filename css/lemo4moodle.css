@@ -12,12 +12,12 @@
 } /*text color*/
 
 .tabs .tab a:hover {
-    
+
     color:#000;
 } /*Text color on hover*/
 
 .tabs .tab a.active {
-    
+
     color:#D92425;
 } /*Background and text color when a tab is active*/
 
@@ -44,7 +44,7 @@
 }
 
 #line_chart {
-    width: 100% !important; 
+    width: 100% !important;
     min-height: 500px !important;
 }
 
@@ -63,18 +63,18 @@
 }
 
 #chart_div {
-    width: 100% !important; 
+    width: 100% !important;
     min-height: 500px !important;
 }
 
 h3 {
     font-family: Arial, Helvetica, sans-serif;
-    font-size: 15px; 
-    font-weight: bold; 
+    font-size: 15px;
+    font-weight: bold;
 }
 
 .chart {
-    max-width: 100%; 
+    max-width: 100%;
     min-height: 450px;
 }
 
@@ -82,3 +82,4 @@ h3 {
     color: #D92425;
 }
 
+.modal { width: 50% !important ; height: 50% !important ; }
