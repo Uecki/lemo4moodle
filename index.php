@@ -38,11 +38,11 @@ global $CFG;
     <!-- Google Icons -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 
-    <!-- lemo4moodle.css -->
-    <link rel="stylesheet" href="css/lemo4moodle.css">
+    <!-- styles.css -->
+    <link rel="stylesheet" href="styles.css">
 
 	<!-- report_styles.css -->
-	<link rel="stylesheet" href="css/styles.css">
+	<link rel="stylesheet" href="styles.css">
 
 </head>
 
@@ -132,7 +132,7 @@ global $CFG;
                 									<input type='hidden' value='<?php echo $allData ?>' name='data'>
                 									<input type='hidden' value='barchart' name='chart'>
                 									<input type='hidden' value='' name='allCharts' id="allCharts1">
-                                  <!-- for merging files (only for linechart atm) -->
+                                  <!-- for merging files (only for linechart atm). Merge button only uses the elements of the barchart tab. -->
                                   <input type='hidden' value='' name='mergeData' id="mergeData1" >
 
                 								</form>

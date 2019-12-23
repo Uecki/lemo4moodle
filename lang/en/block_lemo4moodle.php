@@ -7,3 +7,4 @@ $string['blockstring'] = 'Hier könnte Ihre Werbung stehen';
 $string['content'] = 'CONTENT SETTINGS';
 $string['blocktitle'] = 'blocktitletest';
 $string['text'] = 'Inhalt des Blocks';
+$string['privacy:metadata'] = 'The lemo4moodle block only displays existing data for actions inside the course.';

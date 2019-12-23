@@ -26,10 +26,10 @@ $heute_filename = date("Y_m_d");
 $table = html_writer::table($outlinetable);
 
 // get each dataset from the data array
-//if($_POST["mergeData"] == "") {
-//  $activity_array = $allData[0];
-//}
-//else{
+if(!isset($_POST["mergeData"]) || $_POST["mergeData"] == "") {
+  $activity_array = $allData[0];
+}
+else{
   $activity_array = JSON_decode($_POST["mergeData"], true);
   //$activity_array_test = $_POST["mergeData"];
   //var_dump($activity_array);
@@ -40,7 +40,7 @@ $table = html_writer::table($outlinetable);
   // sort alphabetically by name
   usort($activity_array, 'compare_date');
   //var_dump($activity_array);
-//  }
+}
 $barchart_array = $allData[1];
 $heatmap_array = $allData[2];
 $treemap_array  = $allData[3];
@@ -190,11 +190,11 @@ if ($_POST['allCharts'] == 'true') {
 		<!-- Google Icons -->
 		<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 
-		<!-- lemo4moodle.css -->
-		<style>'.file_get_contents('css/lemo4moodle_download.css').'</style>
+		<!-- styles.css -->
+		<style>'.file_get_contents('styles.css').'</style>
 
 		<!-- report_styles.css -->
-		<style>'.file_get_contents('css/styles.css').'</style>
+		<style>'.file_get_contents('styles.css').'</style>
 
 	</head>';
 
@@ -316,9 +316,7 @@ if ($_POST['allCharts'] == 'true') {
 						<i class="material-icons right">expand_more</i>Kursaktivität (Moodle Bericht)</div>
 					<div class="collapsible-body">
 						<span>
-							<?php '
-								.$table.
-							'?>
+							'.$table.'
 						</span>
 					</div>
 				</li>
@@ -383,11 +381,11 @@ else if ($_POST['allCharts'] == 'false') {
 		<!-- Google Icons -->
 		<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 
-		<!-- lemo4moodle.css -->
-		<style>'.file_get_contents('css/lemo4moodle_download.css').'</style>
+		<!-- styles.css -->
+		<style>'.file_get_contents('styles.css').'</style>
 
 		<!-- report_styles.css -->
-		<style>'.file_get_contents('css/styles.css').'</style>
+		<style>'.file_get_contents('styles.css').'</style>
 
 	</head>
 
