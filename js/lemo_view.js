@@ -67,6 +67,10 @@ $(document).ready(function() {
 		]
 	});
 
+	//Arrays for comparing timespans
+	var firstTimestamp = [];
+	var lastTimestamp = [];
+
 	// Empty the selected files on load.
 	$('#file_merge').val('');
 
@@ -78,14 +82,36 @@ $(document).ready(function() {
 
 		// Clear previous filename list.
 		$('#file_merge_filenames').empty();
+		$('#file_merge_timespan').empty();
 
 		// Fill div with elements containing the filename.
-	  $( '#file_merge_filenames' ).append('<ul>');
-	  for (var i = 0; i < input.files.length; ++i) {
-	    $( '#file_merge_filenames' ).append('<li class="black-text">Datei '+ (i+1) + ': ' + input.files.item(i).name + '</li><br>');
+	  //$( '#file_merge_filenames' ).append('<ul>');
+		for (var i = 0; i < input.files.length; ++i) {
+				$( '#file_merge_filenames' ).append('<li class="black-text">Datei '+ (i+1) + ': ' + input.files[i].name + '</li><br>');
 	  }
-	  $( '#file_merge_filenames' ).append('</ul>');
-		});
+	  //$( '#file_merge_filenames' ).append('</ul>');
+
+		//Fill div with timespans.
+		for (var i = 0; i < input.files.length; ++i) {
+			// read file to get the timespan of the datasets.
+			readFile(input.files[i], function(e) {
+				var fileStringDate = e.target.result;
+				var root1 = fileStringDate.indexOf('var firstDate =');
+				var start1 = fileStringDate.indexOf('"', root1);
+				var end1 = fileStringDate.indexOf('"', start1+1);
+				var date1 = fileStringDate.substring(start1+1, end1);
+				//firstTimestamp.push(new Date(date1));
+
+				var root2 = fileStringDate.indexOf('var lastDate =');
+				var start2 = fileStringDate.indexOf('"', root2);
+				var end2 = fileStringDate.indexOf('"', start2+1);
+				var date2 = fileStringDate.substring(start2+1, end2);
+				//lastTimestamp.push(new Date(date2));
+				$( '#file_merge_timespan' ).append('<li class="black-text">Zeitraum: ' + date1 + ' - ' + date2 + '</li><br>');
+				//console.log(firstTimestamp + lastTimestamp);
+			});
+	  }
+	});
 
 });
 

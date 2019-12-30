@@ -80,7 +80,10 @@ global $CFG;
                         <p class="red-text" id="modal_error2"></p>
                         <input type="file" accept=".html" id="file_merge" multiple>
                         <br>
-                        <div id="file_merge_filenames"></div>
+                        <div class="row">
+                          <div class="col s6" id="file_merge_filenames"></div>
+                          <div class="col s6" id="file_merge_timespan"></div>
+                        </div>
                         <button class="btn waves-effect waves-light grey darken-3 button" id="mergeButton">Dateien zusammenfügen</button>
                      </div>
                    </div>

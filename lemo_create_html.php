@@ -560,6 +560,5 @@ else{
   header("Content-Disposition: attachment; filename=lemo4moodle_".$heute_filename."_MERGED.html");
 }
 
-
 echo $content;
 ?>
