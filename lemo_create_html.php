@@ -31,8 +31,7 @@ if(!isset($_POST["mergeData"]) || $_POST["mergeData"] == "") {
 }
 else{
   $activity_array = JSON_decode($_POST["mergeData"], true);
-  //$activity_array_test = $_POST["mergeData"];
-  //var_dump($activity_array);
+
   function compare_date($a, $b){
     return strnatcmp($a[0], $b[0]);
   }
@@ -47,7 +46,18 @@ $treemap_array  = $allData[3];
 $heatmap = $allData[4]; #two heatmap datasets, because of filter function
 
 
+//get the first recorded date of the datasets
+preg_match_all('/\d+/', $activity_array[0][0], $matches);
+$firstDate = $matches[0][2].'.'.(intval($matches[0][1])+1).'.'.$matches[0][0]; #month needs to be augmented by 1
 
+//get the last recorded date of the datasets
+if(!isset($_POST["mergeData"]) || $_POST["mergeData"] == "") {
+  $lastDate = date("d.m.Y");
+}
+else{
+  preg_match_all('/\d+/', $activity_array[(count($activity_array)-1)][0], $matches);
+  $lastDate = $matches[0][2].'.'.(intval($matches[0][1])+1).'.'.$matches[0][0]; #month needs to be augmented by 1
+}
 
 // create lineChart data
 $lineChart = '';
@@ -223,7 +233,7 @@ if ($_POST['allCharts'] == 'true') {
             <div class="col s12">
                 <ul class="tabs" id="tabs">
                     <li class="tab disabled">
-                        <a href="#">Lokale Version erstellt: '.$heute.'</a>
+                        <a href="#">Zeitraum der lokalen Version: '.$firstDate.' - '.$lastDate.'</a>
                     </li>
                     <li class="tab" id="tab_barChart">
                         <a class="active" id="tab1" href="#chart1" >Barchart</a>
@@ -354,6 +364,9 @@ if ($_POST['allCharts'] == 'true') {
 
 		var js_activity = ['.$lineChartArray.'];
 		var js_heatmap = Object.entries('.$js_heatmap.');
+
+    var firstDate = "'.$firstDate.'";
+    var lastDate = "'.$lastDate.'";
 	</script>
 	<!-- General functions of the plugin. Must be included after the JS-files of the charts. -->
 		<script>'.file_get_contents('js/lemo_view.js').'</script>
@@ -533,6 +546,20 @@ else if ($_POST['allCharts'] == 'false') {
 
 //set filename and type of file for the download
 header("Content-type: text/html");
-header("Content-Disposition: attachment; filename=lemo4moodle_".$heute_filename.".html");
+// if merged, change filename
+if(!isset($_POST["mergeData"]) || $_POST["mergeData"] == "") {
+  header("Content-Disposition: attachment; filename=lemo4moodle_".$heute_filename.".html");
+}
+else{
+  /*
+  preg_match_all('/\d+/', $firstDate, $matches);
+  $timespan_filename = $matches[0][2].'_'.$matches[0][1].'_'.$matches[0][0];
+  preg_match_all('/\d+/', $lastDate, $matches);
+  $timespan_filename .= '-'.$matches[0][2].'_'.$matches[0][1].'_'.$matches[0][0];
+  */
+  header("Content-Disposition: attachment; filename=lemo4moodle_".$heute_filename."_MERGED.html");
+}
+
+
 echo $content;
 ?>

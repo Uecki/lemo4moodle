@@ -67,6 +67,26 @@ $(document).ready(function() {
 		]
 	});
 
+	// Empty the selected files on load.
+	$('#file_merge').val('');
+
+	//Display filenames of selected files.
+	$( '#file_merge' ).change(function(){
+		// Variables for html elements
+		var input = document.getElementById('file_merge');
+	  var output = document.getElementById('file_merge_filenames');
+
+		// Clear previous filename list.
+		$('#file_merge_filenames').empty();
+
+		// Fill div with elements containing the filename.
+	  $( '#file_merge_filenames' ).append('<ul>');
+	  for (var i = 0; i < input.files.length; ++i) {
+	    $( '#file_merge_filenames' ).append('<li class="black-text">Datei '+ (i+1) + ': ' + input.files.item(i).name + '</li><br>');
+	  }
+	  $( '#file_merge_filenames' ).append('</ul>');
+		});
+
 });
 
 // Load Charts and the corechart package.
@@ -108,6 +128,7 @@ function drawAllCharts() {
 	}
 }
 
+
 //Initialize the Materialize Modal (PopUp)
 $(document).ready(function(){
 	 $('.modal').modal();
@@ -115,7 +136,7 @@ $(document).ready(function(){
 
 //Variables for filemerging
 var barchart_data_test = "[";
-var linechart_data_test = "";
+var linechartData = "";
 var heatmap_data_test = "[";
 var treemap_data_test = "[";
 
@@ -181,29 +202,29 @@ $('#mergeButton').click(function() {
 
 					//Collect linechart data
 					if(it == "linechart_data" && item.toString().length > 2) { //filter out the empty data
-						if (!(linechart_data_test).includes(item.toString())){
-							linechart_data_test += "[" + item.toString() + "],";
+						if (!(linechartData).includes(item.toString())){
+							linechartData += "[" + item.toString() + "],";
 						}
 						//Replace last index with ']' if last element is reached.
 						if (dataArray[dataArray.length-1] == item && loop == (files.length-1)){
-							//linechart_data_test = linechart_data_test.replace(/,([^,]*)$/, "$1");
-							linechart_data_test = linechart_data_test.substring(1, linechart_data_test.lastIndexOf("],"));
-							var linechart_data_array = new Array();
-							var tempArray = linechart_data_test.split("],[");
+							//linechartData = linechartData.replace(/,([^,]*)$/, "$1");
+							linechartData = linechartData.substring(1, linechartData.lastIndexOf("],"));
+							var linechartDataArray = new Array();
+							var tempArray = linechartData.split("],[");
 							tempArray.forEach(function(it){
 								var tempElements1 = it.split(",");
 								var tempElements2 = [it.substring(1, it.lastIndexOf(")")), tempElements1[3], tempElements1[4], tempElements1[5]];
-								linechart_data_array.push(tempElements2);
+								linechartDataArray.push(tempElements2);
 							});
-							linechart_data_test = "";
-							//console.log(linechart_data_test);
-							//console.log(linechart_data_array);
-							var jsonArray = JSON.stringify(linechart_data_array);
+							linechartData = "";
+							//console.log(linechartData);
+							//console.log(linechartDataArray);
+							var jsonArray = JSON.stringify(linechartDataArray);
 							//console.log(jsonArray);
 							$("#allCharts1").val('true');
 							$("#mergeData1").val(jsonArray);
 							$("#download_form_1").submit();
-							$("#mergeData1").value = '';
+							$("#mergeData1").val('');
 							//console.log($("#mergeData1").val());
 						}
 					}
@@ -222,7 +243,7 @@ $('#mergeButton').click(function() {
 					}*/
 				});
 			});
-			//console.log(linechart_data_test);
+			//console.log(linechartData);
 			loop++;
 		});
 	}

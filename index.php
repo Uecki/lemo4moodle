@@ -72,11 +72,15 @@ global $CFG;
                         <input type="file" accept=".html" id="file_container">
                         <div class="divider"></div>
                         -->
-                        <p class="black-text"> W&auml;hlen Sie jetzt die Dateien, von denen die Daten zusammengefügt werden sollen.</p>
+                        <p class="black-text"> Wählen Sie jetzt die Dateien, von denen die Daten zusammengefügt werden sollen.
+                            <br>(Halten Sie bitte die "STRG"-Taste beim Auswählen von mehreren Dateien gedrückt und klicken Sie dabei auf die gewünschten Dateien.)
+                            <br> Von den ausgewählten Dateien werden dann <u>nur</u> die Linechart-Daten zusammengefügt, für
+                            die anderen Graphen werden nur die aktuell in der Datenbank vorhandenen Daten heruntergeladen.
+                        </p>
                         <p class="red-text" id="modal_error2"></p>
                         <input type="file" accept=".html" id="file_merge" multiple>
                         <br>
-                        <br>
+                        <div id="file_merge_filenames"></div>
                         <button class="btn waves-effect waves-light grey darken-3 button" id="mergeButton">Dateien zusammenfügen</button>
                      </div>
                    </div>
