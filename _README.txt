@@ -1,3 +1,6 @@
+!!! Not up to date !!!
+
+
 # Manual for the Moodle Block "Lemo4Moodle"
 ___________________________________________
 
