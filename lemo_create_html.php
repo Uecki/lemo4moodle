@@ -73,8 +73,37 @@ foreach($activity_array as $fO){
         $lineChartArray .= "['".$replacement."', ".$fO[1].", ".$fO[2].", ".$fO[3]."],";
     }
     if($f == $length -1){
-        $lineChart .= "[(".$fO[0]."), ".$fO[1].", ".$fO[2].", ".$fO[3]."]";
-        $lineChartArray .= "['".$replacement."', ".$fO[1].", ".$fO[2].", ".$fO[3]."]";
+/*
+      #add empty data for missing days
+      $replacement2 = str_replace($needle, '', $activity_array[0][0]);
+      $datePartStart = explode(", ", $replacement2);
+      $startDate = $datePartStart[0].'-'.(intval($datePartStart[1])+1).'-'.$datePartStart[2];
+
+      $datePartEnd = explode(", ", $replacement);
+      $endDate = $datePartEnd[0].'-'.(intval($datePartEnd[1])+1).'-'.$datePartEnd[2];
+      var_dump($startDate);
+      var_dump($endDate);
+      $period = new DatePeriod(
+        new DateTime($startDate),
+        new DateInterval('P1D'),
+        new DateTime($endDate)
+      );
+
+      $dateTimespan = iterator_to_array($period);
+      forEach($dateTimespan as $dt){
+        $tempDatePart = explode("-", $dt->format('Y-m-d'));
+        $tempDate = $tempDatePart[0].', '.$tempDatePart[1].', '.$tempDatePart[2];
+        var_dump($tempDate);
+        if (strpos($lineChart, $tempDate) !== false) {
+        }
+        else{
+          $lineChart .= "[new Date($tempDate), 0, 0, 0], ";
+        }
+      }
+      */
+      $lineChart .= "[(".$fO[0]."), ".$fO[1].", ".$fO[2].", ".$fO[3]."]";
+      $lineChartArray .= "['".$replacement."', ".$fO[1].", ".$fO[2].", ".$fO[3]."]";
+      //var_dump($lineChart);
     }
 
     $f++;
@@ -428,6 +457,9 @@ else if ($_POST['allCharts'] == 'false') {
 			<div class="row">
 				<div class="col s12">
 					<ul class="tabs" id="tabs">
+            <li class="tab disabled">
+                <a href="#">Zeitraum der lokalen Version: '.$firstDate.' - '.$lastDate.'</a>
+            </li>
 						<li class="tab" id="tab_chart">
 							<a class="active" href="#chart1" >'.$_POST['chart'].'</a>
 						</li>
@@ -534,6 +566,8 @@ else if ($_POST['allCharts'] == 'false') {
 
 		$content .= '
 		<!-- General functions of the plugin. Must be included after the JS-files of the charts. -->
+    var firstDate = "'.$firstDate.'";
+    var lastDate = "'.$lastDate.'";
 		<script>'.file_get_contents('js/lemo_view.js').'</script>
 	</body>
 	</html>';

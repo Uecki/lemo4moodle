@@ -78,7 +78,16 @@ global $CFG;
                             die anderen Graphen werden nur die aktuell in der Datenbank vorhandenen Daten heruntergeladen.
                         </p>
                         <p class="red-text" id="modal_error2"></p>
-                        <input type="file" accept=".html" id="file_merge" multiple>
+                        <div id='fileSelection'>
+                          <ul id='fileList'>
+                            <li>
+                              <!--<p class = 'black-text'>
+                                <i class="material-icons medium" name='addIcon' id="addIcon">add</i>
+                              </p>-->
+                              <input type="file" accept=".html" name="fileMerge"id="file_merge" multiple>
+                            </li>
+                          </ul>
+                        </div>
                         <br>
                         <div class="row">
                           <div class="col s6" id="file_merge_filenames"></div>
