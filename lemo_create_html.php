@@ -32,13 +32,47 @@ if(!isset($_POST["mergeData"]) || $_POST["mergeData"] == "") {
 else{
   $activity_array = JSON_decode($_POST["mergeData"], true);
 
+  //used for sorting the array
   function compare_date($a, $b){
     return strnatcmp($a[0], $b[0]);
   }
 
   // sort alphabetically by name
   usort($activity_array, 'compare_date');
-  //var_dump($activity_array);
+  #add empty data for missing days
+  $needle = array("new Date(", ")");
+  $length = count($activity_array);
+  $replacement = str_replace($needle, '', $activity_array[$length-1][0]);
+  $replacement2 = str_replace($needle, '', $activity_array[0][0]);
+  $datePartStart = explode(", ", $replacement2);
+  $startDate = $datePartStart[0].'-'.(intval($datePartStart[1])+1).'-'.$datePartStart[2];
+
+  $datePartEnd = explode(", ", $replacement);
+  $endDate = $datePartEnd[0].'-'.(intval($datePartEnd[1])+1).'-'.$datePartEnd[2];
+  $period = new DatePeriod(
+    new DateTime($startDate),
+    new DateInterval('P1D'),
+    new DateTime($endDate)
+  );
+
+  $dateTimespan = iterator_to_array($period);
+  forEach($dateTimespan as $dt){
+    $tempDatePart = explode("-", $dt->format('Y-m-d'));
+    $tempDate = $tempDatePart[0].', '.(intval($tempDatePart[1])-1).', '.$tempDatePart[2];
+    $checkResult = 0;
+    forEach($activity_array as $aa){
+      if (strpos($aa[0], $tempDate) !== false) {
+        $checkResult = 1;
+        break;
+      }
+    }
+    if ($checkResult == 0){
+      array_push($activity_array, ["new Date($tempDate)", 0, 0, 0]);
+    }
+  }
+
+  // sort again alphabetically by name
+  usort($activity_array, 'compare_date');
 }
 $barchart_array = $allData[1];
 $heatmap_array = $allData[2];
@@ -74,32 +108,7 @@ foreach($activity_array as $fO){
     }
     if($f == $length -1){
 /*
-      #add empty data for missing days
-      $replacement2 = str_replace($needle, '', $activity_array[0][0]);
-      $datePartStart = explode(", ", $replacement2);
-      $startDate = $datePartStart[0].'-'.(intval($datePartStart[1])+1).'-'.$datePartStart[2];
 
-      $datePartEnd = explode(", ", $replacement);
-      $endDate = $datePartEnd[0].'-'.(intval($datePartEnd[1])+1).'-'.$datePartEnd[2];
-      var_dump($startDate);
-      var_dump($endDate);
-      $period = new DatePeriod(
-        new DateTime($startDate),
-        new DateInterval('P1D'),
-        new DateTime($endDate)
-      );
-
-      $dateTimespan = iterator_to_array($period);
-      forEach($dateTimespan as $dt){
-        $tempDatePart = explode("-", $dt->format('Y-m-d'));
-        $tempDate = $tempDatePart[0].', '.$tempDatePart[1].', '.$tempDatePart[2];
-        var_dump($tempDate);
-        if (strpos($lineChart, $tempDate) !== false) {
-        }
-        else{
-          $lineChart .= "[new Date($tempDate), 0, 0, 0], ";
-        }
-      }
       */
       $lineChart .= "[(".$fO[0]."), ".$fO[1].", ".$fO[2].", ".$fO[3]."]";
       $lineChartArray .= "['".$replacement."', ".$fO[1].", ".$fO[2].", ".$fO[3]."]";
