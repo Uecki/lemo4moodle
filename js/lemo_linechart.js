@@ -1,4 +1,4 @@
-/*JS-file for everything that can be seen on or is related to the linechart-tab.*/
+/*JS-file for everything that can be seen on or is related to the linechart-tab.  Uses language-strings initialised in index.php.*/
 
 
 $(document).ready(function() {
@@ -46,24 +46,23 @@ $(document).ready(function() {
 				return [new Date(r[0], r[1], r[2]), it.accesses, it.ownhits, it.users];
 			});
 			var data = new google.visualization.DataTable();
-				data.addColumn('date', 'Datum');
-				data.addColumn('number', 'Zugriffe');
-				data.addColumn('number', 'eigene Zugriffe');
-				data.addColumn('number', 'Nutzer');
+				data.addColumn('date', linechart_colDate);
+				data.addColumn('number', linechart_colAccess);
+				data.addColumn('number', linechart_colOwnAccess);
+				data.addColumn('number', linechart_colUser);
 				data.addRows(chartData);
 			var options = {
 				chart: {
-					title: 'Zugriffe und Nutzer pro Tag'
+					title: linechart_title
 				},
 				hAxis: {
-					title: 'Datum',
+					title: linechart_colDate,
 					format:'d.M.yy'
-				},
-				interpolateNulls: false
+				}
 			};
 			activity_chart.draw(data, options);
 		}else{
-			Materialize.toast('Überprüfen Sie ihre Auswahl (Beginn < Ende)', 3000) // 3000 is the duration of the toast
+			Materialize.toast(linechart_checkSelection, 3000) // 3000 is the duration of the toast
 			$('#datepicker_3').val("");
 			$('#datepicker_4').val("");
 		}
@@ -82,20 +81,19 @@ $(document).ready(function() {
 function drawLineChart() {
 
 	var data = new google.visualization.DataTable();
-	data.addColumn('date', 'Datum');
-	data.addColumn('number', 'Zugriffe');
-	data.addColumn('number', 'eigene Zugriffe')
-	data.addColumn('number', 'Nutzer');
-	data.addRows(linechart_data);
-
+		data.addColumn('date', linechart_colDate);
+		data.addColumn('number', linechart_colAccess);
+		data.addColumn('number', linechart_colOwnAccess);
+		data.addColumn('number', linechart_colUser);
+		data.addRows(linechart_data);
 	var options = {
-	chart: {
-	  title: 'Zugriffe und Nutzer pro Tag'
-	},
-	hAxis: {
-	  title: 'Datum',
-	  format:'d.M.yy'
-	}
+		chart: {
+			title: linechart_title
+		},
+		hAxis: {
+			title: linechart_colDate,
+			format:'d.M.yy'
+		},
 
 
 	};

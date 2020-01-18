@@ -1,12 +1,12 @@
-/*JS-file for everything that can be seen on or is related to the barchart-tab.*/
+/*JS-file for everything that can be seen on or is related to the barchart-tab. Uses language-strings initialised in index.php.*/
 
 $(document).ready(function() {
-	
+
 	// Barchart - reset button
 	$('#rst_btn_1').click(function() {
 	/* do something */
 	});
-	
+
 	//Download button for barchart tab.
 	$('#html_btn_1').click(function() {
 		//Opens dialog box.
@@ -19,22 +19,22 @@ $(document).ready(function() {
 //See the google charts documentation for linechart.
 function drawBarChart(){
 var data = google.visualization.arrayToDataTable(barchart_data);
-			
+
 	var materialOptions_BarChart = {
 		chart: {
-			title: 'Zugriffe und Nutzer pro Datei'
+			title: barchart_title
 		},
 		axes: {
 			x: {
-				distance: {label: 'Dateiname'} // bottom x-axis.
+				distance: {label: barchart_xlabel} // bottom x-axis.
 			},
 			y: {
-				distance: {label: 'Zugriffe'} // Left y-axis.
+				distance: {label: barchart_ylabel} // Left y-axis.
 			}
 		},
 		legend: {
 			position: 'none'
-		 
+
 		},
 		bars: 'horizontal'
 	};

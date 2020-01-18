@@ -22,12 +22,12 @@ global $CFG;
 ?>
 
 <!DOCTYPE html>
-<html lang="de">
+<html lang="<?php echo get_string('lang', 'block_lemo4moodle')?>">
 
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Lemo4Moodle</title>
+  <title><?php echo get_string('pluginname', 'block_lemo4moodle')?></title>
 
     <!-- Datepicker jQuery-->
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
@@ -50,26 +50,23 @@ global $CFG;
 
 <body>
 	<!-- Dialog box -->
-	<div id = "dialog" title = "Auswahl">Möchten Sie nur diesen Graphen oder alle Graphen herunterladen?</div>
+	<div id = "dialog" title = "Auswahl"><?php echo get_string('download_dialog', 'block_lemo4moodle')?></div>
 	<!-- Header -->
     <div class="container-fluid">
         <nav>
             <div class="nav-wrapper">
                 <a onClick="window.location.reload()" class="brand-logo">
-                    <i class="material-icons medium">insert_chart</i>Lemo4Moodle</a>
+                    <i class="material-icons medium">insert_chart</i><?php echo get_string('pluginname', 'block_lemo4moodle')?></a>
                 <ul id="nav" class="right hide-on-med-and-down">
                   <li>
                     <!-- Modal Trigger -->
-                   <a class="waves-effect waves-light grey darken-3 btn modal-trigger" href="#modal1">Dateien zusammenfügen</a>
+                   <a class="waves-effect waves-light grey darken-3 btn modal-trigger" href="#modal1"><?php echo get_string('modal_title', 'block_lemo4moodle')?></a>
 
                    <!-- Modal Structure -->
                    <div id="modal1" class="modal modal-fixed-footer">
                      <div class="modal-content">
-                       <h4 class="black-text">Dateien zusammenfügen</h4>
-                        <p class="black-text"> Wählen Sie jetzt die Dateien, von denen die Daten zusammengefügt werden sollen.
-                            <br>(Halten Sie bitte die "STRG"-Taste beim Auswählen von mehreren Dateien gedrückt und klicken Sie dabei auf die gewünschten Dateien.)
-                            <br> Von den ausgewählten Dateien werden dann <u>nur</u> die Linechart-Daten zusammengefügt, für
-                            die anderen Graphen werden nur die aktuell in der Datenbank vorhandenen Daten heruntergeladen.
+                       <h4 class="black-text"><?php echo get_string('modal_title', 'block_lemo4moodle')?></h4>
+                        <p class="black-text"><?php echo get_string('modal_content', 'block_lemo4moodle')?>
                         </p>
                         <p class="red-text" id="modal_error2"></p>
                         <div id='fileSelection'>
@@ -87,7 +84,7 @@ global $CFG;
                           <div class="col s6" id="file_merge_filenames"></div>
                           <div class="col s6" id="file_merge_timespan"></div>
                         </div>
-                        <button class="btn waves-effect waves-light grey darken-3 button" id="mergeButton">Dateien zusammenfügen</button>
+                        <button class="btn waves-effect waves-light grey darken-3 button" id="mergeButton"><?php echo get_string('modal_title', 'block_lemo4moodle')?></button>
                      </div>
                    </div>
                   </li>
@@ -108,10 +105,10 @@ global $CFG;
             <div class="col s12">
                 <ul class="tabs" id="tabs">
                     <li class="tab disabled">
-                        <a href="#">Logdaten seit: <?php echo userdate($minlog);?></a>
+                        <a href="#"><?php echo get_string('logdata', 'block_lemo4moodle')?> <?php echo userdate($minlog);?></a>
                     </li>
                     <li class="tab" id="tab_barChart">
-                        <a class="active" id="tab1" href="#chart1" >Barchart</a>
+                        <a class="active" id="tab1" href="#chart1">Barchart</a>
                     </li>
                     <li class="tab" id="tab_activityChart">
                         <a id="tab2" href="#chart2">Activity Chart</a>
@@ -133,9 +130,9 @@ global $CFG;
                     <div id="options" class="col s3">
                         <div class="row">
                             <div class="input-field col s12">
-                                <p>Datensicherung:</p>
+                                <p><?php echo get_string('backup', 'block_lemo4moodle')?></p>
                                 <form action='lemo_create_html.php' method='post' id='download_form_1'>
-                									<a class="btn waves-effect waves-light grey darken-3 button ajax" id="html_btn_1">HTML Download</a>
+                									<a class="btn waves-effect waves-light grey darken-3 button ajax" id="html_btn_1"><?php echo get_string('html_download', 'block_lemo4moodle')?></a>
                 									<!-- Variables that are to be posted to lemo_create_html.php.  -->
                 									<input type='hidden' value='<?php echo $courseID ?>' name='id'>
                 									<input type='hidden' value='<?php echo $userID ?>' name='userid'>
@@ -162,15 +159,15 @@ global $CFG;
                             <div class="row">
                                 <div class="input-field col s12">
                                     <div class="divider"></div>
-                                    <p>Filter:</p>
+                                    <p><?php echo get_string('filter', 'block_lemo4moodle')?></p>
                                     <input placeholder="Beginn" type="text" class="datepick " id="datepicker_3">
                                     <input placeholder="Ende" type="text" class="datepick " id="datepicker_4">
-                                    <button class="btn waves-effect waves-light grey darken-3 button" type="submit" name="action" id="dp_button_2">Aktualisieren</button>
-                                    <button class="btn waves-effect waves-light grey darken-3 button" type="submit" name="action" id="rst_btn_2">R&uuml;ckg&auml;ngig</button>
+                                    <button class="btn waves-effect waves-light grey darken-3 button" type="submit" name="action" id="dp_button_2"><?php echo get_string('update', 'block_lemo4moodle')?></button>
+                                    <button class="btn waves-effect waves-light grey darken-3 button" type="submit" name="action" id="rst_btn_2"><?php echo get_string('reset', 'block_lemo4moodle')?></button>
                                     <div class="divider"></div>
-                                    <p>Datensicherung:</p>
+                                    <p><?php echo get_string('backup', 'block_lemo4moodle')?></p>
 									<form action='lemo_create_html.php' method='post' id='download_form_2'>
-										<a class="btn waves-effect waves-light grey darken-3 button ajax" id="html_btn_2">HTML Download</a>
+										<a class="btn waves-effect waves-light grey darken-3 button ajax" id="html_btn_2"><?php echo get_string('html_download', 'block_lemo4moodle')?></a>
 										<!-- Variables that are to be posted to lemo_create_html.php.  -->
 										<input type='hidden' value='<?php echo $courseID ?>' name='id'>
 										<input type='hidden' value='<?php echo $userID ?>' name='userid'>
@@ -194,16 +191,16 @@ global $CFG;
                             <div class="row">
                                 <div class="input-field col s12">
 									<div class="divider"></div>
-									<p>Filter:</p>
+									<p><?php echo get_string('filter', 'block_lemo4moodle')?></p>
                                     <input placeholder="Beginn" type="text" class="datepick " id="datepicker_5">
                                     <input placeholder="Ende" type="text" class="datepick " id="datepicker_6">
-                                    <button class="btn waves-effect waves-light grey darken-3 button" type="submit" name="action" id="dp_button_3">Aktualisieren</button>
-                                    <button class="btn waves-effect waves-light grey darken-3 button" type="submit" name="action" id="rst_btn_3">R&uuml;ckg&auml;ngig</button>
+                                    <button class="btn waves-effect waves-light grey darken-3 button" type="submit" name="action" id="dp_button_3"><?php echo get_string('update', 'block_lemo4moodle')?></button>
+                                    <button class="btn waves-effect waves-light grey darken-3 button" type="submit" name="action" id="rst_btn_3"><?php echo get_string('reset', 'block_lemo4moodle')?></button>
                                     <div class="divider"></div>
-                                    <p>Datensicherung:</p>
+                                    <p><?php echo get_string('backup', 'block_lemo4moodle')?></p>
 
 									<form action='lemo_create_html.php' method='post' id='download_form_3'>
-										<a class="btn waves-effect waves-light grey darken-3 button ajax" id="html_btn_3">HTML Download</a>
+										<a class="btn waves-effect waves-light grey darken-3 button ajax" id="html_btn_3"><?php echo get_string('html_download', 'block_lemo4moodle')?></a>
 										<!-- Variables that are to be posted to lemo_create_html.php.  -->
 										<input type='hidden' value='<?php echo $courseID ?>' name='id'>
 										<input type='hidden' value='<?php echo $userID ?>' name='userid'>
@@ -225,10 +222,10 @@ global $CFG;
                         <div id="options" class="col s3">
                             <div class="row">
                                 <div class="input-field col s12">
-                                    <p>Datensicherung:</p>
+                                    <p><?php echo get_string('backup', 'block_lemo4moodle')?></p>
 
 									<form action='lemo_create_html.php' method='post' id='download_form_4'>
-										<a class="btn waves-effect waves-light grey darken-3 button ajax" id="html_btn_4">HTML Download</a>
+										<a class="btn waves-effect waves-light grey darken-3 button ajax" id="html_btn_4"><?php echo get_string('html_download', 'block_lemo4moodle')?></a>
 										<!-- Variables that are to be posted to lemo_create_html.php.  -->
 										<input type='hidden' value='<?php echo $courseID ?>' name='id'>
 										<input type='hidden' value='<?php echo $userID ?>' name='userid'>
@@ -247,7 +244,7 @@ global $CFG;
 			<ul class="collapsible z-depth-0" data-collapsible="accordion">
 				<li>
 					<div class="collapsible-header">
-						<i class="material-icons right">expand_more</i>Kursaktivität (Moodle Bericht)</div>
+						<i class="material-icons right">expand_more</i><?php echo get_string('course_activity', 'block_lemo4moodle')?></div>
 					<div class="collapsible-body">
 						<span>
 							<?php
@@ -281,7 +278,7 @@ global $CFG;
 
 	<script>
 
-		<!-- Data-variables from lemo_dq_queries.php made usable for the js-files. -->
+		//Data-variables from lemo_dq_queries.php made usable for the js-files.
 		var barchart_data = <?php echo $bar_chart_data; ?>;
 		var linechart_data = [<?php echo $lineChart; ?>];
 		var heatmap_data = <?php echo $heatmap_data; ?>;
@@ -294,6 +291,44 @@ global $CFG;
 			$js_heatmap = json_encode($heatmap, JSON_NUMERIC_CHECK);
 			echo "var js_heatmap = Object.entries(". $js_heatmap . ");\n";
 		?>
+
+    //Language-string variables made accessible for JS
+      //Barchart
+    var barchart_title = <?php echo '"' . get_string('barchart_title', 'block_lemo4moodle') . '"'?>;
+    var barchart_xlabel = <?php echo '"' . get_string('barchart_xlabel', 'block_lemo4moodle') . '"'?>;
+    var barchart_ylabel = <?php echo '"' . get_string('barchart_ylabel', 'block_lemo4moodle') . '"'?>;
+      //Linechart
+    var linechart_colDate = <?php echo '"' . get_string('linechart_colDate', 'block_lemo4moodle') . '"'?>;
+    var linechart_colAccess = <?php echo '"' . get_string('linechart_colAccess', 'block_lemo4moodle') . '"'?>;
+    var linechart_colOwnAccess = <?php echo '"' . get_string('linechart_colOwnAccess', 'block_lemo4moodle') . '"'?>;
+    var linechart_colUser = <?php echo '"' . get_string('linechart_colUser', 'block_lemo4moodle') . '"'?>;
+    var linechart_title = <?php echo '"' . get_string('linechart_title', 'block_lemo4moodle') . '"'?>;
+    var linechart_checkSelection = <?php echo '"' . get_string('linechart_checkSelection', 'block_lemo4moodle') . '"'?>;
+      //Heatmap
+    var heatmap_title = <?php echo '"' . get_string('heatmap_title', 'block_lemo4moodle') . '"'?>;
+    var heatmap_all = <?php echo '"' . get_string('heatmap_all', 'block_lemo4moodle') . '"'?>;
+    var heatmap_own = <?php echo '"' . get_string('heatmap_own', 'block_lemo4moodle') . '"'?>;
+    var heatmap_overall = <?php echo '"' . get_string('heatmap_overall', 'block_lemo4moodle') . '"'?>;
+    var heatmap_average = <?php echo '"' . get_string('heatmap_average', 'block_lemo4moodle') . '"'?>;
+    var heatmap_monday = <?php echo '"' . get_string('heatmap_monday', 'block_lemo4moodle') . '"'?>;
+    var heatmap_tuesday = <?php echo '"' . get_string('heatmap_tuesday', 'block_lemo4moodle') . '"'?>;
+    var heatmap_wednesday = <?php echo '"' . get_string('heatmap_wednesday', 'block_lemo4moodle') . '"'?>;
+    var heatmap_thursday = <?php echo '"' . get_string('heatmap_thursday', 'block_lemo4moodle') . '"'?>;
+    var heatmap_friday = <?php echo '"' . get_string('heatmap_friday', 'block_lemo4moodle') . '"'?>;
+    var heatmap_saturday = <?php echo '"' . get_string('heatmap_saturday', 'block_lemo4moodle') . '"'?>;
+    var heatmap_sunday = <?php echo '"' . get_string('heatmap_sunday', 'block_lemo4moodle') . '"'?>;
+    var heatmap_checkSelection = <?php echo '"' . get_string('heatmap_checkSelection', 'block_lemo4moodle') . '"'?>;
+      //Treemap
+    var treemap_title = <?php echo '"' . get_string('treemap_title', 'block_lemo4moodle') . '"'?>;
+    var treemap_clickCount = <?php echo '"' . get_string('treemap_clickCount', 'block_lemo4moodle') . '"'?>;
+      //View
+    var view_dialogThis = <?php echo '"' . get_string('view_dialogThis', 'block_lemo4moodle') . '"'?>;
+    var view_dialogAll = <?php echo '"' . get_string('view_dialogAll', 'block_lemo4moodle') . '"'?>;
+    var view_file = <?php echo '"' . get_string('view_file', 'block_lemo4moodle') . '"'?>;
+    var view_timespan = <?php echo '"' . get_string('view_timespan', 'block_lemo4moodle') . '"'?>;
+    var view_noTimespan = <?php echo '"' . get_string('view_noTimespan', 'block_lemo4moodle') . '"'?>;
+    var view_modalError = <?php echo '"' . get_string('view_modalError', 'block_lemo4moodle') . '"'?>;
+
 	</script>
 
 	<!-- Barchart, linechart, heatmap and treemap are loaded. Must be included after the data-variables.-->

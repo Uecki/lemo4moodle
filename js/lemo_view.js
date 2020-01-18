@@ -21,7 +21,7 @@ $(document).ready(function() {
 		autoOpen: false,
 		buttons: [
 			{
-				text: "Dieser Graph",
+				text: view_dialogThis,
 				click: function() {
 					$(this).dialog("close");
 					if ($(".active").attr('id') == 'tab1'){
@@ -43,7 +43,7 @@ $(document).ready(function() {
 				}
 			},
 			{
-				text: "Alle Graphen",
+				text: view_dialogAll,
 				click: function() {
 					$(this).dialog("close");
 					if ($(".active").attr('id') == 'tab1'){
@@ -116,7 +116,7 @@ $(document).ready(function() {
 		// Fill div with elements containing the filename.
 	  //$( '#file_merge_filenames' ).append('<ul>');
 		for (var i = 0; i < input.files.length; ++i) {
-				$( '#file_merge_filenames' ).append('<li class="black-text">Datei '+ (i+1) + ': ' + input.files[i].name + '</li><br>');
+				$( '#file_merge_filenames' ).append('<li class="black-text">' + view_file + (i+1) + ': ' + input.files[i].name + '</li><br>');
 	  }
 	  //$( '#file_merge_filenames' ).append('</ul>');
 
@@ -139,11 +139,11 @@ $(document).ready(function() {
 					var end2 = fileStringDate.indexOf('"', start2+1);
 					var date2 = fileStringDate.substring(start2+1, end2);
 					//lastTimestamp.push(new Date(date2));
-					$( '#file_merge_timespan' ).append('<li class="black-text">Zeitraum: ' + date1 + ' - ' + date2 + '</li><br>');
+					$( '#file_merge_timespan' ).append('<li class="black-text">' + view_timespan + date1 + ' - ' + date2 + '</li><br>');
 					//console.log(firstTimestamp + lastTimestamp);
 				}
 				else {
-					$( '#file_merge_timespan' ).append('<li class="black-text">Kein Zeitraum vorhanden</li><br>');
+					$( '#file_merge_timespan' ).append('<li class="black-text">' + view_noTimespan + '</li><br>');
 				}
 			});
 	  }
@@ -215,7 +215,7 @@ $('#mergeButton').click(function() {
 	}
 	*/
 	if(fileMerge.files.length < 2){
-		$("#modal_error2").text ("Bitte mindestens zwei Dateien zum Zusammenfügen auswählen.");
+		$("#modal_error2").text (view_modalError);
 		return;
 	}
 	var files =	fileMerge.files;

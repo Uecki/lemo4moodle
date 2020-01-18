@@ -182,7 +182,7 @@
 	$j = 1;
 	$leng = count($barchart);
 	$barchart_data_array = array();
-	$bar_chart_data = "[['Dateiname', 'Zugriffe', 'Nutzer'],";
+	$bar_chart_data = "[['".get_string('barchart_xlabel', 'block_lemo4moodle')."', '".get_string('barchart_ylabel', 'block_lemo4moodle')."', '".get_string('barchart_users', 'block_lemo4moodle')."'],";
 
 	foreach($barchart as $bar){
 		if ($j < $leng ){
@@ -646,7 +646,7 @@
 	$treemap_data_array = array();
 	$treemap_data =
 		"[['Name', 'Parent', 'Size', 'Color'],
-			['Global', null, 0, 0],";
+			['".get_string('treemap_global', 'block_lemo4moodle')."', null, 0, 0],";
 				#['Dateien', 'Global', 0, 0],";
 
 	foreach($treemap as $tree){
