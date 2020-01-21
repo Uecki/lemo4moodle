@@ -25,12 +25,13 @@ $string['course_activity'] = 'Course activity (Moodle report)';
 $string['update'] = 'Update';
 $string['reset'] = 'Reset';
 $string['html_download'] = 'HTML Download';
+$string['dialogTitle'] = 'Selection';
 
 //Barchart
 $string['barchart_title'] = 'Accesses and users per file';
 $string['barchart_xlabel'] = 'Filename';
 $string['barchart_ylabel'] = 'Accesses';
-$string['barchart_users'] = 'Nutzer';
+$string['barchart_users'] = 'Users';
 
 //Linechart
 $string['linechart_colDate'] = 'Date';

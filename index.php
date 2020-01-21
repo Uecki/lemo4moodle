@@ -50,7 +50,7 @@ global $CFG;
 
 <body>
 	<!-- Dialog box -->
-	<div id = "dialog" title = "Auswahl"><?php echo get_string('download_dialog', 'block_lemo4moodle')?></div>
+	<div id = "dialog" title = "<?php echo get_string('dialogTitle', 'block_lemo4moodle')?>"><?php echo get_string('download_dialog', 'block_lemo4moodle')?></div>
 	<!-- Header -->
     <div class="container-fluid">
         <nav>

@@ -26,6 +26,8 @@ $string['course_activity'] = 'Kursaktivität (Moodle Bericht)';
 $string['update'] = 'Aktualisieren';
 $string['reset'] = 'R&uuml;ckg&auml;ngig';
 $string['html_download'] = 'HTML Download';
+$string['dialogTitle'] = 'Auswahl';
+
 
 //Barchart
 $string['barchart_title'] = 'Zugriffe und Nutzer pro Datei';
