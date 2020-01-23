@@ -27,6 +27,9 @@ $string['update'] = 'Aktualisieren';
 $string['reset'] = 'R&uuml;ckg&auml;ngig';
 $string['html_download'] = 'HTML Download';
 $string['dialogTitle'] = 'Auswahl';
+$string['filterStart'] = 'Beginn';
+$string['filterEnd'] = 'Ende';
+
 
 
 //Barchart

@@ -26,6 +26,8 @@ $string['update'] = 'Update';
 $string['reset'] = 'Reset';
 $string['html_download'] = 'HTML Download';
 $string['dialogTitle'] = 'Selection';
+$string['filterStart'] = 'Start';
+$string['filterEnd'] = 'End';
 
 //Barchart
 $string['barchart_title'] = 'Accesses and users per file';

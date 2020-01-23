@@ -160,21 +160,21 @@ global $CFG;
                                 <div class="input-field col s12">
                                     <div class="divider"></div>
                                     <p><?php echo get_string('filter', 'block_lemo4moodle')?></p>
-                                    <input placeholder="Beginn" type="text" class="datepick " id="datepicker_3">
-                                    <input placeholder="Ende" type="text" class="datepick " id="datepicker_4">
+                                    <input placeholder="<?php echo get_string('filterStart', 'block_lemo4moodle')?>" type="text" class="datepick " id="datepicker_3">
+                                    <input placeholder="<?php echo get_string('filterEnd', 'block_lemo4moodle')?>" type="text" class="datepick " id="datepicker_4">
                                     <button class="btn waves-effect waves-light grey darken-3 button" type="submit" name="action" id="dp_button_2"><?php echo get_string('update', 'block_lemo4moodle')?></button>
                                     <button class="btn waves-effect waves-light grey darken-3 button" type="submit" name="action" id="rst_btn_2"><?php echo get_string('reset', 'block_lemo4moodle')?></button>
                                     <div class="divider"></div>
                                     <p><?php echo get_string('backup', 'block_lemo4moodle')?></p>
-									<form action='lemo_create_html.php' method='post' id='download_form_2'>
-										<a class="btn waves-effect waves-light grey darken-3 button ajax" id="html_btn_2"><?php echo get_string('html_download', 'block_lemo4moodle')?></a>
-										<!-- Variables that are to be posted to lemo_create_html.php.  -->
-										<input type='hidden' value='<?php echo $courseID ?>' name='id'>
-										<input type='hidden' value='<?php echo $userID ?>' name='userid'>
-										<input type='hidden' value='<?php echo $allData ?>' name='data'>
-										<input type='hidden' value='linechart' name='chart'>
-										<input type='hidden' value='' name='allCharts' id="allCharts2">
-								    </form>
+                  									<form action='lemo_create_html.php' method='post' id='download_form_2'>
+                  										<a class="btn waves-effect waves-light grey darken-3 button ajax" id="html_btn_2"><?php echo get_string('html_download', 'block_lemo4moodle')?></a>
+                  										<!-- Variables that are to be posted to lemo_create_html.php.  -->
+                  										<input type='hidden' value='<?php echo $courseID ?>' name='id'>
+                  										<input type='hidden' value='<?php echo $userID ?>' name='userid'>
+                  										<input type='hidden' value='<?php echo $allData ?>' name='data'>
+                  										<input type='hidden' value='linechart' name='chart'>
+                  										<input type='hidden' value='' name='allCharts' id="allCharts2">
+                  								    </form>
                                     <div class="divider"></div>
                                 </div>
                             </div>
@@ -192,22 +192,22 @@ global $CFG;
                                 <div class="input-field col s12">
 									<div class="divider"></div>
 									<p><?php echo get_string('filter', 'block_lemo4moodle')?></p>
-                                    <input placeholder="Beginn" type="text" class="datepick " id="datepicker_5">
-                                    <input placeholder="Ende" type="text" class="datepick " id="datepicker_6">
+                                    <input placeholder="<?php echo get_string('filterStart', 'block_lemo4moodle')?>" type="text" class="datepick " id="datepicker_5">
+                                    <input placeholder="<?php echo get_string('filterEnd', 'block_lemo4moodle')?>" type="text" class="datepick " id="datepicker_6">
                                     <button class="btn waves-effect waves-light grey darken-3 button" type="submit" name="action" id="dp_button_3"><?php echo get_string('update', 'block_lemo4moodle')?></button>
                                     <button class="btn waves-effect waves-light grey darken-3 button" type="submit" name="action" id="rst_btn_3"><?php echo get_string('reset', 'block_lemo4moodle')?></button>
                                     <div class="divider"></div>
                                     <p><?php echo get_string('backup', 'block_lemo4moodle')?></p>
 
-									<form action='lemo_create_html.php' method='post' id='download_form_3'>
-										<a class="btn waves-effect waves-light grey darken-3 button ajax" id="html_btn_3"><?php echo get_string('html_download', 'block_lemo4moodle')?></a>
-										<!-- Variables that are to be posted to lemo_create_html.php.  -->
-										<input type='hidden' value='<?php echo $courseID ?>' name='id'>
-										<input type='hidden' value='<?php echo $userID ?>' name='userid'>
-										<input type='hidden' value='<?php echo $allData ?>' name='data'>
-										<input type='hidden' value='heatmap' name='chart'>
-										<input type='hidden' value='' name='allCharts' id="allCharts3">
-								    </form>
+                  									<form action='lemo_create_html.php' method='post' id='download_form_3'>
+                  										<a class="btn waves-effect waves-light grey darken-3 button ajax" id="html_btn_3"><?php echo get_string('html_download', 'block_lemo4moodle')?></a>
+                  										<!-- Variables that are to be posted to lemo_create_html.php.  -->
+                  										<input type='hidden' value='<?php echo $courseID ?>' name='id'>
+                  										<input type='hidden' value='<?php echo $userID ?>' name='userid'>
+                  										<input type='hidden' value='<?php echo $allData ?>' name='data'>
+                  										<input type='hidden' value='heatmap' name='chart'>
+                  										<input type='hidden' value='' name='allCharts' id="allCharts3">
+                  								    </form>
                                 </div>
                             </div>
                     </div>
