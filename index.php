@@ -111,7 +111,7 @@ global $CFG;
                         <a class="active" id="tab1" href="#chart1">Barchart</a>
                     </li>
                     <li class="tab" id="tab_activityChart">
-                        <a id="tab2" href="#chart2">Activity Chart</a>
+                        <a id="tab2" href="#chart2">Linechart</a> <!-- previously activity chart -->
                     </li>
                     <li class="tab" id="tab_heatMap">
                         <a id="tab3" href="#chart3">Heatmap</a>
