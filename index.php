@@ -105,7 +105,7 @@ global $CFG;
             <div class="col s12">
                 <ul class="tabs" id="tabs">
                     <li class="tab disabled">
-                        <a href="#"><?php echo get_string('logdata', 'block_lemo4moodle')?> <?php echo userdate($minlog);?></a>
+                        <a href="#"><?php echo get_string('logdata', 'block_lemo4moodle')?> <?php echo $firstDateIndex;?></a>
                     </li>
                     <li class="tab" id="tab_barChart">
                         <a class="active" id="tab1" href="#chart1">Barchart</a>

@@ -167,6 +167,10 @@
 		$f++;
 	}
 
+	# get the first recorded date of the datasets (used to indicate the first date of data-timespan in index.php)
+	preg_match_all('/\d+/', $lineChartArray[0][0], $matches);
+	$firstDateIndex = $matches[0][2].'.'.(intval($matches[0][1])+1).'.'.$matches[0][0]; #month needs to be augmented by 1
+
 	# SQL Query for bar chart data
 
 	$query_barchart_data = "SELECT RESOURCE.id, name, counter_hits, counter_user
