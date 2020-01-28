@@ -24,14 +24,14 @@ function drawTreeMap() {
 	tree = new google.visualization.TreeMap(document.getElementById('treemap'));
 
 	tree.draw(data, {
-	  minColor: '#f00',
-	  midColor: '#ddd',
-	  maxColor: '#0d0',
-	  headerHeight: 15,
-	  fontColor: 'black',
-	  highlightOnMouseOver: true,
-	  title: treemap_title,
-	  generateTooltip: showTooltipTreemap
+		minColor: '#f00',
+		midColor: '#ddd',
+		maxColor: '#0d0',
+		headerHeight: 15,
+		fontColor: 'black',
+		highlightOnMouseOver: true,
+		title: treemap_title,
+		generateTooltip: showTooltipTreemap
 	});
 
 	function showTooltipTreemap(row, size, value) {

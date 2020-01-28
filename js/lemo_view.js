@@ -105,7 +105,7 @@ $(document).ready(function() {
 
 		// Variables for html elements
 		var input = document.getElementById('file_merge');
-	  var output = document.getElementById('file_merge_filenames');
+	  	var output = document.getElementById('file_merge_filenames');
 
 		//$('#fileSelection').append('<input type="file" name="file[]"/>');
 
@@ -114,11 +114,11 @@ $(document).ready(function() {
 		$('#file_merge_timespan').empty();
 
 		// Fill div with elements containing the filename.
-	  //$( '#file_merge_filenames' ).append('<ul>');
+	  	//$( '#file_merge_filenames' ).append('<ul>');
 		for (var i = 0; i < input.files.length; ++i) {
-				$( '#file_merge_filenames' ).append('<li class="black-text">' + view_file + (i+1) + ': ' + input.files[i].name + '</li><br>');
-	  }
-	  //$( '#file_merge_filenames' ).append('</ul>');
+			$( '#file_merge_filenames' ).append('<li class="black-text">' + view_file + (i+1) + ': ' + input.files[i].name + '</li><br>');
+	  	}
+	  	//$( '#file_merge_filenames' ).append('</ul>');
 
 		//Fill div with timespans.
 		for (var i = 0; i < input.files.length; ++i) {
@@ -146,14 +146,14 @@ $(document).ready(function() {
 					$( '#file_merge_timespan' ).append('<li class="black-text">' + view_noTimespan + '</li><br>');
 				}
 			});
-	  }
+	  	}
 	});
 
 });
 
 // Load Charts and the corechart package.
 google.charts.load('current', {
-  'packages': ['bar', 'line', 'treemap', 'corechart', 'controls']
+  	'packages': ['bar', 'line', 'treemap', 'corechart', 'controls']
 });
 
 // Draw all charts when Charts is loaded. (Even the Highchart, which is not from Google Charts).
