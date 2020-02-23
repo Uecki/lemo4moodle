@@ -1,319 +1,274 @@
-/*JS-file for all global functions of the plugin.*/
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
+/**
+ * JS file for all the general functionalities of this block.
+ *
+ * The languae strings used here are initialised as variables in index.php.
+ * Inluded are:
+ * dialog box after click on "Download",
+ * merging files functionality,
+ * function to draw all charts (combines functions of each charts JS file).
+ *
+ *
+ * @package    block_lemo4moodle
+ * @copyright  2020 Finn Ueckert
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 
 
 $(document).ready(function() {
 
-	// Redraw charts when page is resized.
-	$(window).resize(function(){
-		drawAllCharts();
-	});
+    // Redraw charts when page is resized.
+    $(window).resize(function() {
+        block_lemo4moodle_draw_all_charts();
+    });
 
-	//Closes the window when the button "Schließen" is clicked.
-	$('#btn_close').click(function(){
-		window.close();
-	});
+    // Closes the window when the button "Schließen" is clicked.
+    $('#btn_close').click(function() {
+        window.close();
+    });
 
-	//Minimalize tabs are being initialized, callback function 'drawAllCharts' is executed on tab change
-	$('#tabs').tabs({ 'onShow': drawAllCharts });
+    // Minimalize tabs are being initialized, callback function 'block_lemo4moodle_draw_all_charts' is executed on tab change.
+    $('#tabs').tabs({ 'onShow': block_lemo4moodle_draw_all_charts });
 
-	//Initializing the dialog box shown before the download.
-	$( "#dialog" ).dialog({
-		autoOpen: false,
-		buttons: [
-			{
-				text: view_dialogThis,
-				click: function() {
-					$(this).dialog("close");
-					if ($(".active").attr('id') == 'tab1'){
-						document.getElementById("allCharts1").value = 'false';
-						document.getElementById("download_form_1").submit();
-					}
-					else if ($(".active").attr('id') == 'tab2'){
-						document.getElementById("allCharts2").value = 'false';
-						document.getElementById("download_form_2").submit();
-					}
-					else if ($(".active").attr('id') == 'tab3'){
-						document.getElementById("allCharts3").value = 'false';
-						document.getElementById("download_form_3").submit();
-					}
-					else if ($(".active").attr('id') == 'tab4'){
-						document.getElementById("allCharts4").value = 'false';
-						document.getElementById("download_form_4").submit();
-					}
-				}
-			},
-			{
-				text: view_dialogAll,
-				click: function() {
-					$(this).dialog("close");
-					if ($(".active").attr('id') == 'tab1'){
-						document.getElementById("allCharts1").value = 'true';
-						document.getElementById("download_form_1").submit();
-					}
-					else if ($(".active").attr('id') == 'tab2'){
-						document.getElementById("allCharts2").value = 'true';
-						document.getElementById("download_form_2").submit();
-					}
-					else if ($(".active").attr('id') == 'tab3'){
-						document.getElementById("allCharts3").value = 'true';
-						document.getElementById("download_form_3").submit();
-					}
-					else if ($(".active").attr('id') == 'tab4'){
-						document.getElementById("allCharts4").value = 'true';
-						document.getElementById("download_form_4").submit();
-					}
-				}
-			}
-		]
-	});
+    // Initializing the dialog box shown before the download.
+    $( "#dialog" ).dialog({
+        autoOpen: false,
+        buttons: [
+        {
+            text: view_dialogThis,
+            click: function() {
+                $(this).dialog("close");
+                if ($(".active").attr('id') == 'tab1') {
+                    document.getElementById("allCharts1").value = 'false';
+                    document.getElementById("download_form_1").submit();
+                } else if ($(".active").attr('id') == 'tab2') {
+                    document.getElementById("allCharts2").value = 'false';
+                    document.getElementById("download_form_2").submit();
+                } else if ($(".active").attr('id') == 'tab3') {
+                    document.getElementById("allCharts3").value = 'false';
+                    document.getElementById("download_form_3").submit();
+                } else if ($(".active").attr('id') == 'tab4') {
+                    document.getElementById("allCharts4").value = 'false';
+                    document.getElementById("download_form_4").submit();
+                }
+            }
+        },
+        {
+            text: view_dialogAll,
+            click: function() {
+                $(this).dialog("close");
+                if ($(".active").attr('id') == 'tab1') {
+                    document.getElementById("allCharts1").value = 'true';
+                    document.getElementById("download_form_1").submit();
+                } else if ($(".active").attr('id') == 'tab2') {
+                    document.getElementById("allCharts2").value = 'true';
+                    document.getElementById("download_form_2").submit();
+                } else if ($(".active").attr('id') == 'tab3') {
+                    document.getElementById("allCharts3").value = 'true';
+                    document.getElementById("download_form_3").submit();
+                } else if ($(".active").attr('id') == 'tab4') {
+                    document.getElementById("allCharts4").value = 'true';
+                    document.getElementById("download_form_4").submit();
+                }
+            }
+        }
+        ]
+    });
 
-	/*
-	//Trigger file input when clicking icon.
-	$('#addIcon').click( function(){
-		$('#file_merge').trigger('click');
-	})
-	*/
+    // Empty the selected files on load.
+    $('#file_merge').val('');
 
-	//Arrays for comparing timespans
-	//var firstTimestamp = [];
-	//var lastTimestamp = [];
+    // Display filenames of selected files.
+    $('#file_merge').change(function() {
 
-	// Empty the selected files on load.
-	$('#file_merge').val('');
+        // Variables for html elements.
+        var input = document.getElementById('file_merge');
+        var output = document.getElementById('file_merge_filenames');
 
-	/*
-	//Variable that stores the selected files in an array
-	var filesSelected = new Array();
+        // Clear previous filename list.
+        $('#file_merge_filenames').empty();
+        $('#file_merge_timespan').empty();
 
-	//Variable that stores the html elements for each file-input.
-	var inputArray = new Array();
-	inputArray.push('<li><p class = "black-text"><i class="material-icons medium" id="addIcon">add</i></p><input type="file" style="display:none;"accept=".html" name="fileMerge" id="file_merge'+ inputArray.length.toString() +'"></li>');
-	*/
+        // Fill div with elements containing the filename.
+        for (var i = 0; i < input.files.length; ++i) {
+            $( '#file_merge_filenames' ).append('<li class="black-text">' + view_file + (i + 1) + ': ' + input.files[i].name + '</li><br>');
+        }
 
-	//Display filenames of selected files.
-	$('#file_merge').change(function(){
+        // Fill div with timespans.
+        for (var i = 0; i < input.files.length; ++i) {
 
-		/*
-		while ($('#fileList').firstChild) {
-    myNode.removeChild($('#fileList').firstChild);
-  	}
+            // Read file to get the timespan of the datasets.
+            block_lemo4moodle_read_file(input.files[i], function(e) {
+                var fileStringDate = e.target.result;
 
-		for (var i = 0; i < inputArray.length; i++) {
-			$('#fileList').append(inputArray[i]);
-		}
-		*/
+                if (fileStringDate.includes('var firstdate ')) {
+                    var root1 = fileStringDate.indexOf('var firstdate =');
+                    var start1 = fileStringDate.indexOf('"', root1);
+                    var end1 = fileStringDate.indexOf('"', start1 + 1);
+                    var date1 = fileStringDate.substring(start1 + 1, end1);
 
-		// Variables for html elements
-		var input = document.getElementById('file_merge');
-	  	var output = document.getElementById('file_merge_filenames');
-
-		//$('#fileSelection').append('<input type="file" name="file[]"/>');
-
-		// Clear previous filename list.
-		$('#file_merge_filenames').empty();
-		$('#file_merge_timespan').empty();
-
-		// Fill div with elements containing the filename.
-	  	//$( '#file_merge_filenames' ).append('<ul>');
-		for (var i = 0; i < input.files.length; ++i) {
-			$( '#file_merge_filenames' ).append('<li class="black-text">' + view_file + (i+1) + ': ' + input.files[i].name + '</li><br>');
-	  	}
-	  	//$( '#file_merge_filenames' ).append('</ul>');
-
-		//Fill div with timespans.
-		for (var i = 0; i < input.files.length; ++i) {
-			//$( '#file_merge_timespan' ).append('<li class="black-text">'+input.files[i].name+'</li><br>');
-			// read file to get the timespan of the datasets.
-			readFile(input.files[i], function(e) {
-				var fileStringDate = e.target.result;
-
-				if(fileStringDate.includes('var firstDate ')) {
-					var root1 = fileStringDate.indexOf('var firstDate =');
-					var start1 = fileStringDate.indexOf('"', root1);
-					var end1 = fileStringDate.indexOf('"', start1+1);
-					var date1 = fileStringDate.substring(start1+1, end1);
-					//firstTimestamp.push(new Date(date1));
-
-					var root2 = fileStringDate.indexOf('var lastDate =');
-					var start2 = fileStringDate.indexOf('"', root2);
-					var end2 = fileStringDate.indexOf('"', start2+1);
-					var date2 = fileStringDate.substring(start2+1, end2);
-					//lastTimestamp.push(new Date(date2));
-					$( '#file_merge_timespan' ).append('<li class="black-text">' + view_timespan + date1 + ' - ' + date2 + '</li><br>');
-					//console.log(firstTimestamp + lastTimestamp);
-				}
-				else {
-					$( '#file_merge_timespan' ).append('<li class="black-text">' + view_noTimespan + '</li><br>');
-				}
-			});
-	  	}
-	});
+                    var root2 = fileStringDate.indexOf('var lastdate =');
+                    var start2 = fileStringDate.indexOf('"', root2);
+                    var end2 = fileStringDate.indexOf('"', start2 + 1);
+                    var date2 = fileStringDate.substring(start2 + 1, end2);
+                    $( '#file_merge_timespan' ).append('<li class="black-text">' + view_timespan + date1 + ' - ' + date2 + '</li><br>');
+                } else {
+                    $( '#file_merge_timespan' ).append('<li class="black-text">' + view_noTimespan + '</li><br>');
+                }
+            });
+        }
+    });
 
 });
 
 // Load Charts and the corechart package.
 google.charts.load('current', {
-  	'packages': ['bar', 'line', 'treemap', 'corechart', 'controls']
+    'packages': ['bar', 'line', 'treemap', 'corechart', 'controls']
 });
 
 // Draw all charts when Charts is loaded. (Even the Highchart, which is not from Google Charts).
-google.charts.setOnLoadCallback(drawAllCharts);
+google.charts.setOnLoadCallback(block_lemo4moodle_draw_all_charts);
 
-//JQuery datepicker funtion (for filter)
-$(function () {
-	$(".datepick").datepicker({
-		/*dateFormat: 'mm/dd/yy'*/
-		dateFormat: 'dd.mm.yy'
-	});
+// JQuery datepicker funtion (for filter).
+$(function() {
+    $(".datepick").datepicker({
+        dateFormat: 'dd.mm.yy'
+    });
 });
 
-//Function to get the timestamp of a date-string.
-function toTimestamp(strDate){
-	var datum = Date.parse(strDate);
-	return datum/1000;
+/**
+ * Function to get the timestamp of a date-string.
+ *
+ * @param string $strdate Date in string format.
+ * @return Date Timestamp of the date.
+ */
+function block_lemo4moodle_to_timestamp(strdate) {
+    var date = Date.parse(strdate);
+    return date / 1000;
 }
 
-//Callback that draws all charts.
-//To be optimized to only load chart for current tab.
-function drawAllCharts() {
-	if (typeof drawBarChart === "function") {
-		drawBarChart();
-	}
-	if (typeof drawLineChart === "function") {
-		drawLineChart();
-	}
-	if (typeof drawHeatMap === "function") {
-		drawHeatMap();
-	}
-	if (typeof drawTreeMap === "function") {
-		drawTreeMap();
-	}
+/**
+ * Callback that draws all charts.
+ * To be optimized to only load chart for current tab.
+ * @see block_lemo4moodle_draw_barchart()
+ * @see block_lemo4moodle_draw_linechart()
+ * @see block_lemo4moodle_draw_heatmap()
+ * @see block_lemo4moodle_draw_treemap()
+ */
+function block_lemo4moodle_draw_all_charts() {
+    if (typeof block_lemo4moodle_draw_barchart === "function") {
+        block_lemo4moodle_draw_barchart();
+    }
+    if (typeof block_lemo4moodle_draw_linechart === "function") {
+        block_lemo4moodle_draw_linechart();
+    }
+    if (typeof block_lemo4moodle_draw_heatmap === "function") {
+        block_lemo4moodle_draw_heatmap();
+    }
+    if (typeof block_lemo4moodle_draw_treemap === "function") {
+        block_lemo4moodle_draw_treemap();
+    }
 }
 
 
-//Initialize the Materialize Modal (PopUp)
-$(document).ready(function(){
-	 $('.modal').modal();
- });
+// Initialize the Materialize modal (PopUp).
+$(document).ready(function() {
+     $('.modal').modal();
+});
 
-//Variables for filemerging
-var barchart_data_test = "[";
-var linechartData = "";
-var heatmap_data_test = "[";
-var treemap_data_test = "[";
+// Variables for filemerging.
+var barchartdata_test = "[";
+var linechartdata = "";
+var heatmapdata_test = "[";
+var treemapdata_test = "[";
 
-//Function for filemerging
+// Function for filemerging.
 $('#mergeButton').click(function() {
-	//$("#modal_error1").text("");
-	$("#modal_error2").text("");
-	//fileContainer = document.querySelector('#file_container');
-	var fileMerge = document.querySelector('#file_merge');
-/*
-	if(fileContainer.files.length == 0){
-		$("#modal_error1").text("Bitte eine zu überschreibende Datei auswählen.");
-		return;
-	}
-	*/
-	if(fileMerge.files.length < 2){
-		$("#modal_error2").text (view_modalError);
-		return;
-	}
-	var files =	fileMerge.files;
-	var fileString;
-	//const charttype = ["barchart_data", "linechart_data", "heatmap_data", "treemap_data"];
-	const charttype = ["linechart_data"];
+    $("#modal_error2").text("");
+    var filemerge = document.querySelector('#file_merge');
+    if (filemerge.files.length < 2) {
+        $("#modal_error2").text (view_modalError);
+        return;
+    }
+    var files = filemerge.files;
+    var fileString;
+    const charttype = ["linechartdataarray"];
 
-	//Variable to keep track of loop (for callback).
-	var loop=0;
+    // Variable to keep track of loop (for callback).
+    var loop = 0;
 
-	//Iterate trough each selected file
-	for (i=0; i<files.length; i++) {
-		//Callback function
-		readFile(files[i], function(e) {
-			fileString = e.target.result;
-			//Iterate through each charttype
-			charttype.forEach(function(it){
-				//Get the data from the file as an array of strings
-				var start = fileString.indexOf("[", fileString.indexOf("var "+ it +" ="));
-				var end = fileString.indexOf(";", fileString.indexOf("var " + it + " ="));
-				var rawData = fileString.substring(start, end);
-				var data = rawData.substring(2, rawData.lastIndexOf("]]"));
-				var dataArray;
-				if (it == "linechart_data") {
-					dataArray = data.split("],[");
-				}
-				else if(it == "heatmap_data"){
-					dataArray = data.split("], [");
-				}
-				dataArray.forEach( function(item){
-					/* Not yet functional
-					//Collect barchart data
-					if(it == "barchart_data") {
-						var lala = fileString.indexOf("Lokale Version erstellt: ");
-						var datum = fileString.substring(lala+25, lala+33)
-						//console.log();
-						if (!(barchart_data_test).includes(item.toString())){
-							barchart_data_test += "[" + item.toString() + "],";
-						}
-						//Replace last index with ']' if last element is reached.
-						if (dataArray[dataArray.length-1] == item && loop == (files.length-1)){
-							barchart_data_test = barchart_data_test.replace(/,([^,]*)$/, "]$1");
-						}
-					}
-					*/
+    // Iterate trough each selected file.
+    for (i = 0; i < files.length; i++) {
+        // Callback function.
+        block_lemo4moodle_read_file(files[i], function(e) {
+            fileString = e.target.result;
+            // Iterate through each charttype.
+            charttype.forEach(function(it) {
+                // Get the data from the file as an array of strings.
+                var start = fileString.indexOf("[", fileString.indexOf("var " + it + " ="));
+                var end = fileString.indexOf(";", fileString.indexOf("var " + it + " ="));
+                var rawdata = fileString.substring(start, end);
+                var data = rawdata.substring(2, rawdata.lastIndexOf("]]"));
+                var dataarray;
+                if (it == "linechartdataarray") {
+                    dataarray = data.split("],[");
+                } else if (it == "heatmapdata") {
+                    dataarray = data.split("], [");
+                }
+                dataarray.forEach( function(item) {
 
-					//Collect linechart data
-					if(it == "linechart_data" && item.toString().length > 2) { //filter out the empty data
-						if (!(linechartData).includes(item.toString())){
-							linechartData += "[" + item.toString() + "],";
-						}
-						//Replace last index with ']' if last element is reached.
-						if (dataArray[dataArray.length-1] == item && loop == (files.length-1)){
-							//linechartData = linechartData.replace(/,([^,]*)$/, "$1");
-							linechartData = linechartData.substring(1, linechartData.lastIndexOf("],"));
-							var linechartDataArray = new Array();
-							var tempArray = linechartData.split("],[");
-							tempArray.forEach(function(it){
-								var tempElements1 = it.split(",");
-								var tempElements2 = [it.substring(1, it.lastIndexOf(")")), tempElements1[3], tempElements1[4], tempElements1[5]];
-								linechartDataArray.push(tempElements2);
-							});
-							linechartData = "";
-							//console.log(linechartData);
-							//console.log(linechartDataArray);
-							var jsonArray = JSON.stringify(linechartDataArray);
-							//console.log(jsonArray);
-							$("#allCharts1").val('true');
-							$("#mergeData1").val(jsonArray);
-							$("#download_form_1").submit();
-							$("#mergeData1").val('');
-							//console.log($("#mergeData1").val());
-						}
-					}
-					/* Not yet functional
-					//Collect heatmap data
-					if(it == "heatmap_data" && item.toString().length > 2) { //filter out the empty data
-						var subArray = item.toString().split(", ");
-
-						if (!(heatmap_data_test).includes(item.toString())){
-							heatmap_data_test += "[" + item.toString() + "],";
-						}
-						//Replace last index with ']' if last element is reached.
-						if (dataArray[dataArray.length-1] == item && loop == (files.length-1)){
-							heatmap_data_test = heatmap_data_test.replace(/,([^,]*)$/, "]$1");
-						}
-					}*/
-				});
-			});
-			//console.log(linechartData);
-			loop++;
-		});
-	}
+                    // Collect linechart data.
+                    if (it == "linechartdataarray" && item.toString().length > 2) { // Filter out the empty data.
+                        if (!(linechartdata).includes(item.toString())) {
+                            linechartdata += "[" + item.toString() + "],";
+                        }
+                        // Replace last index with ']' when last element is reached.
+                        if (dataarray[dataarray.length - 1] == item && loop == (files.length - 1)) {
+                            linechartdata = linechartdata.substring(1, linechartdata.lastIndexOf("],"));
+                            var linechartdataarray = new Array();
+                            var temparray = linechartdata.split("],[");
+                            temparray.forEach(function(it) {
+                                var tempElements1 = it.split(",");
+                                var tempElements2 = [it.substring(1, it.lastIndexOf(")")), tempElements1[3], tempElements1[4], tempElements1[5]];
+                                linechartdataarray.push(tempElements2);
+                            });
+                            linechartdata = "";
+                            var jsonarray = JSON.stringify(linechartdataarray);
+                            $("#allCharts1").val('true');
+                            $("#mergeData1").val(jsonarray);
+                            $("#download_form_1").submit();
+                            $("#mergeData1").val('');
+                        }
+                    }
+                });
+            });
+            loop++;
+        });
+    }
 });
 
-//Callback for the FileReader
-function readFile (file, onLoadCallback){
-	var reader = new FileReader();
-	reader.onload = onLoadCallback;
-	reader.readAsText(file);
+/**
+ * Callback function for the FileReader. Reads file given as parameter.
+ *
+ * @param File   $file The file to be read.
+ * @param function $onloadcallback Function that is to be executed on load.
+ */
+function block_lemo4moodle_read_file(file, onloadcallback) {
+    var reader = new FileReader();
+    reader.onload = onloadcallback;
+    reader.readAsText(file);
 }

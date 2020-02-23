@@ -1,5 +1,31 @@
-﻿<?php
-# German language file
+<?php
+// This file is part of Moodle - http:// moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
+/**
+ * This is a one-line short description of the file.
+ *
+ * You can have a rather longer description of the file as well,
+ * if you like, and it can span multiple lines.
+ *
+ * @package    block_lemo4moodle
+ * @copyright  2020 Finn Ueckert
+ * @license    http:// www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
+// German language file.
 
 $string['pluginname'] = 'Lemo4Moodle';
 $string['lemo4moodle'] = 'Lemo4Moodle';
@@ -11,7 +37,7 @@ $string['blocktitle'] = 'blocktitletest';
 $string['text'] = 'Inhalt des Blocks';
 $string['privacy:metadata'] = 'The lemo4moodle block only displays existing data for actions inside the course.';
 
-//index.php: General language strings
+// General language strings (index.php).
 $string['lang'] = 'de';
 $string['download_dialog'] = 'Möchten Sie nur diesen Graphen oder alle Graphen herunterladen?';
 $string['modal_title'] = 'Dateien zusammenfügen';
@@ -32,13 +58,13 @@ $string['filterEnd'] = 'Ende';
 
 
 
-//Barchart
+// Barchart.
 $string['barchart_title'] = 'Zugriffe und Nutzer pro Datei';
 $string['barchart_xlabel'] = 'Dateiname';
 $string['barchart_ylabel'] = 'Zugriffe';
 $string['barchart_users'] = 'Nutzer';
 
-//Linechart
+// Linechart.
 $string['linechart_colDate'] = 'Datum';
 $string['linechart_colAccess'] = 'Zugriffe';
 $string['linechart_colOwnAccess'] = 'eigene Zugriffe';
@@ -46,7 +72,7 @@ $string['linechart_colUser'] = 'Nutzer';
 $string['linechart_title'] = 'Zugriffe und Nutzer pro Tag';
 $string['linechart_checkSelection'] = 'Überprüfen Sie ihre Auswahl (Beginn < Ende)';
 
-//Heatmap
+// Heatmap.
 $string['heatmap_title'] = 'Aktionen pro Tag pro Zeitraum';
 $string['heatmap_all'] = 'ALLE';
 $string['heatmap_own'] = 'EIGENE';
@@ -61,12 +87,13 @@ $string['heatmap_saturday'] = 'Samstag';
 $string['heatmap_sunday'] = 'Sonntag';
 $string['heatmap_checkSelection'] = 'Überprüfen Sie ihre Auswahl (Beginn < Ende)';
 
-//Treemap
+// Treemap.
 $string['treemap_title'] = 'Treemap für die Anzahl der Klicks pro Datei. Rechtsklick, um eine Ebene nach oben zu gelangen.';
 $string['treemap_clickCount'] = ' Anzahl der Klicks: ';
 $string['treemap_global'] = 'Global';
+$string['treemap_files'] = 'Dateien';
 
-//View
+// View.
 $string['view_dialogThis'] = 'Dieser Graph';
 $string['view_dialogAll'] = 'Alle Graphen';
 $string['view_file'] = 'Datei ';

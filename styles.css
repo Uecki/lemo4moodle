@@ -42,21 +42,21 @@
 .tabs .tab a{
     color:#D92425;
     background-color: #ffffff;
-} /*text color*/
+} /* Text color. */
 
 .tabs .tab a:hover {
 
     color:#000;
-} /*Text color on hover*/
+} /* Text color on hover.
 
 .tabs .tab a.active {
 
     color:#D92425;
-} /*Background and text color when a tab is active*/
+} /* Background and text color when a tab is active. */
 
 .tabs .indicator {
     background-color:#D92425;
-} /*Color of underline*/
+} /* Color of underline. */
 
 .tabs .tab.disabled a{
     color:#D92425;
@@ -72,7 +72,7 @@ button{
 
 #barchart {
     width: 90% !important;
-	height: 90% !important;
+    height: 90% !important;
     min-height: 500px !important;
 }
 
@@ -82,13 +82,13 @@ button{
 }
 
 #treemap {
-	width:  100% !important;
-	min-height: 500px !important;
+    width:  100% !important;
+    min-height: 500px !important;
 }
 
 #heatmap {
-	width:  100% !important;
-	min-height: 500px !important;
+    width:  100% !important;
+    min-height: 500px !important;
 }
 
 .col .s9 {
@@ -116,12 +116,12 @@ h3 {
 }
 
 .announcement {
-	margin: 0px;
-	padding: 5px;
+    margin: 0px;
+    padding: 5px;
 }
 
 .announcement-link {
-	color: #0d47a1;
+    color: #0d47a1;
 }
 
 .modal { width: 60% !important ; height: 70% !important ; }
