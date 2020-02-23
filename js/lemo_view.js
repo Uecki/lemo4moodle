@@ -49,7 +49,7 @@ $(document).ready(function() {
         autoOpen: false,
         buttons: [
         {
-            text: view_dialogThis,
+            text: viewDialogThis,
             click: function() {
                 $(this).dialog("close");
                 if ($(".active").attr('id') == 'tab1') {
@@ -68,7 +68,7 @@ $(document).ready(function() {
             }
         },
         {
-            text: view_dialogAll,
+            text: viewDialogAll,
             click: function() {
                 $(this).dialog("close");
                 if ($(".active").attr('id') == 'tab1') {
@@ -105,7 +105,7 @@ $(document).ready(function() {
 
         // Fill div with elements containing the filename.
         for (var i = 0; i < input.files.length; ++i) {
-            $( '#file_merge_filenames' ).append('<li class="black-text">' + view_file + (i + 1) + ': ' + input.files[i].name + '</li><br>');
+            $( '#file_merge_filenames' ).append('<li class="black-text">' + viewFile + (i + 1) + ': ' + input.files[i].name + '</li><br>');
         }
 
         // Fill div with timespans.
@@ -125,9 +125,9 @@ $(document).ready(function() {
                     var start2 = fileStringDate.indexOf('"', root2);
                     var end2 = fileStringDate.indexOf('"', start2 + 1);
                     var date2 = fileStringDate.substring(start2 + 1, end2);
-                    $( '#file_merge_timespan' ).append('<li class="black-text">' + view_timespan + date1 + ' - ' + date2 + '</li><br>');
+                    $( '#file_merge_timespan' ).append('<li class="black-text">' + viewTimespan + date1 + ' - ' + date2 + '</li><br>');
                 } else {
-                    $( '#file_merge_timespan' ).append('<li class="black-text">' + view_noTimespan + '</li><br>');
+                    $( '#file_merge_timespan' ).append('<li class="black-text">' + viewNoTimespan + '</li><br>');
                 }
             });
         }
@@ -201,7 +201,7 @@ $('#mergeButton').click(function() {
     $("#modal_error2").text("");
     var filemerge = document.querySelector('#file_merge');
     if (filemerge.files.length < 2) {
-        $("#modal_error2").text (view_modalError);
+        $("#modal_error2").text (viewModalError);
         return;
     }
     var files = filemerge.files;

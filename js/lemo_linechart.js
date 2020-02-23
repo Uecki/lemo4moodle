@@ -66,23 +66,23 @@ $(document).ready(function() {
                 return [new Date(r[0], r[1], r[2]), it.accesses, it.ownhits, it.users];
             });
             var data = new google.visualization.DataTable();
-                data.addColumn('date', linechart_colDate);
-                data.addColumn('number', linechart_colAccess);
-                data.addColumn('number', linechart_colOwnAccess);
-                data.addColumn('number', linechart_colUser);
+                data.addColumn('date', linechartColDate);
+                data.addColumn('number', linechartColAccess);
+                data.addColumn('number', linechartColOwnAccess);
+                data.addColumn('number', linechartColUser);
                 data.addRows(chartData);
             var options = {
                 chart: {
-                    title: linechart_title
+                    title: linechartTitle
                 },
                 hAxis: {
-                    title: linechart_colDate,
+                    title: linechartColDate,
                     format:'d.M.yy'
                 }
             };
             activitychart.draw(data, options);
         } else {
-            Materialize.toast(linechart_checkSelection, 3000) // 3000 is the duration of the toast.
+            Materialize.toast(linechartCheckSelection, 3000) // 3000 is the duration of the toast.
             $('#datepicker_3').val("");
             $('#datepicker_4').val("");
         }
@@ -103,17 +103,17 @@ $(document).ready(function() {
 function block_lemo4moodle_draw_linechart() {
 
     var data = new google.visualization.DataTable();
-        data.addColumn('date', linechart_colDate);
-        data.addColumn('number', linechart_colAccess);
-        data.addColumn('number', linechart_colOwnAccess);
-        data.addColumn('number', linechart_colUser);
+        data.addColumn('date', linechartColDate);
+        data.addColumn('number', linechartColAccess);
+        data.addColumn('number', linechartColOwnAccess);
+        data.addColumn('number', linechartColUser);
         data.addRows(linechartDataArray);
     var options = {
         chart: {
-            title: linechart_title
+            title: linechartTitle
         },
         hAxis: {
-            title: linechart_colDate,
+            title: linechartColDate,
             format:'d.M.yy'
         },
 

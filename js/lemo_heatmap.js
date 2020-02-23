@@ -477,17 +477,17 @@ $(document).ready(function() {
                 },
 
                 title: {
-                    text: heatmap_title
+                    text: heatmapTitle
                 },
 
                 xAxis: {
-                    categories: [heatmap_all + '<br>00:00-06:00', heatmap_own + '<br>00:00-06:00', heatmap_all + '<br>06:00-12:00', heatmap_own + '<br>06:00-12:00', heatmap_all + '<br>12:00-18:00',
-                        heatmap_own + '<br>12:00-18:00', heatmap_all + '<br>18:00-24:00', heatmap_own + '<br>18:00-24:00',  heatmap_all + '<br>' + heatmap_overall, heatmap_own + '<br>' + heatmap_overall,
-                        heatmap_all + '<br>' + heatmap_average, heatmap_own + '<br>' + heatmap_average]
+                    categories: [heatmapAll + '<br>00:00-06:00', heatmapOwn + '<br>00:00-06:00', heatmapAll + '<br>06:00-12:00', heatmapOwn + '<br>06:00-12:00', heatmapAll + '<br>12:00-18:00',
+                        heatmapOwn + '<br>12:00-18:00', heatmapAll + '<br>18:00-24:00', heatmapOwn + '<br>18:00-24:00',  heatmapAll + '<br>' + heatmapOverall, heatmapOwn + '<br>' + heatmapOverall,
+                        heatmapAll + '<br>' + heatmapAverage, heatmapOwn + '<br>' + heatmapAverage]
                 },
 
                 yAxis: {
-                    categories: [heatmap_monday, heatmap_tuesday, heatmap_wednesday, heatmap_thursday, heatmap_friday, heatmap_saturday, heatmap_sunday],
+                    categories: [heatmapMonday, heatmapTuesday, heatmapWednesday, heatmapThursday, heatmapFriday, heatmapSaturday, heatmapSunday],
                     title: null
                 },
 
@@ -520,7 +520,7 @@ $(document).ready(function() {
 
             });
         } else {
-            Materialize.toast(heatmap_checkSelection, 3000) // 3000 is the duration of the toast.
+            Materialize.toast(heatmapCheckSelection, 3000) // 3000 is the duration of the toast.
             $('#datepicker_5').val("");
             $('#datepicker_6').val("");
         }
@@ -549,15 +549,15 @@ function block_lemo4moodle_draw_heatmap() {
         },
 
         title: {
-            text: heatmap_title
+            text: heatmapTitle
         },
 
         xAxis: {
-            categories: [heatmap_all + '<br>00:00-06:00', heatmap_own + '<br>00:00-06:00', heatmap_all + '<br>06:00-12:00', heatmap_own + '<br>06:00-12:00', heatmap_all + '<br>12:00-18:00', heatmap_own + '<br>12:00-18:00', heatmap_all + '<br>18:00-24:00', heatmap_own + '<br>18:00-24:00',  heatmap_all + '<br>' + heatmap_overall, heatmap_own + '<br>' + heatmap_overall, heatmap_all + '<br>' + heatmap_average, heatmap_own + '<br>' + heatmap_average]
+            categories: [heatmapAll + '<br>00:00-06:00', heatmapOwn + '<br>00:00-06:00', heatmapAll + '<br>06:00-12:00', heatmapOwn + '<br>06:00-12:00', heatmapAll + '<br>12:00-18:00', heatmapOwn + '<br>12:00-18:00', heatmapAll + '<br>18:00-24:00', heatmapOwn + '<br>18:00-24:00',  heatmapAll + '<br>' + heatmapOverall, heatmapOwn + '<br>' + heatmapOverall, heatmapAll + '<br>' + heatmapAverage, heatmapOwn + '<br>' + heatmapAverage]
         },
 
         yAxis: {
-            categories: [heatmap_monday, heatmap_tuesday, heatmap_wednesday, heatmap_thursday, heatmap_friday, heatmap_saturday, heatmap_sunday],
+            categories: [heatmapMonday, heatmapTuesday, heatmapWednesday, heatmapThursday, heatmapFriday, heatmapSaturday, heatmapSunday],
             title: null
         },
 

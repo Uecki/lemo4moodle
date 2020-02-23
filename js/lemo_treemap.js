@@ -44,7 +44,7 @@ $(document).ready(function() {
  */
 function block_lemo4moodle_draw_treemap() {
 
-    var data = new google.visualization.arrayToDataTable(treemapdata);
+    var data = new google.visualization.arrayToDataTable(treemapData);
 
     tree = new google.visualization.TreeMap(document.getElementById('treemap'));
 
@@ -55,7 +55,7 @@ function block_lemo4moodle_draw_treemap() {
         headerHeight: 15,
         fontColor: 'black',
         highlightOnMouseOver: true,
-        title: treemap_title,
+        title: treemapTitle,
         generateTooltip: block_lemo4moodle_show_tooltip_treemap
     });
 
@@ -69,6 +69,6 @@ function block_lemo4moodle_draw_treemap() {
      * @return string
      */
     function block_lemo4moodle_show_tooltip_treemap(row, size, value) {
-        return '<div style="background:#fd9; padding:10px; border-style:solid">' + data.getValue(row, 0) + '<br>' + treemap_clickCount + size + ' </div>';
+        return '<div style="background:#fd9; padding:10px; border-style:solid">' + data.getValue(row, 0) + '<br>' + treemapClickCount + size + ' </div>';
     }
 }

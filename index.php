@@ -317,40 +317,40 @@ require_once(__DIR__.'/lemo_db_queries.php');
 
         // Language-string variables made accessible for JS.
         // Barchart.
-        var barchart_title = <?php echo '"' . get_string('barchart_title', 'block_lemo4moodle') . '"'?>;
-        var barchart_xlabel = <?php echo '"' . get_string('barchart_xlabel', 'block_lemo4moodle') . '"'?>;
-        var barchart_ylabel = <?php echo '"' . get_string('barchart_ylabel', 'block_lemo4moodle') . '"'?>;
+        var barchartTitle = <?php echo '"' . get_string('barchart_title', 'block_lemo4moodle') . '"'?>;
+        var barchartXLabel = <?php echo '"' . get_string('barchart_xlabel', 'block_lemo4moodle') . '"'?>;
+        var barchartYLabel = <?php echo '"' . get_string('barchart_ylabel', 'block_lemo4moodle') . '"'?>;
         // Linechart.
-        var linechart_colDate = <?php echo '"' . get_string('linechart_colDate', 'block_lemo4moodle') . '"'?>;
-        var linechart_colAccess = <?php echo '"' . get_string('linechart_colAccess', 'block_lemo4moodle') . '"'?>;
-        var linechart_colOwnAccess = <?php echo '"' . get_string('linechart_colOwnAccess', 'block_lemo4moodle') . '"'?>;
-        var linechart_colUser = <?php echo '"' . get_string('linechart_colUser', 'block_lemo4moodle') . '"'?>;
-        var linechart_title = <?php echo '"' . get_string('linechart_title', 'block_lemo4moodle') . '"'?>;
-        var linechart_checkSelection = <?php echo '"' . get_string('linechart_checkSelection', 'block_lemo4moodle') . '"'?>;
+        var linechartColDate = <?php echo '"' . get_string('linechart_colDate', 'block_lemo4moodle') . '"'?>;
+        var linechartColAccess = <?php echo '"' . get_string('linechart_colAccess', 'block_lemo4moodle') . '"'?>;
+        var linechartColOwnAccess = <?php echo '"' . get_string('linechart_colOwnAccess', 'block_lemo4moodle') . '"'?>;
+        var linechartColUser = <?php echo '"' . get_string('linechart_colUser', 'block_lemo4moodle') . '"'?>;
+        var linechartTitle = <?php echo '"' . get_string('linechart_title', 'block_lemo4moodle') . '"'?>;
+        var linechartCheckSelection = <?php echo '"' . get_string('linechart_checkSelection', 'block_lemo4moodle') . '"'?>;
         // Heatmap.
-        var heatmap_title = <?php echo '"' . get_string('heatmap_title', 'block_lemo4moodle') . '"'?>;
-        var heatmap_all = <?php echo '"' . get_string('heatmap_all', 'block_lemo4moodle') . '"'?>;
-        var heatmap_own = <?php echo '"' . get_string('heatmap_own', 'block_lemo4moodle') . '"'?>;
-        var heatmap_overall = <?php echo '"' . get_string('heatmap_overall', 'block_lemo4moodle') . '"'?>;
-        var heatmap_average = <?php echo '"' . get_string('heatmap_average', 'block_lemo4moodle') . '"'?>;
-        var heatmap_monday = <?php echo '"' . get_string('heatmap_monday', 'block_lemo4moodle') . '"'?>;
-        var heatmap_tuesday = <?php echo '"' . get_string('heatmap_tuesday', 'block_lemo4moodle') . '"'?>;
-        var heatmap_wednesday = <?php echo '"' . get_string('heatmap_wednesday', 'block_lemo4moodle') . '"'?>;
-        var heatmap_thursday = <?php echo '"' . get_string('heatmap_thursday', 'block_lemo4moodle') . '"'?>;
-        var heatmap_friday = <?php echo '"' . get_string('heatmap_friday', 'block_lemo4moodle') . '"'?>;
-        var heatmap_saturday = <?php echo '"' . get_string('heatmap_saturday', 'block_lemo4moodle') . '"'?>;
-        var heatmap_sunday = <?php echo '"' . get_string('heatmap_sunday', 'block_lemo4moodle') . '"'?>;
-        var heatmap_checkSelection = <?php echo '"' . get_string('heatmap_checkSelection', 'block_lemo4moodle') . '"'?>;
+        var heatmapTitle = <?php echo '"' . get_string('heatmap_title', 'block_lemo4moodle') . '"'?>;
+        var heatmapAll = <?php echo '"' . get_string('heatmap_all', 'block_lemo4moodle') . '"'?>;
+        var heatmapOwn = <?php echo '"' . get_string('heatmap_own', 'block_lemo4moodle') . '"'?>;
+        var heatmapOverall = <?php echo '"' . get_string('heatmap_overall', 'block_lemo4moodle') . '"'?>;
+        var heatmapAverage = <?php echo '"' . get_string('heatmap_average', 'block_lemo4moodle') . '"'?>;
+        var heatmapMonday = <?php echo '"' . get_string('heatmap_monday', 'block_lemo4moodle') . '"'?>;
+        var heatmapTuesday = <?php echo '"' . get_string('heatmap_tuesday', 'block_lemo4moodle') . '"'?>;
+        var heatmapWednesday = <?php echo '"' . get_string('heatmap_wednesday', 'block_lemo4moodle') . '"'?>;
+        var heatmapThursday = <?php echo '"' . get_string('heatmap_thursday', 'block_lemo4moodle') . '"'?>;
+        var heatmapFriday = <?php echo '"' . get_string('heatmap_friday', 'block_lemo4moodle') . '"'?>;
+        var heatmapSaturday = <?php echo '"' . get_string('heatmap_saturday', 'block_lemo4moodle') . '"'?>;
+        var heatmapSunday = <?php echo '"' . get_string('heatmap_sunday', 'block_lemo4moodle') . '"'?>;
+        var heatmapCheckSelection = <?php echo '"' . get_string('heatmap_checkSelection', 'block_lemo4moodle') . '"'?>;
         // Treemap.
-        var treemap_title = <?php echo '"' . get_string('treemap_title', 'block_lemo4moodle') . '"'?>;
-        var treemap_clickCount = <?php echo '"' . get_string('treemap_clickCount', 'block_lemo4moodle') . '"'?>;
+        var treemapTitle = <?php echo '"' . get_string('treemap_title', 'block_lemo4moodle') . '"'?>;
+        var treemapClickCount = <?php echo '"' . get_string('treemap_clickCount', 'block_lemo4moodle') . '"'?>;
         // View.
-        var view_dialogThis = <?php echo '"' . get_string('view_dialogThis', 'block_lemo4moodle') . '"'?>;
-        var view_dialogAll = <?php echo '"' . get_string('view_dialogAll', 'block_lemo4moodle') . '"'?>;
-        var view_file = <?php echo '"' . get_string('view_file', 'block_lemo4moodle') . '"'?>;
-        var view_timespan = <?php echo '"' . get_string('view_timespan', 'block_lemo4moodle') . '"'?>;
-        var view_noTimespan = <?php echo '"' . get_string('view_noTimespan', 'block_lemo4moodle') . '"'?>;
-        var view_modalError = <?php echo '"' . get_string('view_modalError', 'block_lemo4moodle') . '"'?>;
+        var viewDialogThis = <?php echo '"' . get_string('view_dialogThis', 'block_lemo4moodle') . '"'?>;
+        var viewDialogAll = <?php echo '"' . get_string('view_dialogAll', 'block_lemo4moodle') . '"'?>;
+        var viewFile = <?php echo '"' . get_string('view_file', 'block_lemo4moodle') . '"'?>;
+        var viewTimespan = <?php echo '"' . get_string('view_timespan', 'block_lemo4moodle') . '"'?>;
+        var viewNoTimespan = <?php echo '"' . get_string('view_noTimespan', 'block_lemo4moodle') . '"'?>;
+        var viewModalError = <?php echo '"' . get_string('view_modalError', 'block_lemo4moodle') . '"'?>;
 
     </script>
 

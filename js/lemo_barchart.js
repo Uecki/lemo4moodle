@@ -47,14 +47,14 @@ function block_lemo4moodle_draw_barchart() {
 
     var materialOptionsBarchart = {
         chart: {
-            title: barchart_title
+            title: barchartTitle
         },
         axes: {
             x: {
-                distance: {label: barchart_xlabel} // Bottom x-axis.
+                distance: {label: barchartXLabel} // Bottom x-axis.
             },
             y: {
-                distance: {label: barchart_ylabel} // Left y-axis.
+                distance: {label: barchartYLabel} // Left y-axis.
             }
         },
         legend: {

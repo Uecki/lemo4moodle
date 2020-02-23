@@ -393,40 +393,40 @@ if ($_POST['allCharts'] == 'true') {
 
         // Language-string variables made accessible for JS.
         // Barchart.
-        var barchart_title = "' . get_string('barchart_title', 'block_lemo4moodle') . '";
-        var barchart_xlabel = "' . get_string('barchart_xlabel', 'block_lemo4moodle') . '";
-        var barchart_ylabel = "' . get_string('barchart_ylabel', 'block_lemo4moodle') . '";
+        var barchartTitle = "' . get_string('barchart_title', 'block_lemo4moodle') . '";
+        var barchartXLabel = "' . get_string('barchart_xlabel', 'block_lemo4moodle') . '";
+        var barchartYLabel = "' . get_string('barchart_ylabel', 'block_lemo4moodle') . '";
         // Linechart.
-        var linechart_colDate = "' . get_string('linechart_colDate', 'block_lemo4moodle') . '";
-        var linechart_colAccess = "' . get_string('linechart_colAccess', 'block_lemo4moodle') . '";
-        var linechart_colOwnAccess = "' . get_string('linechart_colOwnAccess', 'block_lemo4moodle') . '";
-        var linechart_colUser = "' . get_string('linechart_colUser', 'block_lemo4moodle') . '";
-        var linechart_title = "' . get_string('linechart_title', 'block_lemo4moodle') . '";
-        var linechart_checkSelection = "' . get_string('linechart_checkSelection', 'block_lemo4moodle') . '";
+        var linechartColDate = "' . get_string('linechart_colDate', 'block_lemo4moodle') . '";
+        var linechartColAccess = "' . get_string('linechart_colAccess', 'block_lemo4moodle') . '";
+        var linechartColOwnAccess = "' . get_string('linechart_colOwnAccess', 'block_lemo4moodle') . '";
+        var linechartColUser = "' . get_string('linechart_colUser', 'block_lemo4moodle') . '";
+        var linechartTitle = "' . get_string('linechart_title', 'block_lemo4moodle') . '";
+        var linechartCheckSelection = "' . get_string('linechart_checkSelection', 'block_lemo4moodle') . '";
         // Heatmap.
-        var heatmap_title = "' . get_string('heatmap_title', 'block_lemo4moodle') . '";
-        var heatmap_all = "' . get_string('heatmap_all', 'block_lemo4moodle') . '";
-        var heatmap_own = "' . get_string('heatmap_own', 'block_lemo4moodle') . '";
-        var heatmap_overall = "' . get_string('heatmap_overall', 'block_lemo4moodle') . '";
-        var heatmap_average = "' . get_string('heatmap_average', 'block_lemo4moodle') . '";
-        var heatmap_monday = "' . get_string('heatmap_monday', 'block_lemo4moodle') . '";
-        var heatmap_tuesday = "' . get_string('heatmap_tuesday', 'block_lemo4moodle') . '";
-        var heatmap_wednesday = "' . get_string('heatmap_wednesday', 'block_lemo4moodle') . '";
-        var heatmap_thursday = "' . get_string('heatmap_thursday', 'block_lemo4moodle') . '";
-        var heatmap_friday = "' . get_string('heatmap_friday', 'block_lemo4moodle') . '";
-        var heatmap_saturday = "' . get_string('heatmap_saturday', 'block_lemo4moodle') . '";
-        var heatmap_sunday = "' . get_string('heatmap_sunday', 'block_lemo4moodle') . '";
-        var heatmap_checkSelection = "' . get_string('heatmap_checkSelection', 'block_lemo4moodle') . '";
+        var heatmapTitle = "' . get_string('heatmap_title', 'block_lemo4moodle') . '";
+        var heatmapAll = "' . get_string('heatmap_all', 'block_lemo4moodle') . '";
+        var heatmapOwn = "' . get_string('heatmap_own', 'block_lemo4moodle') . '";
+        var heatmapOverall = "' . get_string('heatmap_overall', 'block_lemo4moodle') . '";
+        var heatmapAverage = "' . get_string('heatmap_average', 'block_lemo4moodle') . '";
+        var heatmapMonday = "' . get_string('heatmap_monday', 'block_lemo4moodle') . '";
+        var heatmapTuesday = "' . get_string('heatmap_tuesday', 'block_lemo4moodle') . '";
+        var heatmapWednesday = "' . get_string('heatmap_wednesday', 'block_lemo4moodle') . '";
+        var heatmapThursday = "' . get_string('heatmap_thursday', 'block_lemo4moodle') . '";
+        var heatmapFriday = "' . get_string('heatmap_friday', 'block_lemo4moodle') . '";
+        var heatmapSaturday = "' . get_string('heatmap_saturday', 'block_lemo4moodle') . '";
+        var heatmapSunday = "' . get_string('heatmap_sunday', 'block_lemo4moodle') . '";
+        var heatmapCheckSelection = "' . get_string('heatmap_checkSelection', 'block_lemo4moodle') . '";
         // Treemap.
-        var treemap_title = "' . get_string('treemap_title', 'block_lemo4moodle') . '";
-        var treemap_clickCount = "' . get_string('treemap_clickCount', 'block_lemo4moodle') . '";
+        var treemapTitle = "' . get_string('treemap_title', 'block_lemo4moodle') . '";
+        var treemapClickCount = "' . get_string('treemap_clickCount', 'block_lemo4moodle') . '";
         // View.
-        var view_dialogThis = "' . get_string('view_dialogThis', 'block_lemo4moodle') . '";
-        var view_dialogAll = "' . get_string('view_dialogAll', 'block_lemo4moodle') . '";
-        var view_file = "' . get_string('view_file', 'block_lemo4moodle') . '";
-        var view_timespan = "' . get_string('view_timespan', 'block_lemo4moodle') . '";
-        var view_noTimespan = "' . get_string('view_noTimespan', 'block_lemo4moodle') . '";
-        var view_modalError = "' . get_string('view_modalError', 'block_lemo4moodle') . '";
+        var viewDialogThis = "' . get_string('view_dialogThis', 'block_lemo4moodle') . '";
+        var viewDialogAll = "' . get_string('view_dialogAll', 'block_lemo4moodle') . '";
+        var viewFile = "' . get_string('view_file', 'block_lemo4moodle') . '";
+        var viewTimespan = "' . get_string('view_timespan', 'block_lemo4moodle') . '";
+        var viewNoTimespan = "' . get_string('view_noTimespan', 'block_lemo4moodle') . '";
+        var viewModalError = "' . get_string('view_modalError', 'block_lemo4moodle') . '";
         </script>
 
         <script>'.file_get_contents('js/lemo_barchart.js').'</script>
@@ -581,40 +581,40 @@ if ($_POST['allCharts'] == 'true') {
 
             // Language-string variables made accessible for JS
             // Barchart.
-            var barchart_title = "' . get_string('barchart_title', 'block_lemo4moodle') . '";
-            var barchart_xlabel = "' . get_string('barchart_xlabel', 'block_lemo4moodle') . '";
-            var barchart_ylabel = "' . get_string('barchart_ylabel', 'block_lemo4moodle') . '";
+            var barchartTitle = "' . get_string('barchart_title', 'block_lemo4moodle') . '";
+            var barchartXLabel = "' . get_string('barchart_xlabel', 'block_lemo4moodle') . '";
+            var barchartYLabel = "' . get_string('barchart_ylabel', 'block_lemo4moodle') . '";
             // Linechart.
-            var linechart_colDate = "' . get_string('linechart_colDate', 'block_lemo4moodle') . '";
-            var linechart_colAccess = "' . get_string('linechart_colAccess', 'block_lemo4moodle') . '";
-            var linechart_colOwnAccess = "' . get_string('linechart_colOwnAccess', 'block_lemo4moodle') . '";
-            var linechart_colUser = "' . get_string('linechart_colUser', 'block_lemo4moodle') . '";
-            var linechart_title = "' . get_string('linechart_title', 'block_lemo4moodle') . '";
-            var linechart_checkSelection = "' . get_string('linechart_checkSelection', 'block_lemo4moodle') . '";
+            var linechartColDate = "' . get_string('linechart_colDate', 'block_lemo4moodle') . '";
+            var linechartColAccess = "' . get_string('linechart_colAccess', 'block_lemo4moodle') . '";
+            var linechartColOwnAccess = "' . get_string('linechart_colOwnAccess', 'block_lemo4moodle') . '";
+            var linechartColUser = "' . get_string('linechart_colUser', 'block_lemo4moodle') . '";
+            var linechartTitle = "' . get_string('linechart_title', 'block_lemo4moodle') . '";
+            var linechartCheckSelection = "' . get_string('linechart_checkSelection', 'block_lemo4moodle') . '";
             // Heatmap.
-            var heatmap_title = "' . get_string('heatmap_title', 'block_lemo4moodle') . '";
-            var heatmap_all = "' . get_string('heatmap_all', 'block_lemo4moodle') . '";
-            var heatmap_own = "' . get_string('heatmap_own', 'block_lemo4moodle') . '";
-            var heatmap_overall = "' . get_string('heatmap_overall', 'block_lemo4moodle') . '";
-            var heatmap_average = "' . get_string('heatmap_average', 'block_lemo4moodle') . '";
-            var heatmap_monday = "' . get_string('heatmap_monday', 'block_lemo4moodle') . '";
-            var heatmap_tuesday = "' . get_string('heatmap_tuesday', 'block_lemo4moodle') . '";
-            var heatmap_wednesday = "' . get_string('heatmap_wednesday', 'block_lemo4moodle') . '";
-            var heatmap_thursday = "' . get_string('heatmap_thursday', 'block_lemo4moodle') . '";
-            var heatmap_friday = "' . get_string('heatmap_friday', 'block_lemo4moodle') . '";
-            var heatmap_saturday = "' . get_string('heatmap_saturday', 'block_lemo4moodle') . '";
-            var heatmap_sunday = "' . get_string('heatmap_sunday', 'block_lemo4moodle') . '";
-            var heatmap_checkSelection = "' . get_string('heatmap_checkSelection', 'block_lemo4moodle') . '";
+            var heatmapTitle = "' . get_string('heatmap_title', 'block_lemo4moodle') . '";
+            var heatmapAll = "' . get_string('heatmap_all', 'block_lemo4moodle') . '";
+            var heatmapOwn = "' . get_string('heatmap_own', 'block_lemo4moodle') . '";
+            var heatmapOverall = "' . get_string('heatmap_overall', 'block_lemo4moodle') . '";
+            var heatmapAverage = "' . get_string('heatmap_average', 'block_lemo4moodle') . '";
+            var heatmapMonday = "' . get_string('heatmap_monday', 'block_lemo4moodle') . '";
+            var heatmapTuesday = "' . get_string('heatmap_tuesday', 'block_lemo4moodle') . '";
+            var heatmapWednesday = "' . get_string('heatmap_wednesday', 'block_lemo4moodle') . '";
+            var heatmapThursday = "' . get_string('heatmap_thursday', 'block_lemo4moodle') . '";
+            var heatmapFriday = "' . get_string('heatmap_friday', 'block_lemo4moodle') . '";
+            var heatmapSaturday = "' . get_string('heatmap_saturday', 'block_lemo4moodle') . '";
+            var heatmapSunday = "' . get_string('heatmap_sunday', 'block_lemo4moodle') . '";
+            var heatmapCheckSelection = "' . get_string('heatmap_checkSelection', 'block_lemo4moodle') . '";
             // Treemap.
-            var treemap_title = "' . get_string('treemap_title', 'block_lemo4moodle') . '";
-            var treemap_clickCount = "' . get_string('treemap_clickCount', 'block_lemo4moodle') . '";
+            var treemapTitle = "' . get_string('treemap_title', 'block_lemo4moodle') . '";
+            var treemapClickCount = "' . get_string('treemap_clickCount', 'block_lemo4moodle') . '";
             // View
-            var view_dialogThis = "' . get_string('view_dialogThis', 'block_lemo4moodle') . '";
-            var view_dialogAll = "' . get_string('view_dialogAll', 'block_lemo4moodle') . '";
-            var view_file = "' . get_string('view_file', 'block_lemo4moodle') . '";
-            var view_timespan = "' . get_string('view_timespan', 'block_lemo4moodle') . '";
-            var view_noTimespan = "' . get_string('view_noTimespan', 'block_lemo4moodle') . '";
-            var view_modalError = "' . get_string('view_modalError', 'block_lemo4moodle') . '";
+            var viewDialogThis = "' . get_string('view_dialogThis', 'block_lemo4moodle') . '";
+            var viewDialogAll = "' . get_string('view_dialogAll', 'block_lemo4moodle') . '";
+            var viewFile = "' . get_string('view_file', 'block_lemo4moodle') . '";
+            var viewTimespan = "' . get_string('view_timespan', 'block_lemo4moodle') . '";
+            var viewNoTimespan = "' . get_string('view_noTimespan', 'block_lemo4moodle') . '";
+            var viewModalError = "' . get_string('view_modalError', 'block_lemo4moodle') . '";
             </script>
 
             <!-- General functions of the plugin. Must be included after the JS-files of the charts. -->
