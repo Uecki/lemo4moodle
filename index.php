@@ -302,17 +302,17 @@ require_once(__DIR__.'/lemo_db_queries.php');
     <script>
 
         // Data-variables from lemo_dq_queries.php made usable for the js-files.
-        var barchartdata = <?php echo $barchartdata; ?>;
-        var linechartdataarray = [<?php echo $linechart; ?>];
-        var heatmapdata = <?php echo $heatmapdata; ?>;
-        var treemapdata = <?php echo $treemapdata; ?>;
+        var barchartData = <?php echo $barchartdata; ?>;
+        var linechartDataArray = [<?php echo $linechart; ?>];
+        var heatmapData = <?php echo $heatmapdata; ?>;
+        var treemapData = <?php echo $treemapdata; ?>;
 
         <?php
         // JS variables needed for the filter.
         $linechartdataarrayfilter = json_encode($finallinechartobject, JSON_NUMERIC_CHECK);
-        echo "var linechartdataarrayfilter = ". $linechartdataarrayfilter . ";\n";
+        echo "var linechartDataArrayFilter = ". $linechartdataarrayfilter . ";\n";
         $heatmapdatafilter = json_encode($heatmap, JSON_NUMERIC_CHECK);
-        echo "var heatmapdatafilter = Object.entries(". $heatmapdatafilter . ");\n";
+        echo "var heatmapDataFilter = Object.entries(". $heatmapdatafilter . ");\n";
         ?>
 
         // Language-string variables made accessible for JS.

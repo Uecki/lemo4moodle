@@ -46,17 +46,17 @@ $(document).ready(function() {
         end = e[1] + '/' + e[0] + '/' + e[2];
         start += ' 00:00:00';
         end += ' 23:59:59';
-        var starttimestamp = block_lemo4moodle_to_timestamp(start);
-        var endtimestamp = block_lemo4moodle_to_timestamp(end);
-        if (starttimestamp <= endtimestamp) {
+        var startTimestamp = block_lemo4moodle_to_timestamp(start);
+        var endTimestamp = block_lemo4moodle_to_timestamp(end);
+        if (startTimestamp <= endTimestamp) {
 
             // Create heatmap data.
             var timespan;
-            var filteredheatmapdata = [];
-            var counterweekdays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+            var filteredHeatmapData = [];
+            var counterWeekdays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
             // Associative array (object) for total number of weekday actions.
-            var totalhits = {
+            var totalHits = {
                 "Monday"  : 0,
                 "Tuesday"  : 0,
                 "Wednesday"  : 0,
@@ -67,7 +67,7 @@ $(document).ready(function() {
             };
 
             // Associative array (object) for total  number of own weekday actions.
-            var totalownhits = {
+            var totalOwnHits = {
                 "Monday"  : 0,
                 "Tuesday"  : 0,
                 "Wednesday"  : 0,
@@ -397,10 +397,10 @@ $(document).ready(function() {
             };
 
             // Iterate through each element of the original query.
-            heatmapdatafilter.forEach(function(item) {
+            heatmapDataFilter.forEach(function(item) {
 
                 // Check, if the timestamp is included in the filter.
-                if (item[1].timecreated >= starttimestamp && item[1].timecreated <= endtimestamp) {
+                if (item[1].timecreated >= startTimestamp && item[1].timecreated <= endTimestamp) {
 
                     // Link timespan to column in heatmap.
                     if (parseInt(item[1].hour) >= 0  && parseInt(item[1].hour) < 6) {
@@ -418,8 +418,8 @@ $(document).ready(function() {
                     weekdays[item[1].weekday][timespan]["own"]["value"] += parseInt(item[1].ownhits);
 
                     // Data for overall clicks.
-                    totalhits[item[1].weekday] += parseInt(item[1].allhits);
-                    totalownhits[item[1].weekday] += parseInt(item[1].ownhits);
+                    totalHits[item[1].weekday] += parseInt(item[1].allhits);
+                    totalOwnHits[item[1].weekday] += parseInt(item[1].ownhits);
                 }
             });
 
@@ -427,21 +427,21 @@ $(document).ready(function() {
             var counter = 0;
             while (counter <= 6) {
 
-                filteredheatmapdata.push([weekdays[counterweekdays[counter]]['0to6']['all']['col'],weekdays[counterweekdays[counter]]['row'],weekdays[counterweekdays[counter]]['0to6']['all']['value']]);
+                filteredHeatmapData.push([weekdays[counterWeekdays[counter]]['0to6']['all']['col'],weekdays[counterWeekdays[counter]]['row'],weekdays[counterWeekdays[counter]]['0to6']['all']['value']]);
 
-                filteredheatmapdata.push([weekdays[counterweekdays[counter]]['0to6']['own']['col'],weekdays[counterweekdays[counter]]['row'],weekdays[counterweekdays[counter]]['0to6']['own']['value']]);
+                filteredHeatmapData.push([weekdays[counterWeekdays[counter]]['0to6']['own']['col'],weekdays[counterWeekdays[counter]]['row'],weekdays[counterWeekdays[counter]]['0to6']['own']['value']]);
 
-                filteredheatmapdata.push([weekdays[counterweekdays[counter]]['6to12']['all']['col'],weekdays[counterweekdays[counter]]['row'],weekdays[counterweekdays[counter]]['6to12']['all']['value']]);
+                filteredHeatmapData.push([weekdays[counterWeekdays[counter]]['6to12']['all']['col'],weekdays[counterWeekdays[counter]]['row'],weekdays[counterWeekdays[counter]]['6to12']['all']['value']]);
 
-                filteredheatmapdata.push([weekdays[counterweekdays[counter]]['6to12']['own']['col'],weekdays[counterweekdays[counter]]['row'],weekdays[counterweekdays[counter]]['6to12']['own']['value']]);
+                filteredHeatmapData.push([weekdays[counterWeekdays[counter]]['6to12']['own']['col'],weekdays[counterWeekdays[counter]]['row'],weekdays[counterWeekdays[counter]]['6to12']['own']['value']]);
 
-                filteredheatmapdata.push([weekdays[counterweekdays[counter]]['12to18']['all']['col'],weekdays[counterweekdays[counter]]['row'],weekdays[counterweekdays[counter]]['12to18']['all']['value']]);
+                filteredHeatmapData.push([weekdays[counterWeekdays[counter]]['12to18']['all']['col'],weekdays[counterWeekdays[counter]]['row'],weekdays[counterWeekdays[counter]]['12to18']['all']['value']]);
 
-                filteredheatmapdata.push([weekdays[counterweekdays[counter]]['12to18']['own']['col'],weekdays[counterweekdays[counter]]['row'],weekdays[counterweekdays[counter]]['12to18']['own']['value']]);
+                filteredHeatmapData.push([weekdays[counterWeekdays[counter]]['12to18']['own']['col'],weekdays[counterWeekdays[counter]]['row'],weekdays[counterWeekdays[counter]]['12to18']['own']['value']]);
 
-                filteredheatmapdata.push([weekdays[counterweekdays[counter]]['18to24']['all']['col'],weekdays[counterweekdays[counter]]['row'],weekdays[counterweekdays[counter]]['18to24']['all']['value']]);
+                filteredHeatmapData.push([weekdays[counterWeekdays[counter]]['18to24']['all']['col'],weekdays[counterWeekdays[counter]]['row'],weekdays[counterWeekdays[counter]]['18to24']['all']['value']]);
 
-                filteredheatmapdata.push([weekdays[counterweekdays[counter]]['18to24']['own']['col'],weekdays[counterweekdays[counter]]['row'],weekdays[counterweekdays[counter]]['18to24']['own']['value']]);
+                filteredHeatmapData.push([weekdays[counterWeekdays[counter]]['18to24']['own']['col'],weekdays[counterWeekdays[counter]]['row'],weekdays[counterWeekdays[counter]]['18to24']['own']['value']]);
 
                 counter = counter + 1;
             }
@@ -452,13 +452,13 @@ $(document).ready(function() {
                 var y = 0; // For weekdays.
                 while (y <= 6) {
                     if (x == 8) {
-                        filteredheatmapdata.push([x, y, totalhits[counterweekdays[y]]]);
+                        filteredHeatmapData.push([x, y, totalHits[counterWeekdays[y]]]);
                     } else if (x == 9) {
-                        filteredheatmapdata.push([x, y, totalownhits[counterweekdays[y]]]);
+                        filteredHeatmapData.push([x, y, totalOwnHits[counterWeekdays[y]]]);
                     } else if (x == 10) {
-                        filteredheatmapdata.push([x, y, Math.round(totalhits[counterweekdays[y]] / 7.0)]);
+                        filteredHeatmapData.push([x, y, Math.round(totalHits[counterWeekdays[y]] / 7.0)]);
                     } else if (x == 11) {
-                        filteredheatmapdata.push([x, y, Math.round(totalownhits[counterweekdays[y]] / 7.0)]);
+                        filteredHeatmapData.push([x, y, Math.round(totalOwnHits[counterWeekdays[y]] / 7.0)]);
                     }
 
                     y  = y + 1;
@@ -511,7 +511,7 @@ $(document).ready(function() {
                 series: [{
                     name: 'Actions per day',
                     borderWidth: 1,
-                    data: filteredheatmapdata, // Convert data string to array.
+                    data: filteredHeatmapData, // Convert data string to array.
                     dataLabels: {
                         enabled: true,
                         color: '#000000'
@@ -581,7 +581,7 @@ function block_lemo4moodle_draw_heatmap() {
         series: [{
             name: 'Actions per day',
             borderWidth: 1,
-            data: heatmapdata,
+            data: heatmapData,
             dataLabels: {
                 enabled: true,
                 color: '#000000'

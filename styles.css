@@ -1,3 +1,8 @@
+/**
+ * File base.css.
+ * Contains base styles for theme basic.
+ */
+
 #page-report-outline-index td.numviews {
     text-align: right;
 }
@@ -36,68 +41,70 @@
 }
 
 .nav-wrapper {
-    background-color: #D92425;
+    background-color: #d92425;
 }
 
-.tabs .tab a{
-    color:#D92425;
-    background-color: #ffffff;
-} /* Text color. */
+/* Text color. */
+.tabs .tab a {
+    color: #d92425;
+    background-color: #fff;
+}
 
+/* Text color on hover.*/
 .tabs .tab a:hover {
+    color: #000;
+}
 
-    color:#000;
-} /* Text color on hover.
-
+/* Background and text color when a tab is active. */
 .tabs .tab a.active {
+    color: #d92425;
+}
 
-    color:#D92425;
-} /* Background and text color when a tab is active. */
-
+/* Color of underline. */
 .tabs .indicator {
-    background-color:#D92425;
-} /* Color of underline. */
-
-.tabs .tab.disabled a{
-    color:#D92425;
-}
-.tabs .tab.disabled a:hover{
-    color:#D92425;
+    background-color: #d92425;
 }
 
-button{
+.tabs .tab.disabled a {
+    color: #d92425;
+}
+.tabs .tab.disabled a:hover {
+    color: #d92425;
+}
+
+button {
     margin-top: 5px;
     margin-bottom: 5px;
 }
 
 #barchart {
-    width: 90% !important;
-    height: 90% !important;
-    min-height: 500px !important;
+    width: 90%;
+    height: 90%;
+    min-height: 500px;
 }
 
 #linechart {
-    width: 100% !important;
-    min-height: 500px !important;
+    width: 100%;
+    min-height: 500px;
 }
 
 #treemap {
-    width:  100% !important;
-    min-height: 500px !important;
+    width: 100%;
+    min-height: 500px;
 }
 
 #heatmap {
-    width:  100% !important;
-    min-height: 500px !important;
+    width: 100%;
+    min-height: 500px;
 }
 
 .col .s9 {
-    min-height: 500px !important;
+    min-height: 500px;
 }
 
 #chart_div {
-    width: 100% !important;
-    min-height: 500px !important;
+    width: 100%;
+    min-height: 500px;
 }
 
 h3 {
@@ -112,16 +119,10 @@ h3 {
 }
 
 .red-text {
-    color: #D92425;
+    color: #d92425;
 }
 
-.announcement {
-    margin: 0px;
-    padding: 5px;
+.modal {
+    width: 60%;
+    height: 70%;
 }
-
-.announcement-link {
-    color: #0d47a1;
-}
-
-.modal { width: 60% !important ; height: 70% !important ; }

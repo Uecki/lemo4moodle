@@ -33,19 +33,19 @@ $(document).ready(function() {
     // Download button for barchart tab.
     $('#html_btn_1').click(function() {
         // Opens dialog box.
-        $( "#dialog" ).dialog( "open" );
+        $( "#dialog" ).dialog("open");
     });
 
 });
 
 /**
  * Callback function that draws the barchart.
- * See google charts documentation for barchart: https://developers.google.com/chart/interactive/docs/gallery/barchart
+ * See google charts documentation for barchart: https://developers.google.com/chart/interactive/docs/gallery/barchart.
  */
 function block_lemo4moodle_draw_barchart() {
-    var data = google.visualization.arrayToDataTable(barchartdata);
+    var data = google.visualization.arrayToDataTable(barchartData);
 
-    var materialOptions_BarChart = {
+    var materialOptionsBarchart = {
         chart: {
             title: barchart_title
         },
@@ -65,7 +65,7 @@ function block_lemo4moodle_draw_barchart() {
     };
 
     // Instantiate and draw the bar chart.
-    var materialbarchart = new google.charts.Bar(document.getElementById('barchart'));
-    materialbarchart.draw(data, google.charts.Bar.convertOptions(materialOptions_BarChart));
+    var materialBarchart = new google.charts.Bar(document.getElementById('barchart'));
+    materialBarchart.draw(data, google.charts.Bar.convertOptions(materialOptionsBarchart));
 
 }

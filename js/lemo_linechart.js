@@ -46,13 +46,13 @@ $(document).ready(function() {
         end = e[1] + '/' + e[0] + '/' + e[2];
         start += ' 00:00:00';
         end += ' 23:59:59';
-        var starttimestamp = block_lemo4moodle_to_timestamp(start);
-        var endtimestamp = block_lemo4moodle_to_timestamp(end);
-        if (starttimestamp <= endtimestamp) {
-            var activitydata = [];
-            linechartdataarrayfilter.forEach(function(item) {
-                if (item.timestamp >= starttimestamp && item.timestamp <= endtimestamp) {
-                    activitydata.push({
+        var startTimestamp = block_lemo4moodle_to_timestamp(start);
+        var endTimestamp = block_lemo4moodle_to_timestamp(end);
+        if (startTimestamp <= endTimestamp) {
+            var activityData = [];
+            linechartDataArrayFilter.forEach(function(item) {
+                if (item.timestamp >= startTimestamp && item.timestamp <= endTimestamp) {
+                    activityData.push({
                         date: item.date,
                         accesses: item.accesses,
                         ownhits: item.ownhits,
@@ -60,7 +60,7 @@ $(document).ready(function() {
                     });
                 }
             });
-            var chartdata = activitydata.map(function(it) {
+            var chartData = activityData.map(function(it) {
                 var str = it.date;
                 r = str.split(', ');
                 return [new Date(r[0], r[1], r[2]), it.accesses, it.ownhits, it.users];
@@ -70,7 +70,7 @@ $(document).ready(function() {
                 data.addColumn('number', linechart_colAccess);
                 data.addColumn('number', linechart_colOwnAccess);
                 data.addColumn('number', linechart_colUser);
-                data.addRows(chartdata);
+                data.addRows(chartData);
             var options = {
                 chart: {
                     title: linechart_title
@@ -107,7 +107,7 @@ function block_lemo4moodle_draw_linechart() {
         data.addColumn('number', linechart_colAccess);
         data.addColumn('number', linechart_colOwnAccess);
         data.addColumn('number', linechart_colUser);
-        data.addRows(linechartdataarray);
+        data.addRows(linechartDataArray);
     var options = {
         chart: {
             title: linechart_title

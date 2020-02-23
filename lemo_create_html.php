@@ -188,10 +188,10 @@ $heatmapdatafilter = json_encode($heatmap, JSON_NUMERIC_CHECK);
 
 // Lemo_linechart.js-file needs adaptation to work as download. !Doesn't look good, but is functional.
 $linechartstringjs = str_replace(
-'var activitydata = [];
-            linechartdataarrayfilter.forEach(function(item) {
-                if (item.timestamp >= starttimestamp && item.timestamp <= endtimestamp) {
-                    activitydata.push({
+'var activityData = [];
+            linechartDataArrayFilter.forEach(function(item) {
+                if (item.timestamp >= startTimestamp && item.timestamp <= endTimestamp) {
+                    activityData.push({
                         date: item.date,
                         accesses: item.accesses,
                         ownhits: item.ownhits,
@@ -199,8 +199,8 @@ $linechartstringjs = str_replace(
                     });
                 }
             });',
-'var activitydata = [];
-linechartdataarrayfilter.forEach(function(item) {
+'var activityData = [];
+linechartDataArrayFilter.forEach(function(item) {
 
     var mydate = item[0];
     mydate=mydate.split(", ");
@@ -208,8 +208,8 @@ linechartdataarrayfilter.forEach(function(item) {
     mydate[1] = mydate[1].toString();
     var newdate = mydate[1] + "/" + mydate[2] + "/" + mydate[0];
     var nd = block_lemo4moodle_to_timestamp(newdate);
-    if (nd >= starttimestamp && nd <= endtimestamp) {
-        activitydata.push({
+    if (nd >= startTimestamp && nd <= endTimestamp) {
+        activityData.push({
             date: item[0],
             accesses: item[1],
             ownhits: item[2],
@@ -380,13 +380,13 @@ if ($_POST['allCharts'] == 'true') {
         '<script>
 
             <!-- Data-variables from lemo_dq_queries.php made usable for the js-files. -->
-            var barchartdata = '.$barchartdata.';
-            var linechartdataarray = ['.$linechart.'];
-            var heatmapdata = '.$heatmapdata.';
-            var treemapdata = '.$treemapdata.';
+            var barchartData = '.$barchartdata.';
+            var linechartDataArray = ['.$linechart.'];
+            var heatmapData = '.$heatmapdata.';
+            var treemapData = '.$treemapdata.';
 
-            var linechartdataarrayfilter = ['.$linechartarray.'];
-            var heatmapdatafilter = Object.entries('.$heatmapdatafilter.');
+            var linechartDataArrayFilter = ['.$linechartarray.'];
+            var heatmapDataFilter = Object.entries('.$heatmapdatafilter.');
 
         var firstdate = "'.$firstdate.'";
         var lastdate = "'.$lastdate.'";
@@ -550,15 +550,15 @@ if ($_POST['allCharts'] == 'true') {
             <script src="https://code.highcharts.com/modules/heatmap.js"></script>
             <script>';
                 if ($_POST['chart'] == 'barchart') {
-                $content .= 'var barchartdata = '.$barchartdata.';';
+                $content .= 'var barchartData = '.$barchartdata.';';
                 } else if ($_POST['chart'] == 'linechart') {
-                    $content .= 'var linechartdataarray = ['.$linechart.'];
-                    var linechartdataarrayfilter = ['.$linechartarray.'];';
+                    $content .= 'var linechartDataArray = ['.$linechart.'];
+                    var linechartDataArrayFilter = ['.$linechartarray.'];';
                 } else if ($_POST['chart'] == 'heatmap') {
-                    $content .= 'var heatmapdata = '.$heatmapdata.';
-                    var heatmapdatafilter = Object.entries('.$heatmapdatafilter.');';
+                    $content .= 'var heatmapData = '.$heatmapdata.';
+                    var heatmapDataFilter = Object.entries('.$heatmapdatafilter.');';
                 } else if ($_POST['chart'] == 'treemap') {
-                    $content .= 'var treemapdata = '.$treemapdata.';';
+                    $content .= 'var treemapData = '.$treemapdata.';';
                 }
 
             $content .= '</script>

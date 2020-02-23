@@ -191,10 +191,10 @@ $(document).ready(function() {
 });
 
 // Variables for filemerging.
-var barchartdata_test = "[";
-var linechartdata = "";
-var heatmapdata_test = "[";
-var treemapdata_test = "[";
+var barchartDataTest = "[";
+var linechartData = "";
+var heatmapDataTest = "[";
+var treemapDataTest = "[";
 
 // Function for filemerging.
 $('#mergeButton').click(function() {
@@ -206,7 +206,7 @@ $('#mergeButton').click(function() {
     }
     var files = filemerge.files;
     var fileString;
-    const charttype = ["linechartdataarray"];
+    const chartType = ["linechartDataArray"];
 
     // Variable to keep track of loop (for callback).
     var loop = 0;
@@ -216,40 +216,40 @@ $('#mergeButton').click(function() {
         // Callback function.
         block_lemo4moodle_read_file(files[i], function(e) {
             fileString = e.target.result;
-            // Iterate through each charttype.
-            charttype.forEach(function(it) {
+            // Iterate through each chartType.
+            chartType.forEach(function(it) {
                 // Get the data from the file as an array of strings.
                 var start = fileString.indexOf("[", fileString.indexOf("var " + it + " ="));
                 var end = fileString.indexOf(";", fileString.indexOf("var " + it + " ="));
-                var rawdata = fileString.substring(start, end);
-                var data = rawdata.substring(2, rawdata.lastIndexOf("]]"));
-                var dataarray;
-                if (it == "linechartdataarray") {
-                    dataarray = data.split("],[");
-                } else if (it == "heatmapdata") {
-                    dataarray = data.split("], [");
+                var rawData = fileString.substring(start, end);
+                var data = rawData.substring(2, rawData.lastIndexOf("]]"));
+                var dataArray;
+                if (it == "linechartDataArray") {
+                    dataArray = data.split("],[");
+                } else if (it == "heatmapData") {
+                    dataArray = data.split("], [");
                 }
-                dataarray.forEach( function(item) {
+                dataArray.forEach( function(item) {
 
                     // Collect linechart data.
-                    if (it == "linechartdataarray" && item.toString().length > 2) { // Filter out the empty data.
-                        if (!(linechartdata).includes(item.toString())) {
-                            linechartdata += "[" + item.toString() + "],";
+                    if (it == "linechartDataArray" && item.toString().length > 2) { // Filter out the empty data.
+                        if (!(linechartData).includes(item.toString())) {
+                            linechartData += "[" + item.toString() + "],";
                         }
                         // Replace last index with ']' when last element is reached.
-                        if (dataarray[dataarray.length - 1] == item && loop == (files.length - 1)) {
-                            linechartdata = linechartdata.substring(1, linechartdata.lastIndexOf("],"));
-                            var linechartdataarray = new Array();
-                            var temparray = linechartdata.split("],[");
-                            temparray.forEach(function(it) {
+                        if (dataArray[dataArray.length - 1] == item && loop == (files.length - 1)) {
+                            linechartData = linechartData.substring(1, linechartData.lastIndexOf("],"));
+                            var linechartDataArray = new Array();
+                            var tempArray = linechartData.split("],[");
+                            tempArray.forEach(function(it) {
                                 var tempElements1 = it.split(",");
                                 var tempElements2 = [it.substring(1, it.lastIndexOf(")")), tempElements1[3], tempElements1[4], tempElements1[5]];
-                                linechartdataarray.push(tempElements2);
+                                linechartDataArray.push(tempElements2);
                             });
-                            linechartdata = "";
-                            var jsonarray = JSON.stringify(linechartdataarray);
+                            linechartData = "";
+                            var jsonArray = JSON.stringify(linechartDataArray);
                             $("#allCharts1").val('true');
-                            $("#mergeData1").val(jsonarray);
+                            $("#mergeData1").val(jsonArray);
                             $("#download_form_1").submit();
                             $("#mergeData1").val('');
                         }

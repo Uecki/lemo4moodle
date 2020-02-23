@@ -51,6 +51,7 @@ $counter = 0;
  * @copyright  2020 Finn Ueckert
  * @license    http:// www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+ 
 class Activity {
     /** @var string This variable stores the date. */
     public $date;
@@ -702,7 +703,7 @@ foreach ($treemap as $tree) {
 }
 
 // Create dataarray.
-// Data as JSON [activitydata[date, overallHits, ownhits, users], barchartdata[name, hits, users],
+// Data as JSON [activityData[date, overallHits, ownhits, users], barchartdata[name, hits, users],
 // treemapdata[name, title, hits, color(as int)]].
 $dataarray = array();
 $dataarray[] = $linechartdataarray;
