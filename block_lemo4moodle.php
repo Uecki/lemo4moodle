@@ -18,7 +18,7 @@
  * This file holds the class definition for the block, and is used both to manage it as a plugin and to render it onscreen.
  *
  * @package    block_lemo4moodle
- * @copyright  2020 Finn Ueckert
+ * @copyright  2020 Margarita Elkina
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -46,7 +46,7 @@ class block_lemo4moodle extends block_base {
         // Add text to plugin body.
         $this->content->footer = '<a href= "'.$CFG->wwwroot.'/blocks/lemo4moodle/index.php?id='.$COURSE->id.'&user='.$USER->id.
             '" target="_blank"><img src="'.$CFG->wwwroot.
-            '/blocks/lemo4moodle/images/logo_180.png" alt="Logo Lemo4moodle" width="100" height="100"/></a>';
+            '/blocks/lemo4moodle/pix/logo_180.png" alt="Logo Lemo4moodle" width="100" height="100"/></a>';
 
         // Return content.
         return $this->content;

@@ -18,7 +18,7 @@
  * This file contains all the english language strings used by this block.
  *
  * @package    block_lemo4moodle
- * @copyright  2020 Finn Ueckert
+ * @copyright  2020 Margarita Elkina
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -37,8 +37,8 @@ $string['lang'] = 'en';
 $string['download_dialog'] = 'Download only this graph or all graphs?';
 $string['modal_title'] = 'Merge files';
 $string['modal_content'] = 'Now choose the files you want to merge the data from.
-    <br>(Hold down the "ctrl"-button on your keyboard when selecting multiple files and click on each file you want to merge.)
-    <br> At the moment, <u>only</u> the linechart data will be merged. For the other graphs, the current data from the moodle database will be downloaded.';
+    <br>At the moment, <u>only</u> the linechart data will be merged. For the other graphs, the current data from the moodle database will be downloaded.
+    <br>(Hold down the "ctrl"-button on your keyboard when selecting multiple files and click on each file you want to merge.)';
 $string['logdata'] = 'Logdata since: ';
 $string['backup'] = 'Backup your data: ';
 $string['filter'] = 'Filter';
@@ -91,4 +91,4 @@ $string['view_dialogAll'] = 'All graphs';
 $string['view_file'] = 'File ';
 $string['view_timespan'] = 'Timespan: ';
 $string['view_noTimespan'] = 'Timespan could not be determined.';
-$string['view_modalError'] = 'Please choose at least to files to merge.';
+$string['view_modalError'] = 'Please choose at least two files to merge.';

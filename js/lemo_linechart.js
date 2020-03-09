@@ -19,17 +19,28 @@
  * The languae strings used here are initialised as variables in index.php.
  *
  * @package    block_lemo4moodle
- * @copyright  2020 Finn Ueckert
+ * @copyright  2020 Margarita Elkina
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+// Language file variables.
+var linechartDataArray = $('#linechartDataArray').value;
+var linechartDataArrayFilter = $('#linechartDataArrayFilter').value;
+var linechartColDate = $('#linechartColOwnAccess').value;
+var linechartColAccess = $('#linechartColAccess').value;
+var linechartColOwnAccess = $('#linechartColOwnAccess').value;
+var linechartColUser = $('#linechartColUser').value;
+var linechartTitle = $('#linechartTitle').value;
+var linechartCheckSelection = $('#linechartCheckSelection').value;
+
+// Variable for instantiation of google chart.
+var activitychart = new google.visualization.LineChart(document.getElementById('linechart'));
 
 $(document).ready(function() {
 
     // Line Chart - reset button.
     $('#rst_btn_2').click(function() {
-        var data = new google.visualization.DataTable();
-        block_lemo4moodle_draw_linechart();
+        block_lemo4moodle_drawLinechart();
         $("#datepicker_3").val("");
         $("#datepicker_4").val("");
     });
@@ -39,15 +50,15 @@ $(document).ready(function() {
         var start = document.getElementById('datepicker_3').value;
         var end = document.getElementById('datepicker_4').value;
         // Rewrite date.
-        s = start.split('.');
+        var s = start.split('.');
         start = s[1] + '/' + s[0] + '/' + s[2];
         // Rewrite date.
-        e = end.split('.');
+        var e = end.split('.');
         end = e[1] + '/' + e[0] + '/' + e[2];
         start += ' 00:00:00';
         end += ' 23:59:59';
-        var startTimestamp = block_lemo4moodle_to_timestamp(start);
-        var endTimestamp = block_lemo4moodle_to_timestamp(end);
+        var startTimestamp = block_lemo4moodle_toTimestamp(start);
+        var endTimestamp = block_lemo4moodle_toTimestamp(end);
         if (startTimestamp <= endTimestamp) {
             var activityData = [];
             linechartDataArrayFilter.forEach(function(item) {
@@ -62,7 +73,7 @@ $(document).ready(function() {
             });
             var chartData = activityData.map(function(it) {
                 var str = it.date;
-                r = str.split(', ');
+                var r = str.split(', ');
                 return [new Date(r[0], r[1], r[2]), it.accesses, it.ownhits, it.users];
             });
             var data = new google.visualization.DataTable();
@@ -82,7 +93,7 @@ $(document).ready(function() {
             };
             activitychart.draw(data, options);
         } else {
-            Materialize.toast(linechartCheckSelection, 3000) // 3000 is the duration of the toast.
+            Materialize.toast(linechartCheckSelection, 3000); // 3000 is the duration of the toast.
             $('#datepicker_3').val("");
             $('#datepicker_4').val("");
         }
@@ -94,13 +105,23 @@ $(document).ready(function() {
         $( "#dialog" ).dialog( "open" );
     });
 
+
+    // Redraw charts when page is resized.
+    $(window).resize(function() {
+        block_lemo4moodle_drawLinechart();
+    });
+
+    // Minimalize tabs are being initialized, callback function
+    // 'block_lemo4moodle_drawLinechart' is executed on tab change.
+    $('#tabs').tabs({ 'onShow': block_lemo4moodle_drawLinechart });
+
 });
 
 /**
  * Callback function that draws the linehchart.
  * See google charts documentation for linechart: https://developers.google.com/chart/interactive/docs/gallery/linechart
  */
-function block_lemo4moodle_draw_linechart() {
+function block_lemo4moodle_drawLinechart() {
 
     var data = new google.visualization.DataTable();
         data.addColumn('date', linechartColDate);
@@ -118,8 +139,6 @@ function block_lemo4moodle_draw_linechart() {
         },
 
     };
-
-    activitychart = new google.visualization.LineChart(document.getElementById('linechart'));
     activitychart.draw(data, options);
 
 }
