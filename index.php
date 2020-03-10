@@ -50,12 +50,10 @@ require_once(__DIR__.'/lemo_db_queries.php');
     <title><?php echo get_string('pluginname', 'block_lemo4moodle')?></title>
 
     <!-- Datepicker jQuery-->
-    <link rel="stylesheet" href="lib\jquery\jquery-ui.css">
-    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="lib/jquery/jquery-ui.css">
 
     <!-- Materialize CSS Framework - minified CSS. -->
-    <link rel="stylesheet" href="lib\materialize\materialize.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+    <link rel="stylesheet" href="lib/materialize/css/materialize.min.css">
 
     <!-- Google Icons -->
     <link rel="stylesheet" href="lib/materialicons/icon.css">
@@ -356,7 +354,7 @@ require_once(__DIR__.'/lemo_db_queries.php');
     <script src="lib/google/loader.js"></script>
 
     <!-- Materialize CSS Framework - minified - JavaScript. -->
-    <script src="lib/materialize/materialize.min.js"></script>
+    <script src="lib/materialize/js/materialize.min.js"></script>
 
     <!-- Plotly, Heatmap. -->
     <script src="lib/plotly/plotly-latest.min.js"></script>
