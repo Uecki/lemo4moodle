@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<libraries>
+    <library>
+        <location>lib/googlecharts/loader.js</location>
+        <name>Google Charts library loader</name>
+        <version>47</version>
+        <license>Apache</license>
+        <licenseversion>2.0</licenseversion>
+    </library>
+    <library>
+        <location>lib/materialize/materialize.min.js</location>
+        <name>MaterializeCSS</name>
+        <version>v0.100.2</version>
+        <license>MIT</license>
+        <licenseversion></licenseversion>
+    </library>
+    <library>
+        <location>lib/materialize/materialize.min.css</location>
+        <name>MaterializeCSS</name>
+        <version>v0.100.2</version>
+        <license>MIT</license>
+        <licenseversion></licenseversion>
+    </library>
+    <library>
+        <location>lib/plotly/plotly-latest.min.js</location>
+        <name>Plotly</name>
+        <version>v1.52.3</version>
+        <license>MIT</license>
+        <licenseversion></licenseversion>
+    </library>
+    <library>
+        <location>lib/materialicons/icons.css</location>
+        <name>Material Icons</name>
+        <version></version>
+        <license>Apache</license>
+        <licenseversion>2.0</licenseversion>
+    </library>
+</libraries>
