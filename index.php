@@ -354,7 +354,6 @@ require_once(__DIR__.'/lemo_db_queries.php');
 
     <!-- Google Charts. -->
     <script src="lib/google/loader.js"></script>
-    <script src="lib/google/jsapi.js"></script>
 
     <!-- Materialize CSS Framework - minified - JavaScript. -->
     <script src="lib/materialize/materialize.min.js"></script>

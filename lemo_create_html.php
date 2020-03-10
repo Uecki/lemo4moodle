@@ -402,7 +402,6 @@ if ($_POST['allCharts'] == 'true') {
 
           <!-- Google Charts. -->
         <script src="https://www.gstatic.com/charts/loader.js"></script>
-        <script src="https://www.google.com/jsapi"></script>
 
           <!-- Materialize CSS Framework - minified - JavaScript. -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
@@ -576,7 +575,6 @@ if ($_POST['allCharts'] == 'true') {
 
         <!-- Google Charts. -->
         <script src="https://www.gstatic.com/charts/loader.js"></script>
-        <script src="https://www.google.com/jsapi"></script>
 
         <!-- Materialize CSS Framework - minified - JavaScript. -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
