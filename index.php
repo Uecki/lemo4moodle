@@ -51,6 +51,7 @@ require_once(__DIR__.'/lemo_db_queries.php');
 
     <!-- Datepicker jQuery-->
     <link rel="stylesheet" href="lib/jquery/jquery-ui.css">
+    <link rel="stylesheet" href="lib/jquery/jquery-ui.theme.min.css">
 
     <!-- Materialize CSS Framework - minified CSS. -->
     <link rel="stylesheet" href="lib/materialize/css/materialize.min.css">
