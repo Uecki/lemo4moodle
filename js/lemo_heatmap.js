@@ -19,15 +19,32 @@
  * The languae strings used here are initialised as variables in index.php.
  *
  * @package    block_lemo4moodle
- * @copyright  2020 Finn Ueckert
+ * @copyright  2020 Margarita Elkina
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
+// Language file variables.
+//var heatmapData = $('#heatmapData').val();
+//var heatmapDataFilter = Object.entries($('#heatmapDataFilter').val());
+var heatmapTitle = $('#heatmapTitle').val();
+var heatmapAll = $('#heatmapAll').val();
+var heatmapOwn = $('#heatmapOwn').val();
+var heatmapOverall = $('#heatmapOverall').val();
+var heatmapAverage = $('#heatmapAverage').val();
+var heatmapMonday = $('#heatmapMonday').val();
+var heatmapTuesday = $('#heatmapTuesday').val();
+var heatmapWednesday = $('#heatmapWednesday').val();
+var heatmapThursday = $('#heatmapThursday').val();
+var heatmapFriday = $('#heatmapFriday').val();
+var heatmapSaturday = $('#heatmapSaturday').val();
+var heatmapSunday = $('#heatmapSunday').val();
+var heatmapCheckSelection = $('#heatmapCheckSelection').val();
 
 $(document).ready(function() {
 
     // Heatmap - reset button.
     $('#rst_btn_3').click(function() {
-        block_lemo4moodle_draw_heatmap();
+        block_lemo4moodle_drawHeatmap();
         $('#datepicker_5').val("");
         $('#datepicker_6').val("");
 
@@ -46,8 +63,8 @@ $(document).ready(function() {
         end = e[1] + '/' + e[0] + '/' + e[2];
         start += ' 00:00:00';
         end += ' 23:59:59';
-        var startTimestamp = block_lemo4moodle_to_timestamp(start);
-        var endTimestamp = block_lemo4moodle_to_timestamp(end);
+        var startTimestamp = block_lemo4moodle_toTimestamp(start);
+        var endTimestamp = block_lemo4moodle_toTimestamp(end);
         if (startTimestamp <= endTimestamp) {
 
             // Create heatmap data.
@@ -427,100 +444,92 @@ $(document).ready(function() {
             var counter = 0;
             while (counter <= 6) {
 
-                filteredHeatmapData.push([weekdays[counterWeekdays[counter]]['0to6']['all']['col'],weekdays[counterWeekdays[counter]]['row'],weekdays[counterWeekdays[counter]]['0to6']['all']['value']]);
-
-                filteredHeatmapData.push([weekdays[counterWeekdays[counter]]['0to6']['own']['col'],weekdays[counterWeekdays[counter]]['row'],weekdays[counterWeekdays[counter]]['0to6']['own']['value']]);
-
-                filteredHeatmapData.push([weekdays[counterWeekdays[counter]]['6to12']['all']['col'],weekdays[counterWeekdays[counter]]['row'],weekdays[counterWeekdays[counter]]['6to12']['all']['value']]);
-
-                filteredHeatmapData.push([weekdays[counterWeekdays[counter]]['6to12']['own']['col'],weekdays[counterWeekdays[counter]]['row'],weekdays[counterWeekdays[counter]]['6to12']['own']['value']]);
-
-                filteredHeatmapData.push([weekdays[counterWeekdays[counter]]['12to18']['all']['col'],weekdays[counterWeekdays[counter]]['row'],weekdays[counterWeekdays[counter]]['12to18']['all']['value']]);
-
-                filteredHeatmapData.push([weekdays[counterWeekdays[counter]]['12to18']['own']['col'],weekdays[counterWeekdays[counter]]['row'],weekdays[counterWeekdays[counter]]['12to18']['own']['value']]);
-
-                filteredHeatmapData.push([weekdays[counterWeekdays[counter]]['18to24']['all']['col'],weekdays[counterWeekdays[counter]]['row'],weekdays[counterWeekdays[counter]]['18to24']['all']['value']]);
-
-                filteredHeatmapData.push([weekdays[counterWeekdays[counter]]['18to24']['own']['col'],weekdays[counterWeekdays[counter]]['row'],weekdays[counterWeekdays[counter]]['18to24']['own']['value']]);
+                filteredHeatmapData.push([weekdays[counterWeekdays[counter]]['0to6']['all']['value'],
+                    weekdays[counterWeekdays[counter]]['0to6']['own']['value'],
+                    weekdays[counterWeekdays[counter]]['6to12']['all']['value'],
+                    weekdays[counterWeekdays[counter]]['6to12']['own']['value'],
+                    weekdays[counterWeekdays[counter]]['12to18']['all']['value'],
+                    weekdays[counterWeekdays[counter]]['12to18']['own']['value'],
+                    weekdays[counterWeekdays[counter]]['18to24']['all']['value'],
+                    weekdays[counterWeekdays[counter]]['18to24']['own']['value'],
+                    totalHits[counterWeekdays[counter]],
+                    totalOwnHits[counterWeekdays[counter]],
+                    Math.round(totalHits[counterWeekdays[counter]] / 4.0),
+                    Math.round(totalOwnHits[counterWeekdays[counter]] / 4.0)]);
 
                 counter = counter + 1;
             }
 
-            // Put data of overall clicks into suitable format for the chart.
-            var x = 8; // For total and average hits.
-            while (x <= 11) {
-                var y = 0; // For weekdays.
-                while (y <= 6) {
-                    if (x == 8) {
-                        filteredHeatmapData.push([x, y, totalHits[counterWeekdays[y]]]);
-                    } else if (x == 9) {
-                        filteredHeatmapData.push([x, y, totalOwnHits[counterWeekdays[y]]]);
-                    } else if (x == 10) {
-                        filteredHeatmapData.push([x, y, Math.round(totalHits[counterWeekdays[y]] / 7.0)]);
-                    } else if (x == 11) {
-                        filteredHeatmapData.push([x, y, Math.round(totalOwnHits[counterWeekdays[y]] / 7.0)]);
-                    }
+            var xValues = [heatmapAll + '<br>00:00-06:00', heatmapOwn + '<br>00:00-06:00', heatmapAll +
+                '<br>06:00-12:00', heatmapOwn + '<br>06:00-12:00', heatmapAll + '<br>12:00-18:00', heatmapOwn +
+                '<br>12:00-18:00', heatmapAll + '<br>18:00-24:00', heatmapOwn + '<br>18:00-24:00',  heatmapAll +
+                '<br>' + heatmapOverall, heatmapOwn + '<br>' + heatmapOverall, heatmapAll + '<br>' +
+                heatmapAverage, heatmapOwn + '<br>' + heatmapAverage];
 
-                    y  = y + 1;
+            var yValues = [heatmapMonday, heatmapTuesday, heatmapWednesday, heatmapThursday, heatmapFriday,
+                    heatmapSaturday, heatmapSunday];
+
+            var zValues = filteredHeatmapData;
+
+            var colorscaleValue = [
+                [0, '#3D9970'],
+                [1, '#001f3f']
+            ];
+
+            var data = [{
+                x: xValues,
+                y: yValues,
+                z: zValues,
+                type: 'heatmap',
+                colorscale: colorscaleValue,
+                showscale: false
+            }];
+
+            var layout = {
+                title: heatmapTitle,
+                annotations: [],
+                xaxis: {
+                    ticks: '',
+                    side: 'top'
+                },
+                yaxis: {
+                    ticks: '',
+                    ticksuffix: ' ',
+                    width: 700,
+                    height: 700,
+                    autosize: false
                 }
-                x = x + 1;
+            };
+
+            for ( var i = 0; i < yValues.length; i++ ) {
+                for ( var j = 0; j < xValues.length; j++ ) {
+                    var currentValue = zValues[i][j];
+                    if (currentValue != 0.0) {
+                        var textColor = 'white';
+                    } else {
+                        var textColor = 'black';
+                    }
+                    var result = {
+                        xref: 'x1',
+                        yref: 'y1',
+                        x: xValues[j],
+                        y: yValues[i],
+                        text: zValues[i][j],
+                        font: {
+                            family: 'Arial',
+                            size: 12,
+                            color: textColor
+                        },
+                        showarrow: false,
+                    };
+                    layout.annotations.push(result);
+                }
             }
 
-            // Initialize heatmap chart.
-            Highcharts.chart('heatmap', {
+            Plotly.newPlot('heatmap', data, layout);
 
-                chart: {
-                    type: 'heatmap',
-                    marginTop: 40,
-                    marginBottom: 80,
-                    plotBorderWidth: 1
-                },
-
-                title: {
-                    text: heatmapTitle
-                },
-
-                xAxis: {
-                    categories: [heatmapAll + '<br>00:00-06:00', heatmapOwn + '<br>00:00-06:00', heatmapAll + '<br>06:00-12:00', heatmapOwn + '<br>06:00-12:00', heatmapAll + '<br>12:00-18:00',
-                        heatmapOwn + '<br>12:00-18:00', heatmapAll + '<br>18:00-24:00', heatmapOwn + '<br>18:00-24:00',  heatmapAll + '<br>' + heatmapOverall, heatmapOwn + '<br>' + heatmapOverall,
-                        heatmapAll + '<br>' + heatmapAverage, heatmapOwn + '<br>' + heatmapAverage]
-                },
-
-                yAxis: {
-                    categories: [heatmapMonday, heatmapTuesday, heatmapWednesday, heatmapThursday, heatmapFriday, heatmapSaturday, heatmapSunday],
-                    title: null
-                },
-
-                colorAxis: {
-                    min: 0,
-                    minColor: '#FFFFFF',
-                    maxColor: Highcharts.getOptions().colors[0]
-                },
-
-                legend: {
-                    align: 'right',
-                    layout: 'vertical',
-                    margin: 0,
-                    verticalAlign: 'top',
-                    y: 25,
-                    symbolHeight: 280
-                },
-
-                tooltip: false,
-
-                series: [{
-                    name: 'Actions per day',
-                    borderWidth: 1,
-                    data: filteredHeatmapData, // Convert data string to array.
-                    dataLabels: {
-                        enabled: true,
-                        color: '#000000'
-                    }
-                }]
-
-            });
         } else {
-            Materialize.toast(heatmapCheckSelection, 3000) // 3000 is the duration of the toast.
+            Materialize.toast(heatmapCheckSelection, 3000); // 3000 is the duration of the toast.
             $('#datepicker_5').val("");
             $('#datepicker_6').val("");
         }
@@ -532,61 +541,87 @@ $(document).ready(function() {
         // Opens dialog box.
         $( "#dialog" ).dialog( "open" );
     });
+
+    // Redraw charts when page is resized.
+    $(window).resize(function() {
+        block_lemo4moodle_drawHeatmap();
+    });
+
+    // Minimalize tabs are being initialized, callback function
+    // 'block_lemo4moodle_drawHeatmap' is executed on tab change.
+    $('#tabs').tabs({ 'onShow': block_lemo4moodle_drawHeatmap });
 });
 
 /**
  * Callback function that draws the heatmap.
  * See highcharts documentation for heatmap: https://www.highcharts.com/demo/heatmap
  */
-function block_lemo4moodle_draw_heatmap() {
-    Highcharts.chart('heatmap', {
+function block_lemo4moodle_drawHeatmap() {
+    var xValues = [heatmapAll + '<br>00:00-06:00', heatmapOwn + '<br>00:00-06:00', heatmapAll +
+        '<br>06:00-12:00', heatmapOwn + '<br>06:00-12:00', heatmapAll + '<br>12:00-18:00', heatmapOwn +
+        '<br>12:00-18:00', heatmapAll + '<br>18:00-24:00', heatmapOwn + '<br>18:00-24:00',  heatmapAll +
+        '<br>' + heatmapOverall, heatmapOwn + '<br>' + heatmapOverall, heatmapAll + '<br>' +
+        heatmapAverage, heatmapOwn + '<br>' + heatmapAverage];
 
-        chart: {
-            type: 'heatmap',
-            marginTop: 40,
-            marginBottom: 80,
-            plotBorderWidth: 1
+    var yValues = [heatmapMonday, heatmapTuesday, heatmapWednesday, heatmapThursday, heatmapFriday,
+            heatmapSaturday, heatmapSunday];
+
+    var zValues = heatmapData;
+
+    var colorscaleValue = [
+        [0, '#3D9970'],
+        [1, '#001f3f']
+    ];
+
+    var data = [{
+        x: xValues,
+        y: yValues,
+        z: zValues,
+        type: 'heatmap',
+        colorscale: colorscaleValue,
+        showscale: false
+    }];
+
+    var layout = {
+        title: heatmapTitle,
+        annotations: [],
+        xaxis: {
+            ticks: '',
+            side: 'top'
         },
+        yaxis: {
+            ticks: '',
+            ticksuffix: ' ',
+            width: 700,
+            height: 700,
+            autosize: false
+        }
+    };
 
-        title: {
-            text: heatmapTitle
-        },
-
-        xAxis: {
-            categories: [heatmapAll + '<br>00:00-06:00', heatmapOwn + '<br>00:00-06:00', heatmapAll + '<br>06:00-12:00', heatmapOwn + '<br>06:00-12:00', heatmapAll + '<br>12:00-18:00', heatmapOwn + '<br>12:00-18:00', heatmapAll + '<br>18:00-24:00', heatmapOwn + '<br>18:00-24:00',  heatmapAll + '<br>' + heatmapOverall, heatmapOwn + '<br>' + heatmapOverall, heatmapAll + '<br>' + heatmapAverage, heatmapOwn + '<br>' + heatmapAverage]
-        },
-
-        yAxis: {
-            categories: [heatmapMonday, heatmapTuesday, heatmapWednesday, heatmapThursday, heatmapFriday, heatmapSaturday, heatmapSunday],
-            title: null
-        },
-
-        colorAxis: {
-            min: 0,
-            minColor: '#FFFFFF',
-            maxColor: Highcharts.getOptions().colors[0]
-        },
-
-        legend: {
-            align: 'right',
-            layout: 'vertical',
-            margin: 0,
-            verticalAlign: 'top',
-            y: 25,
-            symbolHeight: 280
-        },
-
-        tooltip: false,
-
-        series: [{
-            name: 'Actions per day',
-            borderWidth: 1,
-            data: heatmapData,
-            dataLabels: {
-                enabled: true,
-                color: '#000000'
+    for ( var i = 0; i < yValues.length; i++ ) {
+        for ( var j = 0; j < xValues.length; j++ ) {
+            var currentValue = zValues[i][j];
+            if (currentValue != 0.0) {
+                var textColor = 'white';
+            } else {
+                var textColor = 'black';
             }
-        }]
+            var result = {
+                xref: 'x1',
+                yref: 'y1',
+                x: xValues[j],
+                y: yValues[i],
+                text: zValues[i][j],
+                font: {
+                    family: 'Arial',
+                    size: 12,
+                    color: textColor
+                },
+                showarrow: false,
+            };
+            layout.annotations.push(result);
+        }
+    }
 
-    });
+    Plotly.newPlot('heatmap', data, layout);
 }

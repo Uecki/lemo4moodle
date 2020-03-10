@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <libraries>
     <library>
-        <location>lib/googlecharts/loader.js</location>
+        <location>lib/google/loader.js</location>
         <name>Google Charts library loader</name>
         <version>47</version>
         <license>Apache</license>

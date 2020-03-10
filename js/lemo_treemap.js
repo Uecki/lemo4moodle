@@ -19,9 +19,14 @@
  * The languae strings used here are initialised as variables in index.php.
  *
  * @package    block_lemo4moodle
- * @copyright  2020 Finn Ueckert
+ * @copyright  2020 Margarita Elkina
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
+// Language file variables.
+//var treemapData = $('#treemapData').val();
+var treemapTitle = $('#treemapTitle').val();
+var treemapClickCount = $('#treemapClickCount').val();
 
 $(document).ready(function() {
 
@@ -36,17 +41,26 @@ $(document).ready(function() {
         $( "#dialog" ).dialog( "open" );
     });
 
+    // Redraw charts when page is resized.
+    $(window).resize(function() {
+        block_lemo4moodle_drawTreemap();
+    });
+
+    // Minimalize tabs are being initialized, callback function
+    // 'block_lemo4moodle_drawTreemap' is executed on tab change.
+    $('#tabs').tabs({ 'onShow': block_lemo4moodle_drawTreemap });
+
 });
 
 /**
  * Callback function that draws the treemap.
  * See google charts documentation for treemap: https://developers.google.com/chart/interactive/docs/gallery/treemap
  */
-function block_lemo4moodle_draw_treemap() {
+function block_lemo4moodle_drawTreemap() {
 
     var data = new google.visualization.arrayToDataTable(treemapData);
 
-    tree = new google.visualization.TreeMap(document.getElementById('treemap'));
+    var tree = new google.visualization.TreeMap(document.getElementById('treemap'));
 
     tree.draw(data, {
         minColor: '#f00',
@@ -56,7 +70,7 @@ function block_lemo4moodle_draw_treemap() {
         fontColor: 'black',
         highlightOnMouseOver: true,
         title: treemapTitle,
-        generateTooltip: block_lemo4moodle_show_tooltip_treemap
+        generateTooltip: block_lemo4moodle_showTooltipTreemap
     });
 
     /**
@@ -68,7 +82,8 @@ function block_lemo4moodle_draw_treemap() {
      * @param int $value
      * @return string
      */
-    function block_lemo4moodle_show_tooltip_treemap(row, size, value) {
-        return '<div style="background:#fd9; padding:10px; border-style:solid">' + data.getValue(row, 0) + '<br>' + treemapClickCount + size + ' </div>';
+    function block_lemo4moodle_showTooltipTreemap(row, size, value) {
+        return '<div style="background:#fd9; padding:10px; border-style:solid">' +
+            data.getValue(row, 0) + '<br>' + treemapClickCount + size + ' </div>';
     }
 }

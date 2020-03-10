@@ -21,7 +21,7 @@
  * usable for the charts. This file is included in index.php.
  *
  * @package    block_lemo4moodle
- * @copyright  2020 Finn Ueckert
+ * @copyright  2020 Margarita Elkina
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -43,15 +43,13 @@ $activity = array();
 $counter = 0;
 
 /**
- * Short description for class.
- *
- * Long description for class (if any)...
+ * Class that holds the results of the linechart query.
  *
  * @package    block_lemo4moodle
- * @copyright  2020 Finn Ueckert
+ * @copyright  2020 Margarita Elkina
  * @license    http:// www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
- 
+
 class Activity {
     /** @var string This variable stores the date. */
     public $date;
@@ -620,55 +618,26 @@ $counter = 0;
 while ($counter <= 6) {
 
     // Data for index.php.
-    $heatmapdata .= "[".$weekdays[$counterweekday[$counter]]['0to6']['all']['col'].", ".
-        $weekdays[$counterweekday[$counter]]['row'].", ".$weekdays[$counterweekday[$counter]]['0to6']['all']['value']."], ";
+    $daydata = "[".$weekdays[$counterweekday[$counter]]['0to6']['all']['value'].", ".
+        $weekdays[$counterweekday[$counter]]['0to6']['own']['value'].", ".
+        $weekdays[$counterweekday[$counter]]['6to12']['all']['value'].", ".
+        $weekdays[$counterweekday[$counter]]['6to12']['own']['value'].", ".
+        $weekdays[$counterweekday[$counter]]['12to18']['all']['value'].", ".
+        $weekdays[$counterweekday[$counter]]['12to18']['own']['value'].", ".
+        $weekdays[$counterweekday[$counter]]['18to24']['all']['value'].", ".
+        $weekdays[$counterweekday[$counter]]['18to24']['own']['value'].", ".
+        $totalhits[$counterweekday[$counter]].", ".
+        $totalownhits[$counterweekday[$counter]].", ".
+        round(($totalhits[$counterweekday[$counter]] / 4.0), 2).", ".
+        round(($totalownhits[$counterweekday[$counter]] / 4.0), 2)."]";
 
-    $heatmapdata .= "[".$weekdays[$counterweekday[$counter]]['0to6']['own']['col'].", ".
-        $weekdays[$counterweekday[$counter]]['row'].", ".$weekdays[$counterweekday[$counter]]['0to6']['own']['value']."], ";
+    if ($counter < 6) {
+        $daydata .= ", ";
+    }
 
-    $heatmapdata .= "[".$weekdays[$counterweekday[$counter]]['6to12']['all']['col'].", ".
-        $weekdays[$counterweekday[$counter]]['row'].", ".$weekdays[$counterweekday[$counter]]['6to12']['all']['value']."], ";
-
-    $heatmapdata .= "[".$weekdays[$counterweekday[$counter]]['6to12']['own']['col'].", ".
-        $weekdays[$counterweekday[$counter]]['row'].", ".$weekdays[$counterweekday[$counter]]['6to12']['own']['value']."], ";
-
-    $heatmapdata .= "[".$weekdays[$counterweekday[$counter]]['12to18']['all']['col'].", ".
-        $weekdays[$counterweekday[$counter]]['row'].", ".$weekdays[$counterweekday[$counter]]['12to18']['all']['value']."], ";
-
-    $heatmapdata .= "[".$weekdays[$counterweekday[$counter]]['12to18']['own']['col'].", ".
-        $weekdays[$counterweekday[$counter]]['row'].", ".$weekdays[$counterweekday[$counter]]['12to18']['own']['value']."], ";
-
-    $heatmapdata .= "[".$weekdays[$counterweekday[$counter]]['18to24']['all']['col'].", ".
-        $weekdays[$counterweekday[$counter]]['row'].", ".$weekdays[$counterweekday[$counter]]['18to24']['all']['value']."], ";
-
-    $heatmapdata .= "[".$weekdays[$counterweekday[$counter]]['18to24']['own']['col'].", ".
-        $weekdays[$counterweekday[$counter]]['row'].", ".$weekdays[$counterweekday[$counter]]['18to24']['own']['value']."], ";
+    $heatmapdata .= $daydata;
 
     $counter++;
-}
-
-// Put data of overall clicks into suitable format for the chart.
-$x = 8; // For total and average hits.
-while ($x <= 11) {
-    $y = 0; // For weekdays.
-    while ($y <= 6) {
-        if ($x == 8) {
-            $heatmapdata .= "[".$x.", ".$y.", ".$totalhits[$counterweekday[$y]]."]";
-        } else if ($x == 9) {
-            $heatmapdata .= "[".$x.", ".$y.", ".$totalownhits[$counterweekday[$y]]."]";
-        } else if ($x == 10) {
-            $heatmapdata .= "[".$x.", ".$y.", ".round(($totalhits[$counterweekday[$y]] / 4.0), 2)."]";
-        } else if ($x == 11) {
-            $heatmapdata .= "[".$x.", ".$y.", ".round(($totalownhits[$counterweekday[$y]] / 4.0), 2)."]";
-        }
-
-        if ($x < 11 || $y < 6) {
-            $heatmapdata .= ", ";
-        }
-
-        $y++;
-    }
-    $x++;
 }
 
 $heatmapdata .= "]";

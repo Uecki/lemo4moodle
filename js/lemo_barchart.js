@@ -19,9 +19,15 @@
  * The languae strings used here are initialised as variables in index.php.
  *
  * @package    block_lemo4moodle
- * @copyright  2020 Finn Ueckert
+ * @copyright  2020 Margarita Elkina
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
+// Language file variables.
+//var barchartData = $('#barchartData').val();
+var barchartTitle = $('#barchartTitle').val();
+var barchartXLabel = $('#barchartXLabel').val();
+var barchartYLabel = $('#barchartYLabel').val();
 
 $(document).ready(function() {
 
@@ -36,13 +42,22 @@ $(document).ready(function() {
         $( "#dialog" ).dialog("open");
     });
 
+    // Redraw charts when page is resized.
+    $(window).resize(function() {
+        block_lemo4moodle_drawBarchart();
+    });
+
+    // Minimalize tabs are being initialized, callback function
+    // 'block_lemo4moodle_drawBarchart' is executed on tab change.
+    $('#tabs').tabs({ 'onShow': block_lemo4moodle_drawBarchart });
+
 });
 
 /**
  * Callback function that draws the barchart.
  * See google charts documentation for barchart: https://developers.google.com/chart/interactive/docs/gallery/barchart.
  */
-function block_lemo4moodle_draw_barchart() {
+function block_lemo4moodle_drawBarchart() {
     var data = google.visualization.arrayToDataTable(barchartData);
 
     var materialOptionsBarchart = {
