@@ -68,6 +68,7 @@ function block_lemo4moodle_drawTreemap() {
         maxColor: '#0d0',
         headerHeight: 15,
         fontColor: 'black',
+        showScale: true,
         highlightOnMouseOver: true,
         title: treemapTitle,
         generateTooltip: block_lemo4moodle_showTooltipTreemap
