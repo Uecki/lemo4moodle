@@ -46,7 +46,7 @@ $string['course_activity'] = 'Course activity (Moodle report)';
 $string['update'] = 'Update';
 $string['reset'] = 'Reset';
 $string['html_download'] = 'HTML Download';
-$string['dialogTitle'] = 'Selection';
+$string['dialogTitle'] = 'Choice';
 $string['filterStart'] = 'Start';
 $string['filterEnd'] = 'End';
 
