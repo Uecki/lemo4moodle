@@ -472,8 +472,8 @@ $(document).ready(function() {
             var zValues = filteredHeatmapData;
 
             var colorscaleValue = [
-                [0, '#3D9970'],
-                [1, '#001f3f']
+                [0, '#b2b2b2'],
+                [1, '#f06060']
             ];
 
             var data = [{
@@ -505,7 +505,7 @@ $(document).ready(function() {
                 for ( var j = 0; j < xValues.length; j++ ) {
                     var currentValue = zValues[i][j];
                     if (currentValue != 0.0) {
-                        var textColor = 'white';
+                        var textColor = 'black';
                     } else {
                         var textColor = 'black';
                     }
@@ -554,7 +554,7 @@ $(document).ready(function() {
 
 /**
  * Callback function that draws the heatmap.
- * See highcharts documentation for heatmap: https://www.highcharts.com/demo/heatmap
+ * See plotly documentation for heatmap: https://plot.ly/javascript/heatmaps/
  */
 function block_lemo4moodle_drawHeatmap() {
     var xValues = [heatmapAll + '<br>00:00-06:00', heatmapOwn + '<br>00:00-06:00', heatmapAll +
@@ -569,8 +569,8 @@ function block_lemo4moodle_drawHeatmap() {
     var zValues = heatmapData;
 
     var colorscaleValue = [
-        [0, '#3D9970'],
-        [1, '#001f3f']
+        [0, '#b2b2b2'],
+        [1, '#f06060']
     ];
 
     var data = [{
@@ -602,7 +602,7 @@ function block_lemo4moodle_drawHeatmap() {
         for ( var j = 0; j < xValues.length; j++ ) {
             var currentValue = zValues[i][j];
             if (currentValue != 0.0) {
-                var textColor = 'white';
+                var textColor = 'black';
             } else {
                 var textColor = 'black';
             }
