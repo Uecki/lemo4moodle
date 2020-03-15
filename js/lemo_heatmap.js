@@ -472,8 +472,8 @@ $(document).ready(function() {
             var zValues = filteredHeatmapData;
 
             var colorscaleValue = [
-                [0, '#b2b2b2'],
-                [1, '#f06060']
+                [0, '#ffffff'],
+                [1, '#4a9dd4']
             ];
 
             var data = [{
@@ -569,8 +569,8 @@ function block_lemo4moodle_drawHeatmap() {
     var zValues = heatmapData;
 
     var colorscaleValue = [
-        [0, '#b2b2b2'],
-        [1, '#f06060']
+        [0, '#ffffff'],
+        [1, '#4a9dd4']
     ];
 
     var data = [{
