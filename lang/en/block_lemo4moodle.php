@@ -37,7 +37,7 @@ $string['lang'] = 'en';
 $string['download_dialog'] = 'Download only this graph or all graphs?';
 $string['modal_title'] = 'Merge files';
 $string['modal_content'] = 'Now choose the files you want to merge the data from.
-    <br>At the moment, <u>only</u> the linechart data will be merged. For the other graphs, the current data from the moodle database will be downloaded.
+    <br>At the moment, <u>only</u> the linechart data will be merged and displayed in the downloaded file.
     <br>(Hold down the "ctrl"-button on your keyboard when selecting multiple files and click on each file you want to merge.)';
 $string['logdata'] = 'Logdata since: ';
 $string['backup'] = 'Backup your data: ';
