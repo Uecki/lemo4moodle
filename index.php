@@ -158,9 +158,6 @@ require_once(__DIR__.'/lemo_db_queries.php');
                                         <input type='hidden' value='<?php echo $alldata ?>' name='data'>
                                         <input type='hidden' value='barchart' name='chart'>
                                         <input type='hidden' value='' name='allCharts' id="allCharts1">
-                                        <!-- For merging files (only for linechart atm).
-                                        Merge button only uses the elements of the barchart tab. -->
-                                        <input type='hidden' value='' name='mergeData' id="mergeData1" >
                                     </form>
                                     <div class="divider"></div>
                                 </div>
@@ -203,6 +200,8 @@ require_once(__DIR__.'/lemo_db_queries.php');
                                         <input type='hidden' value='<?php echo $alldata ?>' name='data'>
                                         <input type='hidden' value='linechart' name='chart'>
                                         <input type='hidden' value='' name='allCharts' id="allCharts2">
+                                        <!-- For merging files (only for linechart atm). -->
+                                        <input type='hidden' value='' name='mergeData' id="mergeData2" >
                                     </form>
                                     <div class="divider"></div>
                                 </div>
@@ -282,9 +281,12 @@ require_once(__DIR__.'/lemo_db_queries.php');
         <div id="jsvariables">
             <!-- Data-variables from lemo_dq_queries.php made usable for the js-files. -->
             <input type='hidden' value='<?php echo $barchartdata;?>' id="barchartData">
+            <input type='hidden' value='<?php echo json_encode($barchartfileinfo); ?>' id='barchartFileInfo'>
             <input type='hidden' value='[<?php echo $linechart; ?>]' id="linechartDataArray">
             <input type='hidden' value='<?php echo $heatmapdata; ?>' id="heatmapData">
             <input type='hidden' value='<?php echo $treemapdata; ?>' id="treemapData">
+
+            <input type='hidden' value='<?php echo $CFG->wwwroot; ?>' id="wwwroot">
             <!-- Filter. -->
             <?php
             //$linechartdataarrayfilter = json_encode($finallinechartobject, JSON_NUMERIC_CHECK);
@@ -337,7 +339,6 @@ require_once(__DIR__.'/lemo_db_queries.php');
         var linechartDataArray = [<?php echo $linechart; ?>];
         var heatmapData = <?php echo $heatmapdata; ?>;
         var treemapData = <?php echo $treemapdata; ?>;
-
         <?php
         // JS variables needed for the filter.
         $linechartdataarrayfilter = json_encode($finallinechartobject, JSON_NUMERIC_CHECK);

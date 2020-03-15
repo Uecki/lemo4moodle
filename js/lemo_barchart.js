@@ -83,4 +83,31 @@ function block_lemo4moodle_drawBarchart() {
     var materialBarchart = new google.charts.Bar(document.getElementById('barchart'));
     materialBarchart.draw(data, google.charts.Bar.convertOptions(materialOptionsBarchart));
 
+    // Check, if the file info is available.
+    // Necessary for downloaded file, where it is not available.
+    if ($('#barchartFileInfo').length > 0) {
+
+        var barchartDataArray = JSON.parse($('#barchartFileInfo').val());
+
+        // Add event listener that checks, which bar was clicked and then
+        // opens the corresponding file.
+        google.visualization.events.addListener(materialBarchart, 'select', function() {
+            if (typeof materialBarchart.getSelection()[0] !== 'undefined') {
+                var selection = data.getValue(materialBarchart.getSelection()[0].row, 0);
+                if (selection.length) {
+                    barchartDataArray.forEach( function(item) {
+                        if (selection == item[0]) {
+                            var url = $('#wwwroot').val() + '/pluginfile.php/' + item[1] + '/' + item[2] + '/' + item[3] + '/' + item[4] + '/' + item[5];
+                            window.open(url);
+                            materialBarchart.setSelection([]);
+                            return;
+                        }
+                    });
+                }
+            }
+
+
+        });
+    }
+
 }

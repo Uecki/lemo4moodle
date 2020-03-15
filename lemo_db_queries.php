@@ -202,13 +202,13 @@ $firstdateindex = $matches[0][2].'.'.(intval($matches[0][1]) + 1).'.'.$matches[0
 
 // SQL Query for bar chart data.
 
-$querybarchart = "SELECT RESOURCE.id, name, counter_hits, counter_user, contextid, component
-                    FROM (SELECT contextid, courseid, objectid, userid, component, count(objectid) AS counter_hits, count(DISTINCT userid) AS counter_user
-                            FROM {logstore_standard_log}
-                           WHERE target = 'course_module'
-                        GROUP BY courseid, objectid) AS LOGS
-                    JOIN (SELECT id FROM {course}) AS COURSE ON LOGS.courseid = COURSE.id
-                    JOIN (SELECT mdl_resource.id, name, timemodified FROM {resource}) AS RESOURCE ON LOGS.objectid = RESOURCE.id WHERE courseid = '".$courseid."'";
+$querybarchart = "SELECT count(LOGS.objectid) AS counter_hits, count(DISTINCT LOGS.userid) AS counter_user, LOGS.contextid, FILE.component, FILE.filename, FILE.itemid, FILE.filearea, RES.name
+                    FROM mdl_logstore_standard_log AS LOGS
+              INNER JOIN mdl_files AS FILE ON LOGS.contextid = FILE.contextid
+              INNER JOIN mdl_resource As RES ON LOGS.objectid = RES.id
+                   WHERE action = 'viewed' AND courseid = " . $courseid . " AND filename != '.'
+                GROUP BY objectid
+                ORDER BY counter_hits DESC";
 
 
 // Perform SQL-Query.
@@ -217,7 +217,11 @@ $barchart = $DB->get_records_sql($querybarchart);
 // Create barchart data.
 $j = 1;
 $leng = count($barchart);
+// Array that stores the info needed to open files in moodle.
+$barchartfileinfo = array();
+
 $barchartdataarray = array();
+
 $barchartdata = "[['".get_string('barchart_xlabel', 'block_lemo4moodle')."', '".get_string('barchart_ylabel',
     'block_lemo4moodle')."', '".get_string('barchart_users', 'block_lemo4moodle')."'],";
 
@@ -228,9 +232,11 @@ foreach ($barchart as $bar) {
     if ($j == $leng ) {
         $barchartdata .= "['".$bar->name."', ".$bar->counter_hits.", ".$bar->counter_user."]]";
     }
+    $barchartfileinfo[] = array($bar->name, $bar->contextid, $bar->component, $bar->filearea, $bar->itemid, $bar->filename);
     $barchartdataarray[] = array($bar->name, $bar->counter_hits, $bar->counter_user);
     $j++;
 }
+
 
 
 // Query for heatmap. Only minor changes to activity chart query.
