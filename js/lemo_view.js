@@ -235,7 +235,7 @@ $('#mergeButton').click(function() {
                 } else if (it == "heatmapData") {
                     dataArray = data.split("], [");
                 }
-                dataArray.forEach( function(item) {
+                dataArray.forEach(function(item) {
 
                     // Collect linechart data.
                     if (it == "linechartDataArray" && item.toString().length > 2) { // Filter out the empty data.
@@ -255,10 +255,10 @@ $('#mergeButton').click(function() {
                             });
                             linechartData = "";
                             var jsonArray = JSON.stringify(linechartDataArray);
-                            $("#allCharts1").val('true');
-                            $("#mergeData1").val(jsonArray);
-                            $("#download_form_1").submit();
-                            $("#mergeData1").val('');
+                            $("#allCharts2").val('false');
+                            $("#mergeData2").val(jsonArray);
+                            $("#download_form_2").submit();
+                            $("#mergeData2").val('');
                         }
                     }
                 });
