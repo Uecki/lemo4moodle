@@ -29,12 +29,12 @@
  */
 
 // Language file variables.
-var viewDialogThis = $('#viewDialogThis').value;
-var viewDialogAll = $('#viewDialogAll').value;
-var viewFile = $('#viewFile').value;
-var viewTimespan = $('#viewTimespan').value;
-var viewNoTimespan = $('#viewNoTimespan').value;
-var viewModalError = $('#viewModalError').value;
+var viewDialogThis = $('#viewDialogThis').val();
+var viewDialogAll = $('#viewDialogAll').val();
+var viewFile = $('#viewFile').val();
+var viewTimespan = $('#viewTimespan').val();
+var viewNoTimespan = $('#viewNoTimespan').val();
+var viewModalError = $('#viewModalError').val();
 
 $(document).ready(function() {
 
@@ -235,7 +235,7 @@ $('#mergeButton').click(function() {
                 } else if (it == "heatmapData") {
                     dataArray = data.split("], [");
                 }
-                dataArray.forEach( function(item) {
+                dataArray.forEach(function(item) {
 
                     // Collect linechart data.
                     if (it == "linechartDataArray" && item.toString().length > 2) { // Filter out the empty data.
@@ -255,10 +255,10 @@ $('#mergeButton').click(function() {
                             });
                             linechartData = "";
                             var jsonArray = JSON.stringify(linechartDataArray);
-                            $("#allCharts1").val('true');
-                            $("#mergeData1").val(jsonArray);
-                            $("#download_form_1").submit();
-                            $("#mergeData1").val('');
+                            $("#allCharts2").val('false');
+                            $("#mergeData2").val(jsonArray);
+                            $("#download_form_2").submit();
+                            $("#mergeData2").val('');
                         }
                     }
                 });

@@ -24,13 +24,17 @@ ___________________________________________
 
     2.1 Installing Lemo4Moodle via Moodle (recommended)
 
-    To install Lemo4Moodle via Moodle, you first have to download the .zip file
+    To install Lemo4Moodle via Moodle, you first have to download the lemo4moodle.zip file
     found in the GitHub repository and make sure that you are logged in as an admin.
+
+    !!! Important: there are two .zip files, lemo4moodle.zip and lemo4moodle_hwr.zip.
+        You should only use the latter when installing this plugin for the HWR Berlin,
+        because it doesn't follow all the moodle coding guidelines.
 
     Next, choose "Site administration" from the left sidebar, click on the tab
     "Plugins" and the click on "Install plugins".
 
-    On that page, you simply have to select the Lemo4Mooodle .zip file and Moodle
+    On that page, you simply have to select the lemo4Mooodle.zip file and Moodle
     does the rest for you.
 
     -----------------------------------

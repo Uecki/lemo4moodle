@@ -42,8 +42,7 @@ $string['lang'] = 'de';
 $string['download_dialog'] = 'Möchten Sie nur diesen Graphen oder alle Graphen herunterladen?';
 $string['modal_title'] = 'Dateien zusammenfügen';
 $string['modal_content'] = 'Wählen Sie jetzt die Dateien, von denen die Daten zusammengefügt werden sollen.
-    <br> Von den ausgewählten Dateien werden dann <u>nur</u> die Linechart-Daten zusammengefügt, für
-    die anderen Graphen werden nur die aktuell in der Datenbank vorhandenen Daten heruntergeladen.
+    <br> Von den ausgewählten Dateien werden dann <u>nur</u> die Linechart-Daten zusammengefügt und in der heruntergeladenen Version dargestellt.
     <br>(Halten Sie bitte die "STRG"-Taste beim Auswählen von mehreren Dateien gedrückt und klicken Sie dabei auf die gewünschten Dateien.)';
 $string['logdata'] = 'Logdaten seit: ';
 $string['backup'] = 'Datensicherung: ';

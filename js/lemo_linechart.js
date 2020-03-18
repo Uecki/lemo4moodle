@@ -24,22 +24,25 @@
  */
 
 // Language file variables.
-var linechartDataArray = $('#linechartDataArray').value;
-var linechartDataArrayFilter = $('#linechartDataArrayFilter').value;
-var linechartColDate = $('#linechartColOwnAccess').value;
-var linechartColAccess = $('#linechartColAccess').value;
-var linechartColOwnAccess = $('#linechartColOwnAccess').value;
-var linechartColUser = $('#linechartColUser').value;
-var linechartTitle = $('#linechartTitle').value;
-var linechartCheckSelection = $('#linechartCheckSelection').value;
-
-// Variable for instantiation of google chart.
-var activitychart = new google.visualization.LineChart(document.getElementById('linechart'));
+var linechartDataArray = JSON.parse($('#linechartDataArray').val());
+// One result needs to be made usable by running eval().
+// Probably not so great to use eval(), but it works.
+for (var i = 0; i < linechartDataArray.length; i++) {
+    linechartDataArray[i][0] = eval(linechartDataArray[i][0]);
+}
+var linechartDataArrayFilter = JSON.parse($('#linechartDataArrayFilter').val());
+var linechartColDate = $('#linechartColDate').val();
+var linechartColAccess = $('#linechartColAccess').val();
+var linechartColOwnAccess = $('#linechartColOwnAccess').val();
+var linechartColUser = $('#linechartColUser').val();
+var linechartTitle = $('#linechartTitle').val();
+var linechartCheckSelection = $('#linechartCheckSelection').val();
 
 $(document).ready(function() {
 
     // Line Chart - reset button.
     $('#rst_btn_2').click(function() {
+        var data = new google.visualization.DataTable();
         block_lemo4moodle_drawLinechart();
         $("#datepicker_3").val("");
         $("#datepicker_4").val("");
@@ -91,6 +94,8 @@ $(document).ready(function() {
                     format:'d.M.yy'
                 }
             };
+
+            var activitychart = new google.visualization.LineChart(document.getElementById('linechart'));
             activitychart.draw(data, options);
         } else {
             Materialize.toast(linechartCheckSelection, 3000); // 3000 is the duration of the toast.
@@ -139,6 +144,7 @@ function block_lemo4moodle_drawLinechart() {
         },
 
     };
+    var activitychart = new google.visualization.LineChart(document.getElementById('linechart'));
     activitychart.draw(data, options);
 
 }

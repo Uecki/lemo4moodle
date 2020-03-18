@@ -1,21 +1,21 @@
 <?xml version="1.0"?>
 <libraries>
     <library>
-        <location>lib/googlecharts/loader.js</location>
+        <location>lib/google/loader.js</location>
         <name>Google Charts library loader</name>
         <version>47</version>
         <license>Apache</license>
         <licenseversion>2.0</licenseversion>
     </library>
     <library>
-        <location>lib/materialize/materialize.min.js</location>
+        <location>lib/materialize/js/materialize.min.js</location>
         <name>MaterializeCSS</name>
         <version>v0.100.2</version>
         <license>MIT</license>
         <licenseversion></licenseversion>
     </library>
     <library>
-        <location>lib/materialize/materialize.min.css</location>
+        <location>lib/materialize/css/materialize.min.css</location>
         <name>MaterializeCSS</name>
         <version>v0.100.2</version>
         <license>MIT</license>
@@ -34,5 +34,26 @@
         <version></version>
         <license>Apache</license>
         <licenseversion>2.0</licenseversion>
+    </library>
+    <library>
+        <location>lib/jquery/jquery.js</location>
+        <name>JQuery</name>
+        <version>v1.12.4</version>
+        <license>MIT</license>
+        <licenseversion></licenseversion>
+    </library>
+    <library>
+        <location>lib/jquery/jquery-ui.css</location>
+        <name>JQuery UI CSS</name>
+        <version>v1.12.1</version>
+        <license>MIT</license>
+        <licenseversion></licenseversion>
+    </library>
+    <library>
+        <location>lib/jquery/jquery-ui.js</location>
+        <name>JQuery UI JS</name>
+        <version>v1.12.1</version>
+        <license>MIT</license>
+        <licenseversion></licenseversion>
     </library>
 </libraries>

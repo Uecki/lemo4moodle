@@ -192,7 +192,7 @@ foreach ($finallinechartobject as $fo) {
     if ($f == $length - 1) {
         $linechart .= "[new Date(".$fo->date."), ".$fo->accesses.", ".$fo->ownhits.", ".$fo->user."]";
     }
-    $linechartdataarray[] = array("new Date(".$fo->date.")", $fo->accesses, $fo->ownhits, $fo->user, $fo->timestamp);
+    $linechartdataarray[] = array("new Date(".$fo->date.")", $fo->accesses, $fo->ownhits, $fo->user);
     $f++;
 }
 
@@ -202,13 +202,13 @@ $firstdateindex = $matches[0][2].'.'.(intval($matches[0][1]) + 1).'.'.$matches[0
 
 // SQL Query for bar chart data.
 
-$querybarchart = "SELECT RESOURCE.id, name, counter_hits, counter_user
-                    FROM (SELECT contextid, courseid, objectid, userid, count(objectid) AS counter_hits, count(DISTINCT userid) AS counter_user
-                            FROM mdl_logstore_standard_log
-                           WHERE target = 'course_module'
-                        GROUP BY courseid, objectid) AS LOGS
-                    JOIN (SELECT id FROM mdl_course) AS COURSE ON LOGS.courseid = COURSE.id
-                    JOIN (SELECT mdl_resource.id, name, timemodified FROM mdl_resource) AS RESOURCE ON LOGS.objectid = RESOURCE.id WHERE courseid = '".$courseid."'";
+$querybarchart = "SELECT count(LOGS.objectid) AS counter_hits, count(DISTINCT LOGS.userid) AS counter_user, LOGS.contextid, FILE.component, FILE.filename, FILE.itemid, FILE.filearea, RES.name
+                    FROM mdl_logstore_standard_log AS LOGS
+              INNER JOIN mdl_files AS FILE ON LOGS.contextid = FILE.contextid
+              INNER JOIN mdl_resource As RES ON LOGS.objectid = RES.id
+                   WHERE action = 'viewed' AND courseid = " . $courseid . " AND filename != '.'
+                GROUP BY objectid
+                ORDER BY counter_hits DESC";
 
 
 // Perform SQL-Query.
@@ -217,7 +217,13 @@ $barchart = $DB->get_records_sql($querybarchart);
 // Create barchart data.
 $j = 1;
 $leng = count($barchart);
+// Array that stores the info needed to open files in moodle.
+$barchartfileinfo = array();
+
 $barchartdataarray = array();
+$barchartdataarray[] = array(get_string('barchart_xlabel', 'block_lemo4moodle'), get_string('barchart_ylabel',
+    'block_lemo4moodle'), get_string('barchart_users', 'block_lemo4moodle'));
+
 $barchartdata = "[['".get_string('barchart_xlabel', 'block_lemo4moodle')."', '".get_string('barchart_ylabel',
     'block_lemo4moodle')."', '".get_string('barchart_users', 'block_lemo4moodle')."'],";
 
@@ -228,15 +234,17 @@ foreach ($barchart as $bar) {
     if ($j == $leng ) {
         $barchartdata .= "['".$bar->name."', ".$bar->counter_hits.", ".$bar->counter_user."]]";
     }
+    $barchartfileinfo[] = array($bar->name, $bar->contextid, $bar->component, $bar->filearea, $bar->itemid, $bar->filename);
     $barchartdataarray[] = array($bar->name, $bar->counter_hits, $bar->counter_user);
     $j++;
 }
 
 
+
 // Query for heatmap. Only minor changes to activity chart query.
 
 $queryheatmap = "SELECT  id, timecreated, FROM_UNIXTIME(timecreated, '%W') AS 'weekday', FROM_UNIXTIME(timecreated, '%k') AS 'hour',
-    COUNT(action) AS 'allHits',  COUNT(case when userid = $userid then $userid end) AS 'ownhits'
+                            COUNT(action) AS 'allHits',  COUNT(case when userid = $userid then $userid end) AS 'ownhits'
                          FROM {logstore_standard_log}
                         WHERE (courseid = '".$courseid."')
                      GROUP BY timecreated"; // Group by hour.
@@ -246,6 +254,7 @@ $heatmap = $DB->get_records_sql($queryheatmap);
 // Create heatmap data.
 $timespan;
 $heatmapdata = "[";
+$heatmapdataarray = array();
 $counterweekday = array("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday");
 
 // Array for total number of weekday actions.
@@ -617,6 +626,21 @@ foreach ($heatmap as $heat) {
 $counter = 0;
 while ($counter <= 6) {
 
+    $heatmapdataarray[] = array(
+        $weekdays[$counterweekday[$counter]]['0to6']['all']['value'],
+        $weekdays[$counterweekday[$counter]]['0to6']['own']['value'],
+        $weekdays[$counterweekday[$counter]]['6to12']['all']['value'],
+        $weekdays[$counterweekday[$counter]]['6to12']['own']['value'],
+        $weekdays[$counterweekday[$counter]]['12to18']['all']['value'],
+        $weekdays[$counterweekday[$counter]]['12to18']['own']['value'],
+        $weekdays[$counterweekday[$counter]]['18to24']['all']['value'],
+        $weekdays[$counterweekday[$counter]]['18to24']['own']['value'],
+        $totalhits[$counterweekday[$counter]],
+        $totalownhits[$counterweekday[$counter]],
+        round(($totalhits[$counterweekday[$counter]] / 4.0), 2),
+        round(($totalownhits[$counterweekday[$counter]] / 4.0), 2)
+    );
+
     // Data for index.php.
     $daydata = "[".$weekdays[$counterweekday[$counter]]['0to6']['all']['value'].", ".
         $weekdays[$counterweekday[$counter]]['0to6']['own']['value'].", ".
@@ -653,6 +677,8 @@ $i = 1;
 $nodetitle = 'Global'; // Variable for node title.
 $lengtree = count($treemap);
 $treemapdataarray = array();
+$treemapdataarray[] = array('Name', 'Parent', 'Size', 'Color');
+$treemapdataarray[] = array(get_string('treemap_global', 'block_lemo4moodle'), null, 0, 0);
 $treemapdata =
     "[['Name', 'Parent', 'Size', 'Color'],
         ['".get_string('treemap_global', 'block_lemo4moodle')."', null, 0, 0],";

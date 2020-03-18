@@ -24,9 +24,9 @@
  */
 
 // Language file variables.
-var treemapData = $('#treemapData').value;
-var treemapTitle = $('#treemapTitle').value;
-var treemapClickCount = $('#treemapClickCount').value;
+var treemapData = JSON.parse($('#treemapData').val());
+var treemapTitle = $('#treemapTitle').val();
+var treemapClickCount = $('#treemapClickCount').val();
 
 $(document).ready(function() {
 
@@ -68,6 +68,7 @@ function block_lemo4moodle_drawTreemap() {
         maxColor: '#0d0',
         headerHeight: 15,
         fontColor: 'black',
+        showScale: true,
         highlightOnMouseOver: true,
         title: treemapTitle,
         generateTooltip: block_lemo4moodle_showTooltipTreemap

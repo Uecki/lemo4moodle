@@ -23,23 +23,22 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-variables
 // Language file variables.
-var heatmapData = $('#heatmapData').value;
-var heatmapDataFilter = $('#heatmapDataFilter').value;
-var heatmapTitle = $('#heatmapTitle').value;
-var heatmapAll = $('#heatmapAll').value;
-var heatmapOwn = $('#heatmapOwn').value;
-var heatmapOverall = $('#heatmapOverall').value;
-var heatmapAverage = $('#heatmapAverage').value;
-var heatmapMonday = $('#heatmapMonday').value;
-var heatmapTuesday = $('#heatmapTuesday').value;
-var heatmapWednesday = $('#heatmapWednesday').value;
-var heatmapThursday = $('#heatmapThursday').value;
-var heatmapFriday = $('#heatmapFriday').value;
-var heatmapSaturday = $('#heatmapSaturday').value;
-var heatmapSunday = $('#heatmapSunday').value;
-var heatmapCheckSelection = $('#heatmapCheckSelection').value;
+var heatmapData = JSON.parse($('#heatmapData').val());
+var heatmapDataFilter = Object.entries(JSON.parse($('#heatmapDataFilter').val()));
+var heatmapTitle = $('#heatmapTitle').val();
+var heatmapAll = $('#heatmapAll').val();
+var heatmapOwn = $('#heatmapOwn').val();
+var heatmapOverall = $('#heatmapOverall').val();
+var heatmapAverage = $('#heatmapAverage').val();
+var heatmapMonday = $('#heatmapMonday').val();
+var heatmapTuesday = $('#heatmapTuesday').val();
+var heatmapWednesday = $('#heatmapWednesday').val();
+var heatmapThursday = $('#heatmapThursday').val();
+var heatmapFriday = $('#heatmapFriday').val();
+var heatmapSaturday = $('#heatmapSaturday').val();
+var heatmapSunday = $('#heatmapSunday').val();
+var heatmapCheckSelection = $('#heatmapCheckSelection').val();
 
 $(document).ready(function() {
 
@@ -473,8 +472,8 @@ $(document).ready(function() {
             var zValues = filteredHeatmapData;
 
             var colorscaleValue = [
-                [0, '#3D9970'],
-                [1, '#001f3f']
+                [0, '#ffffff'],
+                [1, '#4a9dd4']
             ];
 
             var data = [{
@@ -506,7 +505,7 @@ $(document).ready(function() {
                 for ( var j = 0; j < xValues.length; j++ ) {
                     var currentValue = zValues[i][j];
                     if (currentValue != 0.0) {
-                        var textColor = 'white';
+                        var textColor = 'black';
                     } else {
                         var textColor = 'black';
                     }
@@ -555,7 +554,7 @@ $(document).ready(function() {
 
 /**
  * Callback function that draws the heatmap.
- * See highcharts documentation for heatmap: https://www.highcharts.com/demo/heatmap
+ * See plotly documentation for heatmap: https://plot.ly/javascript/heatmaps/
  */
 function block_lemo4moodle_drawHeatmap() {
     var xValues = [heatmapAll + '<br>00:00-06:00', heatmapOwn + '<br>00:00-06:00', heatmapAll +
@@ -570,8 +569,8 @@ function block_lemo4moodle_drawHeatmap() {
     var zValues = heatmapData;
 
     var colorscaleValue = [
-        [0, '#3D9970'],
-        [1, '#001f3f']
+        [0, '#ffffff'],
+        [1, '#4a9dd4']
     ];
 
     var data = [{
@@ -603,7 +602,7 @@ function block_lemo4moodle_drawHeatmap() {
         for ( var j = 0; j < xValues.length; j++ ) {
             var currentValue = zValues[i][j];
             if (currentValue != 0.0) {
-                var textColor = 'white';
+                var textColor = 'black';
             } else {
                 var textColor = 'black';
             }

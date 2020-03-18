@@ -50,13 +50,14 @@ require_once(__DIR__.'/lemo_db_queries.php');
     <title><?php echo get_string('pluginname', 'block_lemo4moodle')?></title>
 
     <!-- Datepicker jQuery-->
-    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="lib/jquery/jquery-ui.css">
+    <link rel="stylesheet" href="lib/jquery/jquery-ui.theme.min.css">
 
     <!-- Materialize CSS Framework - minified CSS. -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+    <link rel="stylesheet" href="lib/materialize/css/materialize.min.css">
 
     <!-- Google Icons -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="lib/materialicons/icon.css">
 
     <!-- styles.css -->
     <link rel="stylesheet" href="styles.css">
@@ -157,9 +158,6 @@ require_once(__DIR__.'/lemo_db_queries.php');
                                         <input type='hidden' value='<?php echo $alldata ?>' name='data'>
                                         <input type='hidden' value='barchart' name='chart'>
                                         <input type='hidden' value='' name='allCharts' id="allCharts1">
-                                        <!-- For merging files (only for linechart atm).
-                                        Merge button only uses the elements of the barchart tab. -->
-                                        <input type='hidden' value='' name='mergeData' id="mergeData1" >
                                     </form>
                                     <div class="divider"></div>
                                 </div>
@@ -202,6 +200,8 @@ require_once(__DIR__.'/lemo_db_queries.php');
                                         <input type='hidden' value='<?php echo $alldata ?>' name='data'>
                                         <input type='hidden' value='linechart' name='chart'>
                                         <input type='hidden' value='' name='allCharts' id="allCharts2">
+                                        <!-- For merging files (only for linechart atm). -->
+                                        <input type='hidden' value='' name='mergeData' id="mergeData2" >
                                     </form>
                                     <div class="divider"></div>
                                 </div>
@@ -280,65 +280,64 @@ require_once(__DIR__.'/lemo_db_queries.php');
         </div>
         <div id="jsvariables">
             <!-- Data-variables from lemo_dq_queries.php made usable for the js-files. -->
-            <input type='hidden' value='<?php echo $barchartdata; ?>' id="barchartData">
-            <input type='hidden' value='[<?php echo $linechart; ?>]' id="linechartDataArray">
-            <input type='hidden' value='<?php echo $heatmapdata; ?>' id="heatmapData">
-            <input type='hidden' value='<?php echo $treemapdata; ?>' id="treemapData">
+            <input type='hidden' value='<?php echo json_encode($barchartdataarray, JSON_NUMERIC_CHECK);?>' id="barchartData">
+            <input type='hidden' value='<?php echo json_encode($barchartfileinfo, JSON_NUMERIC_CHECK); ?>' id='barchartFileInfo'>
+            <input type='hidden' value='<?php echo json_encode($linechartdataarray, JSON_NUMERIC_CHECK); ?>' id="linechartDataArray">
+            <input type='hidden' value='<?php echo json_encode($heatmapdataarray, JSON_NUMERIC_CHECK); ?>' id="heatmapData">
+            <input type='hidden' value='<?php echo json_encode($treemapdataarray, JSON_NUMERIC_CHECK); ?>' id="treemapData">
+
+            <input type='hidden' value='<?php echo $CFG->wwwroot; ?>' id="wwwroot">
             <!-- Filter. -->
-            <?php
-            $linechartdataarrayfilter = json_encode($finallinechartobject, JSON_NUMERIC_CHECK);
-            $heatmapdatafilter = json_encode($heatmap, JSON_NUMERIC_CHECK);
-            ?>
-            <input type='hidden' value='<?php echo $linechartdataarrayfilter; ?>' id="linechartDataArrayFilter">
-            <input type='hidden' value='<?php echo Object.entries(". $heatmapdatafilter . "); ?>' id="heatmapDataFilter">
+            <input type='hidden' value='<?php echo json_encode($finallinechartobject, JSON_NUMERIC_CHECK); ?>' id="linechartDataArrayFilter">
+            <input type='hidden' value='<?php echo json_encode($heatmap, JSON_NUMERIC_CHECK); ?>' id="heatmapDataFilter">
             <!-- Language-string variables made accessible for JS. -->
             <!-- Barchart. -->
-            <input type='hidden' value='<?php echo '"' . get_string('barchart_title', 'block_lemo4moodle') . '"'?>' id="barchartTitle">
-            <input type='hidden' value='<?php echo '"' . get_string('barchart_xlabel', 'block_lemo4moodle') . '"'?>' id="barchartXLabel">
-            <input type='hidden' value='<?php echo '"' . get_string('barchart_ylabel', 'block_lemo4moodle') . '"'?>' id="barchartYLabel">
+            <input type='hidden' value='<?php echo get_string('barchart_title', 'block_lemo4moodle')?>' id="barchartTitle">
+            <input type='hidden' value='<?php echo get_string('barchart_xlabel', 'block_lemo4moodle')?>' id="barchartXLabel">
+            <input type='hidden' value='<?php echo get_string('barchart_ylabel', 'block_lemo4moodle')?>' id="barchartYLabel">
             <!-- Linechart. -->
-            <input type='hidden' value='<?php echo '"' . get_string('linechart_colDate', 'block_lemo4moodle') . '"'?>' id="linechartColDate">
-            <input type='hidden' value='<?php echo '"' . get_string('linechart_colAccess', 'block_lemo4moodle') . '"'?>' id="linechartColAccess">
-            <input type='hidden' value='<?php echo '"' . get_string('linechart_colOwnAccess', 'block_lemo4moodle') . '"'?>' id="linechartColOwnAccess">
-            <input type='hidden' value='<?php echo '"' . get_string('linechart_colUser', 'block_lemo4moodle') . '"'?>' id="linechartColUser">
-            <input type='hidden' value='<?php echo '"' . get_string('linechart_title', 'block_lemo4moodle') . '"'?>' id="linechartTitle">
-            <input type='hidden' value='<?php echo '"' . get_string('linechart_checkSelection', 'block_lemo4moodle') . '"'?>' id="linechartCheckSelection">
+            <input type='hidden' value='<?php echo get_string('linechart_colDate', 'block_lemo4moodle')?>' id="linechartColDate">
+            <input type='hidden' value='<?php echo get_string('linechart_colAccess', 'block_lemo4moodle')?>' id="linechartColAccess">
+            <input type='hidden' value='<?php echo get_string('linechart_colOwnAccess', 'block_lemo4moodle')?>' id="linechartColOwnAccess">
+            <input type='hidden' value='<?php echo get_string('linechart_colUser', 'block_lemo4moodle')?>' id="linechartColUser">
+            <input type='hidden' value='<?php echo get_string('linechart_title', 'block_lemo4moodle')?>' id="linechartTitle">
+            <input type='hidden' value='<?php echo get_string('linechart_checkSelection', 'block_lemo4moodle')?>' id="linechartCheckSelection">
             <!--Heatmap.  -->
-            <input type='hidden' value='<?php echo '"' . get_string('heatmap_title', 'block_lemo4moodle') . '"'?>' id="heatmapTitle">
-            <input type='hidden' value='<?php echo '"' . get_string('heatmap_all', 'block_lemo4moodle') . '"'?>' id="heatmapAll">
-            <input type='hidden' value='<?php echo '"' . get_string('heatmap_own', 'block_lemo4moodle') . '"'?>' id="heatmapOwn">
-            <input type='hidden' value='<?php echo '"' . get_string('heatmap_overall', 'block_lemo4moodle') . '"'?>' id="heatmapOverall">
-            <input type='hidden' value='<?php echo '"' . get_string('heatmap_average', 'block_lemo4moodle') . '"'?>' id="heatmapAverage">
-            <input type='hidden' value='<?php echo '"' . get_string('heatmap_monday', 'block_lemo4moodle') . '"'?>' id="heatmapMonday">
-            <input type='hidden' value='<?php echo '"' . get_string('heatmap_tuesday', 'block_lemo4moodle') . '"'?>' id="heatmapTuesday">
-            <input type='hidden' value='<?php echo '"' . get_string('heatmap_wednesday', 'block_lemo4moodle') . '"'?>' id="heatmapWednesday">
-            <input type='hidden' value='<?php echo '"' . get_string('heatmap_thursday', 'block_lemo4moodle') . '"'?>' id="heatmapThursday">
-            <input type='hidden' value='<?php echo '"' . get_string('heatmap_friday', 'block_lemo4moodle') . '"'?>' id="heatmapFriday">
-            <input type='hidden' value='<?php echo '"' . get_string('heatmap_saturday', 'block_lemo4moodle') . '"'?>' id="heatmapSaturday">
-            <input type='hidden' value='<?php echo '"' . get_string('heatmap_sunday', 'block_lemo4moodle') . '"'?>' id="heatmapSunday">
-            <input type='hidden' value='<?php echo '"' . get_string('heatmap_checkSelection', 'block_lemo4moodle') . '"'?>' id="heatmapCheckSelection">
+            <input type='hidden' value='<?php echo get_string('heatmap_title', 'block_lemo4moodle')?>' id="heatmapTitle">
+            <input type='hidden' value='<?php echo get_string('heatmap_all', 'block_lemo4moodle')?>' id="heatmapAll">
+            <input type='hidden' value='<?php echo get_string('heatmap_own', 'block_lemo4moodle')?>' id="heatmapOwn">
+            <input type='hidden' value='<?php echo get_string('heatmap_overall', 'block_lemo4moodle')?>' id="heatmapOverall">
+            <input type='hidden' value='<?php echo get_string('heatmap_average', 'block_lemo4moodle')?>' id="heatmapAverage">
+            <input type='hidden' value='<?php echo get_string('heatmap_monday', 'block_lemo4moodle')?>' id="heatmapMonday">
+            <input type='hidden' value='<?php echo get_string('heatmap_tuesday', 'block_lemo4moodle')?>' id="heatmapTuesday">
+            <input type='hidden' value='<?php echo get_string('heatmap_wednesday', 'block_lemo4moodle')?>' id="heatmapWednesday">
+            <input type='hidden' value='<?php echo get_string('heatmap_thursday', 'block_lemo4moodle')?>' id="heatmapThursday">
+            <input type='hidden' value='<?php echo get_string('heatmap_friday', 'block_lemo4moodle')?>' id="heatmapFriday">
+            <input type='hidden' value='<?php echo get_string('heatmap_saturday', 'block_lemo4moodle')?>' id="heatmapSaturday">
+            <input type='hidden' value='<?php echo get_string('heatmap_sunday', 'block_lemo4moodle')?>' id="heatmapSunday">
+            <input type='hidden' value='<?php echo get_string('heatmap_checkSelection', 'block_lemo4moodle')?>' id="heatmapCheckSelection">
             <!-- Treemap. -->
-            <input type='hidden' value='<?php echo '"' . get_string('treemap_title', 'block_lemo4moodle') . '"'?>' id="treemapTitle">
-            <input type='hidden' value='<?php echo '"' . get_string('treemap_clickCount', 'block_lemo4moodle') . '"'?>' id="treemapClickCount">
+            <input type='hidden' value='<?php echo get_string('treemap_title', 'block_lemo4moodle')?>' id="treemapTitle">
+            <input type='hidden' value='<?php echo get_string('treemap_clickCount', 'block_lemo4moodle')?>' id="treemapClickCount">
             <!-- View. -->
-            <input type='hidden' value='<?php echo '"' . get_string('view_dialogThis', 'block_lemo4moodle') . '"'?>' id="viewDialogThis">
-            <input type='hidden' value='<?php echo '"' . get_string('view_dialogAll', 'block_lemo4moodle') . '"'?>' id="viewDialogAll">
-            <input type='hidden' value='<?php echo '"' . get_string('view_file', 'block_lemo4moodle') . '"'?>' id="viewFile">
-            <input type='hidden' value='<?php echo '"' . get_string('view_timespan', 'block_lemo4moodle') . '"'?>' id="viewTimespan">
-            <input type='hidden' value='<?php echo '"' . get_string('view_noTimespan', 'block_lemo4moodle') . '"'?>' id="viewNoTimespan">
-            <input type='hidden' value='<?php echo '"' . get_string('view_modalError', 'block_lemo4moodle') . '"'?>' id="viewModalError">
+            <input type='hidden' value='<?php echo get_string('view_dialogThis', 'block_lemo4moodle')?>' id="viewDialogThis">
+            <input type='hidden' value='<?php echo get_string('view_dialogAll', 'block_lemo4moodle')?>' id="viewDialogAll">
+            <input type='hidden' value='<?php echo get_string('view_file', 'block_lemo4moodle')?>' id="viewFile">
+            <input type='hidden' value='<?php echo get_string('view_timespan', 'block_lemo4moodle')?>' id="viewTimespan">
+            <input type='hidden' value='<?php echo get_string('view_noTimespan', 'block_lemo4moodle')?>' id="viewNoTimespan">
+            <input type='hidden' value='<?php echo get_string('view_modalError', 'block_lemo4moodle')?>' id="viewModalError">
         </div>
     </div>
 
     <!-- JQuery and JQuery Datepicker. -->
-    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="lib/jquery/jquery.js"></script>
+    <script src="lib/jquery/jquery-ui.js"></script>
 
     <!-- Google Charts. -->
-    <script src="lib/googlecharts/loader.js"></script>
+    <script src="lib/google/loader.js"></script>
 
     <!-- Materialize CSS Framework - minified - JavaScript. -->
-    <script src="lib/materialize/materialize.min.js"></script>
+    <script src="lib/materialize/js/materialize.min.js"></script>
 
     <!-- Plotly, Heatmap. -->
     <script src="lib/plotly/plotly-latest.min.js"></script>
