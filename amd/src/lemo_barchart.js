@@ -23,8 +23,8 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-define(['jquery', 'jqueryui', 'blocks_lemo4moodle/googlecharts', 'blocks_lemo4moodle/materialize'],
-        function ($, jqui, googlecharts, materialize) {
+define(['jquery', 'jqueryui', 'blocks_lemo4moodle/googlecharts', 'blocks_lemo4moodle/materialize',
+        'blocks_lemo4moodle/lemo_view'], function ($, jqui, google) {
 
     function initManage() {
 
@@ -102,7 +102,8 @@ define(['jquery', 'jqueryui', 'blocks_lemo4moodle/googlecharts', 'blocks_lemo4mo
                         if (selection.length) {
                             barchartDataArray.forEach( function(item) {
                                 if (selection == item[0]) {
-                                    var url = $('#wwwroot').val() + '/pluginfile.php/' + item[1] + '/' + item[2] + '/' + item[3] + '/' + item[4] + '/' + item[5];
+                                    var url = $('#wwwroot').val() + '/pluginfile.php/' +
+                                        item[1] + '/' + item[2] + '/' + item[3] + '/' + item[4] + '/' + item[5];
                                     window.open(url);
                                     materialBarchart.setSelection([]);
                                     return;

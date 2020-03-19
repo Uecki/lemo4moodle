@@ -23,8 +23,8 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-define(['jquery', 'jqueryui', 'blocks_lemo4moodle/googlecharts', 'blocks_lemo4moodle/materialize'],
-        function ($, jqui, googlecharts, materialize) {
+define(['jquery', 'jqueryui', 'blocks_lemo4moodle/googlecharts', 'blocks_lemo4moodle/materialize', 'blocks_lemo4moodle/lemo_view'],
+        function ($, jqui, google) {
 
     function initManage() {
 
@@ -85,10 +85,9 @@ define(['jquery', 'jqueryui', 'blocks_lemo4moodle/googlecharts', 'blocks_lemo4mo
              *
              * @param int $row
              * @param int $size
-             * @param int $value
              * @return string
              */
-            function block_lemo4moodle_showTooltipTreemap(row, size, value) {
+            function block_lemo4moodle_showTooltipTreemap(row, size) {
                 return '<div style="background:#fd9; padding:10px; border-style:solid">' +
                     data.getValue(row, 0) + '<br>' + treemapClickCount + size + ' </div>';
             }

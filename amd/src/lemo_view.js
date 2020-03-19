@@ -29,7 +29,7 @@
  */
 
 define(['jquery', 'jqueryui', 'blocks_lemo4moodle/googlecharts', 'blocks_lemo4moodle/materialize'],
-        function ($, jqui, googlecharts, materialize) {
+        function ($, jqui, google) {
 
     function initManage() {
 
@@ -174,30 +174,6 @@ define(['jquery', 'jqueryui', 'blocks_lemo4moodle/googlecharts', 'blocks_lemo4mo
             var date = Date.parse(strdate);
             return date / 1000;
         }
-
-        /**
-         * Callback that draws all charts.
-         * To be optimized to only load chart for current tab.
-         * @see block_lemo4moodle_drawBarchart()
-         * @see block_lemo4moodle_drawLinechart()
-         * @see block_lemo4moodle_drawHeatmap()
-         * @see block_lemo4moodle_drawTreemap()
-         */
-        function block_lemo4moodle_drawAllCharts() {
-            if (typeof block_lemo4moodle_drawBarchart === "function") {
-                block_lemo4moodle_drawBarchart();
-            }
-            if (typeof block_lemo4moodle_drawLinechart === "function") {
-                block_lemo4moodle_drawLinechart();
-            }
-            if (typeof block_lemo4moodle_drawHeatmap === "function") {
-                block_lemo4moodle_drawHeatmap();
-            }
-            if (typeof block_lemo4moodle_drawTreemap === "function") {
-                block_lemo4moodle_drawTreemap();
-            }
-        }
-
 
         // Initialize the Materialize modal (PopUp).
         $(document).ready(function() {

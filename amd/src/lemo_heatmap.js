@@ -23,8 +23,8 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-define(['jquery', 'jqueryui', 'blocks_lemo4moodle/plotly', 'blocks_lemo4moodle/materialize'],
-        function ($, jqui, googlecharts, materialize) {
+define(['jquery', 'jqueryui', 'blocks_lemo4moodle/plotly', 'blocks_lemo4moodle/materialize', 'blocks_lemo4moodle/lemo_view'],
+        function ($, jqui, Plotly, Materialize) {
 
     function initManage() {
 

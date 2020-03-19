@@ -38,11 +38,13 @@ ini_set('display_errors', 1);
 $courseid = $_GET['id'];
 $userid = $_GET['user'];
 require_once(__DIR__.'/lemo_db_queries.php');
+
+$PAGE->requires->js_call_amd('block_lemo4moodle/lemo_view', 'init');
 $PAGE->requires->js_call_amd('block_lemo4moodle/lemo_barchart', 'init');
 $PAGE->requires->js_call_amd('block_lemo4moodle/lemo_linechart', 'init');
 $PAGE->requires->js_call_amd('block_lemo4moodle/lemo_heatmap', 'init');
 $PAGE->requires->js_call_amd('block_lemo4moodle/lemo_treemap', 'init');
-$PAGE->requires->js_call_amd('block_lemo4moodle/lemo_view', 'init');
+var_dump($PAGE->requires->js_call_amd('block_lemo4moodle/helloworld', 'init'));
 
 ?>
 
@@ -349,14 +351,6 @@ $PAGE->requires->js_call_amd('block_lemo4moodle/lemo_view', 'init');
 
     <!-- End (for lemo_create_html.php). -->
 
-    <!-- Barchart, linechart, heatmap and treemap are loaded. Must be included after the data-variables. -->
-    <script src="js/lemo_barchart.js"></script>
-    <script src="js/lemo_linechart.js"></script>
-    <script src="js/lemo_heatmap.js"></script>
-    <script src="js/lemo_treemap.js"></script>
-
-    <!-- General functions of the plugin. Must be included after the JS-files of the charts. -->
-    <script src="js/lemo_view.js"></script>
 </body>
 </html>
 <?php
