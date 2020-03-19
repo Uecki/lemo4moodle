@@ -24,8 +24,6 @@
  */
 
 // Language file variables.
-//var linechartDataArray = $('#linechartDataArray').val();
-//var linechartDataArrayFilter = $('#linechartDataArrayFilter').val();
 var linechartColDate = $('#linechartColDate').val();
 var linechartColAccess = $('#linechartColAccess').val();
 var linechartColOwnAccess = $('#linechartColOwnAccess').val();
@@ -105,7 +103,6 @@ $(document).ready(function() {
         $( "#dialog" ).dialog( "open" );
     });
 
-
     // Redraw charts when page is resized.
     $(window).resize(function() {
         block_lemo4moodle_drawLinechart();
@@ -120,6 +117,7 @@ $(document).ready(function() {
 /**
  * Callback function that draws the linehchart.
  * See google charts documentation for linechart: https://developers.google.com/chart/interactive/docs/gallery/linechart
+ * @method block_lemo4moodle_drawLinechart
  */
 function block_lemo4moodle_drawLinechart() {
 

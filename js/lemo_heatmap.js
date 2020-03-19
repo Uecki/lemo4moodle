@@ -24,8 +24,6 @@
  */
 
 // Language file variables.
-//var heatmapData = $('#heatmapData').val();
-//var heatmapDataFilter = Object.entries($('#heatmapDataFilter').val());
 var heatmapTitle = $('#heatmapTitle').val();
 var heatmapAll = $('#heatmapAll').val();
 var heatmapOwn = $('#heatmapOwn').val();
@@ -501,8 +499,8 @@ $(document).ready(function() {
                 }
             };
 
-            for ( var i = 0; i < yValues.length; i++ ) {
-                for ( var j = 0; j < xValues.length; j++ ) {
+            for (var i = 0; i < yValues.length; i++) {
+                for (var j = 0; j < xValues.length; j++) {
                     var currentValue = zValues[i][j];
                     if (currentValue != 0.0) {
                         var textColor = 'black';
@@ -555,6 +553,7 @@ $(document).ready(function() {
 /**
  * Callback function that draws the heatmap.
  * See plotly documentation for heatmap: https://plot.ly/javascript/heatmaps/
+ * @method block_lemo4moodle_drawHeatmap
  */
 function block_lemo4moodle_drawHeatmap() {
     var xValues = [heatmapAll + '<br>00:00-06:00', heatmapOwn + '<br>00:00-06:00', heatmapAll +
@@ -598,8 +597,8 @@ function block_lemo4moodle_drawHeatmap() {
         }
     };
 
-    for ( var i = 0; i < yValues.length; i++ ) {
-        for ( var j = 0; j < xValues.length; j++ ) {
+    for (var i = 0; i < yValues.length; i++) {
+        for (var j = 0; j < xValues.length; j++) {
             var currentValue = zValues[i][j];
             if (currentValue != 0.0) {
                 var textColor = 'black';

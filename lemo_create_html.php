@@ -359,40 +359,70 @@ if ($_POST['allCharts'] == 'true') {
         <div id="jsvariables">
             <!-- Language-string variables made accessible for JS. -->
             <!-- Barchart. -->
-            <input type="hidden" value="' . get_string("barchart_title", "block_lemo4moodle") . '" id="barchartTitle">
-            <input type="hidden" value="' . get_string("barchart_xlabel", "block_lemo4moodle") . '" id="barchartXLabel">
-            <input type="hidden" value="' . get_string("barchart_ylabel", "block_lemo4moodle") . '" id="barchartYLabel">
+            <input type="hidden" value="' .
+                get_string("barchart_title", "block_lemo4moodle") . '" id="barchartTitle">
+            <input type="hidden" value="' .
+                get_string("barchart_xlabel", "block_lemo4moodle") . '" id="barchartXLabel">
+            <input type="hidden" value="' .
+                get_string("barchart_ylabel", "block_lemo4moodle") . '" id="barchartYLabel">
             <!-- Linechart. -->
-            <input type="hidden" value="' . get_string("linechart_colDate", "block_lemo4moodle") . '" id="linechartColDate">
-            <input type="hidden" value="' . get_string("linechart_colAccess", "block_lemo4moodle") . '" id="linechartColAccess">
-            <input type="hidden" value="' . get_string("linechart_colOwnAccess", "block_lemo4moodle") . '" id="linechartColOwnAccess">
-            <input type="hidden" value="' . get_string("linechart_colUser", "block_lemo4moodle") . '" id="linechartColUser">
-            <input type="hidden" value="' . get_string("linechart_title", "block_lemo4moodle") . '" id="linechartTitle">
-            <input type="hidden" value="' . get_string("linechart_checkSelection", "block_lemo4moodle") . '" id="linechartCheckSelection">
+            <input type="hidden" value="' .
+                get_string("linechart_colDate", "block_lemo4moodle") . '" id="linechartColDate">
+            <input type="hidden" value="' .
+                get_string("linechart_colAccess", "block_lemo4moodle") . '" id="linechartColAccess">
+            <input type="hidden" value="' .
+                get_string("linechart_colOwnAccess", "block_lemo4moodle") . '" id="linechartColOwnAccess">
+            <input type="hidden" value="' .
+                get_string("linechart_colUser", "block_lemo4moodle") . '" id="linechartColUser">
+            <input type="hidden" value="' .
+                get_string("linechart_title", "block_lemo4moodle") . '" id="linechartTitle">
+            <input type="hidden" value="' .
+                get_string("linechart_checkSelection", "block_lemo4moodle") . '" id="linechartCheckSelection">
             <!--Heatmap.  -->
-            <input type="hidden" value="' . get_string("heatmap_title", "block_lemo4moodle") . '" id="heatmapTitle">
-            <input type="hidden" value="' . get_string("heatmap_all", "block_lemo4moodle") . '" id="heatmapAll">
-            <input type="hidden" value="' . get_string("heatmap_own", "block_lemo4moodle") . '" id="heatmapOwn">
-            <input type="hidden" value="' . get_string("heatmap_overall", "block_lemo4moodle") . '" id="heatmapOverall">
-            <input type="hidden" value="' . get_string("heatmap_average", "block_lemo4moodle") . '" id="heatmapAverage">
-            <input type="hidden" value="' . get_string("heatmap_monday", "block_lemo4moodle") . '" id="heatmapMonday">
-            <input type="hidden" value="' . get_string("heatmap_tuesday", "block_lemo4moodle") . '" id="heatmapTuesday">
-            <input type="hidden" value="' . get_string("heatmap_wednesday", "block_lemo4moodle") . '" id="heatmapWednesday">
-            <input type="hidden" value="' . get_string("heatmap_thursday", "block_lemo4moodle") . '" id="heatmapThursday">
-            <input type="hidden" value="' . get_string("heatmap_friday", "block_lemo4moodle") . '" id="heatmapFriday">
-            <input type="hidden" value="' . get_string("heatmap_saturday", "block_lemo4moodle") . '" id="heatmapSaturday">
-            <input type="hidden" value="' . get_string("heatmap_sunday", "block_lemo4moodle") . '" id="heatmapSunday">
-            <input type="hidden" value="' . get_string("heatmap_checkSelection", "block_lemo4moodle") . '" id="heatmapCheckSelection">
+            <input type="hidden" value="' .
+                get_string("heatmap_title", "block_lemo4moodle") . '" id="heatmapTitle">
+            <input type="hidden" value="' .
+                get_string("heatmap_all", "block_lemo4moodle") . '" id="heatmapAll">
+            <input type="hidden" value="' .
+                get_string("heatmap_own", "block_lemo4moodle") . '" id="heatmapOwn">
+            <input type="hidden" value="' .
+                get_string("heatmap_overall", "block_lemo4moodle") . '" id="heatmapOverall">
+            <input type="hidden" value="' .
+                get_string("heatmap_average", "block_lemo4moodle") . '" id="heatmapAverage">
+            <input type="hidden" value="' .
+                get_string("heatmap_monday", "block_lemo4moodle") . '" id="heatmapMonday">
+            <input type="hidden" value="' .
+                get_string("heatmap_tuesday", "block_lemo4moodle") . '" id="heatmapTuesday">
+            <input type="hidden" value="' .
+                get_string("heatmap_wednesday", "block_lemo4moodle") . '" id="heatmapWednesday">
+            <input type="hidden" value="' .
+                get_string("heatmap_thursday", "block_lemo4moodle") . '" id="heatmapThursday">
+            <input type="hidden" value="' .
+                get_string("heatmap_friday", "block_lemo4moodle") . '" id="heatmapFriday">
+            <input type="hidden" value="' .
+                get_string("heatmap_saturday", "block_lemo4moodle") . '" id="heatmapSaturday">
+            <input type="hidden" value="' .
+                get_string("heatmap_sunday", "block_lemo4moodle") . '" id="heatmapSunday">
+            <input type="hidden" value="' .
+                get_string("heatmap_checkSelection", "block_lemo4moodle") . '" id="heatmapCheckSelection">
             <!-- Treemap. -->
-            <input type="hidden" value="' . get_string("treemap_title", "block_lemo4moodle") . '" id="treemapTitle">
-            <input type="hidden" value="' . get_string("treemap_clickCount", "block_lemo4moodle") . '" id="treemapClickCount">
+            <input type="hidden" value="' .
+                get_string("treemap_title", "block_lemo4moodle") . '" id="treemapTitle">
+            <input type="hidden" value="' .
+                get_string("treemap_clickCount", "block_lemo4moodle") . '" id="treemapClickCount">
             <!-- View. -->
-            <input type="hidden" value="' . get_string("view_dialogThis", "block_lemo4moodle") . '" id="viewDialogThis">
-            <input type="hidden" value="' . get_string("view_dialogAll", "block_lemo4moodle") . '" id="viewDialogAll">
-            <input type="hidden" value="' . get_string("view_file", "block_lemo4moodle") . '" id="viewFile">
-            <input type="hidden" value="' . get_string("view_timespan", "block_lemo4moodle") . '" id="viewTimespan">
-            <input type="hidden" value="' . get_string("view_noTimespan", "block_lemo4moodle") . '" id="viewNoTimespan">
-            <input type="hidden" value="' . get_string("view_modalError", "block_lemo4moodle") . '" id="viewModalError">
+            <input type="hidden" value="' .
+                get_string("view_dialogThis", "block_lemo4moodle") . '" id="viewDialogThis">
+            <input type="hidden" value="' .
+                get_string("view_dialogAll", "block_lemo4moodle") . '" id="viewDialogAll">
+            <input type="hidden" value="' .
+                get_string("view_file", "block_lemo4moodle") . '" id="viewFile">
+            <input type="hidden" value="' .
+                get_string("view_timespan", "block_lemo4moodle") . '" id="viewTimespan">
+            <input type="hidden" value="' .
+                get_string("view_noTimespan", "block_lemo4moodle") . '" id="viewNoTimespan">
+            <input type="hidden" value="' .
+                get_string("view_modalError", "block_lemo4moodle") . '" id="viewModalError">
         </div>
         </div>
 
@@ -530,40 +560,70 @@ if ($_POST['allCharts'] == 'true') {
         <div id="jsvariables">
             <!-- Language-string variables made accessible for JS. -->
             <!-- Barchart. -->
-            <input type="hidden" value="' . get_string("barchart_title", "block_lemo4moodle") . '" id="barchartTitle">
-            <input type="hidden" value="' . get_string("barchart_xlabel", "block_lemo4moodle") . '" id="barchartXLabel">
-            <input type="hidden" value="' . get_string("barchart_ylabel", "block_lemo4moodle") . '" id="barchartYLabel">
+            <input type="hidden" value="' .
+                get_string("barchart_title", "block_lemo4moodle") . '" id="barchartTitle">
+            <input type="hidden" value="' .
+                get_string("barchart_xlabel", "block_lemo4moodle") . '" id="barchartXLabel">
+            <input type="hidden" value="' .
+                get_string("barchart_ylabel", "block_lemo4moodle") . '" id="barchartYLabel">
             <!-- Linechart. -->
-            <input type="hidden" value="' . get_string("linechart_colDate", "block_lemo4moodle") . '" id="linechartColDate">
-            <input type="hidden" value="' . get_string("linechart_colAccess", "block_lemo4moodle") . '" id="linechartColAccess">
-            <input type="hidden" value="' . get_string("linechart_colOwnAccess", "block_lemo4moodle") . '" id="linechartColOwnAccess">
-            <input type="hidden" value="' . get_string("linechart_colUser", "block_lemo4moodle") . '" id="linechartColUser">
-            <input type="hidden" value="' . get_string("linechart_title", "block_lemo4moodle") . '" id="linechartTitle">
-            <input type="hidden" value="' . get_string("linechart_checkSelection", "block_lemo4moodle") . '" id="linechartCheckSelection">
+            <input type="hidden" value="' .
+                get_string("linechart_colDate", "block_lemo4moodle") . '" id="linechartColDate">
+            <input type="hidden" value="' .
+                get_string("linechart_colAccess", "block_lemo4moodle") . '" id="linechartColAccess">
+            <input type="hidden" value="' .
+                get_string("linechart_colOwnAccess", "block_lemo4moodle") . '" id="linechartColOwnAccess">
+            <input type="hidden" value="' .
+                get_string("linechart_colUser", "block_lemo4moodle") . '" id="linechartColUser">
+            <input type="hidden" value="' .
+                get_string("linechart_title", "block_lemo4moodle") . '" id="linechartTitle">
+            <input type="hidden" value="' .
+                get_string("linechart_checkSelection", "block_lemo4moodle") . '" id="linechartCheckSelection">
             <!--Heatmap.  -->
-            <input type="hidden" value="' . get_string("heatmap_title", "block_lemo4moodle") . '" id="heatmapTitle">
-            <input type="hidden" value="' . get_string("heatmap_all", "block_lemo4moodle") . '" id="heatmapAll">
-            <input type="hidden" value="' . get_string("heatmap_own", "block_lemo4moodle") . '" id="heatmapOwn">
-            <input type="hidden" value="' . get_string("heatmap_overall", "block_lemo4moodle") . '" id="heatmapOverall">
-            <input type="hidden" value="' . get_string("heatmap_average", "block_lemo4moodle") . '" id="heatmapAverage">
-            <input type="hidden" value="' . get_string("heatmap_monday", "block_lemo4moodle") . '" id="heatmapMonday">
-            <input type="hidden" value="' . get_string("heatmap_tuesday", "block_lemo4moodle") . '" id="heatmapTuesday">
-            <input type="hidden" value="' . get_string("heatmap_wednesday", "block_lemo4moodle") . '" id="heatmapWednesday">
-            <input type="hidden" value="' . get_string("heatmap_thursday", "block_lemo4moodle") . '" id="heatmapThursday">
-            <input type="hidden" value="' . get_string("heatmap_friday", "block_lemo4moodle") . '" id="heatmapFriday">
-            <input type="hidden" value="' . get_string("heatmap_saturday", "block_lemo4moodle") . '" id="heatmapSaturday">
-            <input type="hidden" value="' . get_string("heatmap_sunday", "block_lemo4moodle") . '" id="heatmapSunday">
-            <input type="hidden" value="' . get_string("heatmap_checkSelection", "block_lemo4moodle") . '" id="heatmapCheckSelection">
+            <input type="hidden" value="' .
+                get_string("heatmap_title", "block_lemo4moodle") . '" id="heatmapTitle">
+            <input type="hidden" value="' .
+                get_string("heatmap_all", "block_lemo4moodle") . '" id="heatmapAll">
+            <input type="hidden" value="' .
+                get_string("heatmap_own", "block_lemo4moodle") . '" id="heatmapOwn">
+            <input type="hidden" value="' .
+                get_string("heatmap_overall", "block_lemo4moodle") . '" id="heatmapOverall">
+            <input type="hidden" value="' .
+                get_string("heatmap_average", "block_lemo4moodle") . '" id="heatmapAverage">
+            <input type="hidden" value="' .
+                get_string("heatmap_monday", "block_lemo4moodle") . '" id="heatmapMonday">
+            <input type="hidden" value="' .
+                get_string("heatmap_tuesday", "block_lemo4moodle") . '" id="heatmapTuesday">
+            <input type="hidden" value="' .
+                get_string("heatmap_wednesday", "block_lemo4moodle") . '" id="heatmapWednesday">
+            <input type="hidden" value="' .
+                get_string("heatmap_thursday", "block_lemo4moodle") . '" id="heatmapThursday">
+            <input type="hidden" value="' .
+                get_string("heatmap_friday", "block_lemo4moodle") . '" id="heatmapFriday">
+            <input type="hidden" value="' .
+                get_string("heatmap_saturday", "block_lemo4moodle") . '" id="heatmapSaturday">
+            <input type="hidden" value="' .
+                get_string("heatmap_sunday", "block_lemo4moodle") . '" id="heatmapSunday">
+            <input type="hidden" value="' .
+                get_string("heatmap_checkSelection", "block_lemo4moodle") . '" id="heatmapCheckSelection">
             <!-- Treemap. -->
-            <input type="hidden" value="' . get_string("treemap_title", "block_lemo4moodle") . '" id="treemapTitle">
-            <input type="hidden" value="' . get_string("treemap_clickCount", "block_lemo4moodle") . '" id="treemapClickCount">
+            <input type="hidden" value="' .
+                get_string("treemap_title", "block_lemo4moodle") . '" id="treemapTitle">
+            <input type="hidden" value="' .
+                get_string("treemap_clickCount", "block_lemo4moodle") . '" id="treemapClickCount">
             <!-- View. -->
-            <input type="hidden" value="' . get_string("view_dialogThis", "block_lemo4moodle") . '" id="viewDialogThis">
-            <input type="hidden" value="' . get_string("view_dialogAll", "block_lemo4moodle") . '" id="viewDialogAll">
-            <input type="hidden" value="' . get_string("view_file", "block_lemo4moodle") . '" id="viewFile">
-            <input type="hidden" value="' . get_string("view_timespan", "block_lemo4moodle") . '" id="viewTimespan">
-            <input type="hidden" value="' . get_string("view_noTimespan", "block_lemo4moodle") . '" id="viewNoTimespan">
-            <input type="hidden" value="' . get_string("view_modalError", "block_lemo4moodle") . '" id="viewModalError">
+            <input type="hidden" value="' .
+                get_string("view_dialogThis", "block_lemo4moodle") . '" id="viewDialogThis">
+            <input type="hidden" value="' .
+                get_string("view_dialogAll", "block_lemo4moodle") . '" id="viewDialogAll">
+            <input type="hidden" value="' .
+                get_string("view_file", "block_lemo4moodle") . '" id="viewFile">
+            <input type="hidden" value="' .
+                get_string("view_timespan", "block_lemo4moodle") . '" id="viewTimespan">
+            <input type="hidden" value="' .
+                get_string("view_noTimespan", "block_lemo4moodle") . '" id="viewNoTimespan">
+            <input type="hidden" value="' .
+                get_string("view_modalError", "block_lemo4moodle") . '" id="viewModalError">
         </div>
         </div>';
 
@@ -597,6 +657,8 @@ if ($_POST['allCharts'] == 'true') {
     }
 
     $content .= '</script>
+        <!-- General functions of the plugin. Must be included before the JS-files of the charts. -->
+        <script>'.file_get_contents('js/lemo_view.js').'</script>
         <!-- Barchart, linechart, heatmap and treemap are loaded. Must be included after the data-variables. -->';
     if ($_POST['chart'] == 'barchart') {
         $content .= '<script>'.file_get_contents('js/lemo_barchart.js').'</script>';
@@ -615,8 +677,6 @@ if ($_POST['allCharts'] == 'true') {
         var lastdate = "'.$lastdate.'";
         </script>
 
-        <!-- General functions of the plugin. Must be included after the JS-files of the charts. -->
-        <script>'.file_get_contents('js/lemo_view.js').'</script>
         </body>
         </html>';
 }

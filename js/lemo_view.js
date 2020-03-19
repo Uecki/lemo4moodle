@@ -38,11 +38,6 @@ var viewModalError = $('#viewModalError').val();
 
 $(document).ready(function() {
 
-    // Redraw charts when page is resized.
-    $(window).resize(function() {
-        block_lemo4moodle_drawAllCharts();
-    });
-
     // Closes the window when the button "Schließen" is clicked.
     $('#btn_close').click(function() {
         window.close();
@@ -162,6 +157,7 @@ $(function() {
 /**
  * Function to get the timestamp of a date-string.
  *
+ * @method block_lemo4moodle_toTimestamp
  * @param string $strdate Date in string format.
  * @return Date Timestamp of the date.
  */
@@ -169,30 +165,6 @@ function block_lemo4moodle_toTimestamp(strdate) {
     var date = Date.parse(strdate);
     return date / 1000;
 }
-
-/**
- * Callback that draws all charts.
- * To be optimized to only load chart for current tab.
- * @see block_lemo4moodle_drawBarchart()
- * @see block_lemo4moodle_drawLinechart()
- * @see block_lemo4moodle_drawHeatmap()
- * @see block_lemo4moodle_drawTreemap()
- */
-function block_lemo4moodle_drawAllCharts() {
-    if (typeof block_lemo4moodle_drawBarchart === "function") {
-        block_lemo4moodle_drawBarchart();
-    }
-    if (typeof block_lemo4moodle_drawLinechart === "function") {
-        block_lemo4moodle_drawLinechart();
-    }
-    if (typeof block_lemo4moodle_drawHeatmap === "function") {
-        block_lemo4moodle_drawHeatmap();
-    }
-    if (typeof block_lemo4moodle_drawTreemap === "function") {
-        block_lemo4moodle_drawTreemap();
-    }
-}
-
 
 // Initialize the Materialize modal (PopUp).
 $(document).ready(function() {
@@ -202,7 +174,7 @@ $(document).ready(function() {
 // Variables for filemerging.
 var linechartData = "";
 
-// Function for filemerging.
+// Functionality for filemerging.
 $('#mergeButton').click(function() {
     $("#modal_error2").text("");
     var filemerge = document.querySelector('#file_merge');
@@ -271,6 +243,7 @@ $('#mergeButton').click(function() {
 /**
  * Callback function for the FileReader. Reads file given as parameter.
  *
+ * @method block_lemo4moodle_readFile
  * @param File   $file The file to be read.
  * @param function $onloadcallback Function that is to be executed on load.
  */

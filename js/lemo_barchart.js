@@ -24,17 +24,11 @@
  */
 
 // Language file variables.
-//var barchartData = $('#barchartData').val();
 var barchartTitle = $('#barchartTitle').val();
 var barchartXLabel = $('#barchartXLabel').val();
 var barchartYLabel = $('#barchartYLabel').val();
 
 $(document).ready(function() {
-
-    // Barchart - reset button. Not yet implemented.
-    $('#rst_btn_1').click(function() {
-        // Do something.
-    });
 
     // Download button for barchart tab.
     $('#html_btn_1').click(function() {
@@ -56,6 +50,7 @@ $(document).ready(function() {
 /**
  * Callback function that draws the barchart.
  * See google charts documentation for barchart: https://developers.google.com/chart/interactive/docs/gallery/barchart.
+ * @method block_lemo4moodle_drawBarchart
  */
 function block_lemo4moodle_drawBarchart() {
     var data = google.visualization.arrayToDataTable(barchartData);
@@ -105,8 +100,6 @@ function block_lemo4moodle_drawBarchart() {
                     });
                 }
             }
-
-
         });
     }
 

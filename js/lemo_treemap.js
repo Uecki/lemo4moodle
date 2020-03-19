@@ -24,7 +24,6 @@
  */
 
 // Language file variables.
-//var treemapData = $('#treemapData').val();
 var treemapTitle = $('#treemapTitle').val();
 var treemapClickCount = $('#treemapClickCount').val();
 
@@ -55,6 +54,7 @@ $(document).ready(function() {
 /**
  * Callback function that draws the treemap.
  * See google charts documentation for treemap: https://developers.google.com/chart/interactive/docs/gallery/treemap
+ * @method block_lemo4moodle_drawTreemap
  */
 function block_lemo4moodle_drawTreemap() {
 
@@ -75,9 +75,10 @@ function block_lemo4moodle_drawTreemap() {
     });
 
     /**
-     * Function to generate a tooltip for tze treemap.
+     * Function to generate a tooltip for the treemap.
      * For further documentation see google charts documentation for treemap.
      *
+     * @method block_lemo4moodle_shwoTootltipTreemap
      * @param int $row
      * @param int $size
      * @param int $value
