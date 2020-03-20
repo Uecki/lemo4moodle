@@ -657,8 +657,6 @@ if ($_POST['allCharts'] == 'true') {
     }
 
     $content .= '</script>
-        <!-- General functions of the plugin. Must be included before the JS-files of the charts. -->
-        <script>'.file_get_contents('js/lemo_view.js').'</script>
         <!-- Barchart, linechart, heatmap and treemap are loaded. Must be included after the data-variables. -->';
     if ($_POST['chart'] == 'barchart') {
         $content .= '<script>'.file_get_contents('js/lemo_barchart.js').'</script>';
@@ -676,6 +674,9 @@ if ($_POST['allCharts'] == 'true') {
         var firstdate = "'.$firstdate.'";
         var lastdate = "'.$lastdate.'";
         </script>
+
+        <!-- General functions of the plugin. Must be included before the JS-files of the charts. -->
+        <script>'.file_get_contents('js/lemo_view.js').'</script>
 
         </body>
         </html>';

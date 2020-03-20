@@ -381,14 +381,14 @@ require_once(__DIR__.'/lemo_db_queries.php');
 
     <!-- End (for lemo_create_html.php). -->
 
-    <!-- General functions of the plugin. Must be included before the JS-files of the charts. -->
-    <script src="js/lemo_view.js"></script>
-
     <!-- Barchart, linechart, heatmap and treemap are loaded. Must be included after the data-variables. -->
     <script src="js/lemo_barchart.js"></script>
     <script src="js/lemo_linechart.js"></script>
     <script src="js/lemo_heatmap.js"></script>
     <script src="js/lemo_treemap.js"></script>
+
+    <!-- General functions of the plugin. Must be included after the JS-files of the charts. -->
+    <script src="js/lemo_view.js"></script>
 </body>
 </html>
 <?php

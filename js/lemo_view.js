@@ -38,6 +38,11 @@ var viewModalError = $('#viewModalError').val();
 
 $(document).ready(function() {
 
+    // Redraw charts when page is resized.
+    $(window).resize(function() {
+        block_lemo4moodle_drawAllCharts();
+    });
+
     // Closes the window when the button "Schließen" is clicked.
     $('#btn_close').click(function() {
         window.close();
@@ -153,6 +158,30 @@ $(function() {
         dateFormat: 'dd.mm.yy'
     });
 });
+
+/**
+ * Callback that draws all charts.
+ * To be optimized to only load chart for current tab.
+ * @method block_lemo4moodle_drawAllCharts
+ * @see block_lemo4moodle_drawBarchart()
+ * @see block_lemo4moodle_drawLinechart()
+ * @see block_lemo4moodle_drawHeatmap()
+ * @see block_lemo4moodle_drawTreemap()
+ */
+function block_lemo4moodle_drawAllCharts() {
+    if (typeof block_lemo4moodle_drawBarchart === "function") {
+        block_lemo4moodle_drawBarchart();
+    }
+    if (typeof block_lemo4moodle_drawLinechart === "function") {
+        block_lemo4moodle_drawLinechart();
+    }
+    if (typeof block_lemo4moodle_drawHeatmap === "function") {
+        block_lemo4moodle_drawHeatmap();
+    }
+    if (typeof block_lemo4moodle_drawTreemap === "function") {
+        block_lemo4moodle_drawTreemap();
+    }
+}
 
 /**
  * Function to get the timestamp of a date-string.
