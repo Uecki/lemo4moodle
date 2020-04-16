@@ -274,9 +274,6 @@ if ($_POST['allCharts'] == 'true') {
                     <li class="tab" id="tab_heatMap">
                         <a id="tab3" href="#chart3">Heatmap</a>
                     </li>
-                    <li class="tab" id="tab_treeMap">
-                        <a id="tab4" href="#chart4">Treemap</a>
-                    </li>
                 </ul>
             </div>
             <!-- Barchart. -->
@@ -336,20 +333,6 @@ if ($_POST['allCharts'] == 'true') {
                                 <button class="btn waves-effect waves-light grey darken-3 button"
                                     type="submit" name="action" id="rst_btn_3">'.
                                     get_string('reset', 'block_lemo4moodle').'</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- Treemap. -->
-            <div id="chart4" class="col s12">
-                <div class="row">
-                    <div class="col s9 chart">
-                        <div  id="treemap" class="block_lemo4moodle-chart"></div>
-                    </div>
-                        <div id="options" class="col s3">
-                            <div class="row">
-                                <div class="input-field col s12"></div>
                             </div>
                         </div>
                     </div>
