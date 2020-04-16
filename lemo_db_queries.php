@@ -21,7 +21,7 @@
  * usable for the charts. This file is included in index.php.
  *
  * @package    block_lemo4moodle
- * @copyright  2020 Margarita Elkina
+ * @copyright  2020 Finn Ueckert, Margarita Elkina
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -46,7 +46,7 @@ $counter = 0;
  * Class that holds the results of the linechart query.
  *
  * @package    block_lemo4moodle
- * @copyright  2020 Margarita Elkina
+ * @copyright  2020 Finn Ueckert, Margarita Elkina
  * @license    http:// www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 

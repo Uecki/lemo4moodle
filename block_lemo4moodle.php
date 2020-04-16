@@ -18,7 +18,7 @@
  * This file holds the class definition for the block, and is used both to manage it as a plugin and to render it onscreen.
  *
  * @package    block_lemo4moodle
- * @copyright  2020 Margarita Elkina
+ * @copyright  2020 Finn Ueckert, Margarita Elkina
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
