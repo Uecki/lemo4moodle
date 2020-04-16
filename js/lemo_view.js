@@ -38,6 +38,8 @@ var viewModalError = $('#viewModalError').val();
 
 $(document).ready(function() {
 
+    block_lemo4moodle_drawAllCharts();
+
     // Redraw charts when page is resized.
     $(window).resize(function() {
         block_lemo4moodle_drawAllCharts();
@@ -55,6 +57,8 @@ $(document).ready(function() {
     // Initializing the dialog box shown before the download.
     $( "#dialog" ).dialog({
         autoOpen: false,
+        minWidth: 500,
+        minHeight: 400,
         buttons: [
         {
             text: viewDialogThis,
@@ -144,14 +148,6 @@ $(document).ready(function() {
 
 });
 
-// Load Charts and the corechart package.
-google.charts.load('47', {
-    'packages': ['bar', 'line', 'treemap', 'corechart', 'controls']
-});
-
-// Draw all charts when Charts is loaded. (Even the Highchart, which is not from Google Charts).
-google.charts.setOnLoadCallback(block_lemo4moodle_drawAllCharts);
-
 // JQuery datepicker funtion (for filter).
 $(function() {
     $(".datepick").datepicker({
@@ -177,9 +173,6 @@ function block_lemo4moodle_drawAllCharts() {
     }
     if (typeof block_lemo4moodle_drawHeatmap === "function") {
         block_lemo4moodle_drawHeatmap();
-    }
-    if (typeof block_lemo4moodle_drawTreemap === "function") {
-        block_lemo4moodle_drawTreemap();
     }
 }
 
