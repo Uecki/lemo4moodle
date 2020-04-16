@@ -42,24 +42,24 @@
 }
 
 .block_lemo4moodle #barchart {
-    width: 90%;
-    height: 90%;
+    width: 100%;
+    height: 80vh;
     min-height: 500px;
+    min-width: 500px;
 }
 
 .block_lemo4moodle #linechart {
     width: 100%;
+    height: 80vh;
     min-height: 500px;
-}
-
-.block_lemo4moodle #treemap {
-    width: 100%;
-    min-height: 500px;
+    min-width: 500px;
 }
 
 .block_lemo4moodle #heatmap {
     width: 100%;
+    height: 80vh;
     min-height: 500px;
+    min-width: 900px;
 }
 
 .block_lemo4moodle #chart_div {
