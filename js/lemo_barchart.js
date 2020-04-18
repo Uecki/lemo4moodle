@@ -94,7 +94,10 @@ function block_lemo4moodle_drawBarchart() {
 	  name: barchartYLabel,
 	  marker: {
 		color: 'rgb(49,130,189)',
-		opacity: 0.7,
+        line: {
+            color: 'rgb(0,0,0)',
+            width: 1.5
+        }
 	  }
 	};
 
@@ -106,8 +109,11 @@ function block_lemo4moodle_drawBarchart() {
       orientation: 'h',
 	  name: barchartUser,
 	  marker: {
-		color: 'rgb(204,204,204)',
-		opacity: 0.5
+		color: 'rgb(0, 153, 0)',
+        line: {
+            color: 'rgb(0,0,0)',
+            width: 1.5
+        }
 	  }
 	};
 
