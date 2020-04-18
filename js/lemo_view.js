@@ -191,6 +191,7 @@ function block_lemo4moodle_toTimestamp(strdate) {
 // Initialize the Materialize modal (PopUp).
 $(document).ready(function() {
      $('.modal').modal();
+     $( "#dialog" ).css('visibility', 'visible');
 });
 
 // Variables for filemerging.

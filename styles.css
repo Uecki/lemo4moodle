@@ -73,6 +73,10 @@
     font-weight: bold;
 }
 
+.block_lemo4moodle #dialog {
+    visibility: hidden;
+}
+
 .block_lemo4moodle-chart {
     max-width: 100%;
     min-height: 450px;

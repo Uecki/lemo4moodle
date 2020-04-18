@@ -68,16 +68,12 @@ require_once(__DIR__.'/lemo_db_queries.php');
 
 <body>
     <div class="block_lemo4moodle">
-        <!-- Dialog box. -->
-        <div id = "dialog" title = "<?php echo get_string('dialogTitle', 'block_lemo4moodle')?>">
-            <?php echo get_string('download_dialog', 'block_lemo4moodle')?>
-        </div>
         <!-- Header. -->
         <div class="container-fluid">
             <nav>
                 <div class="nav-wrapper">
                     <a onClick="window.location.reload()" class="brand-logo">
-                        <i class="material-icons medium">insert_chart</i>
+                        <i class="material-icons">insert_chart</i>
                         <?php echo get_string('pluginname', 'block_lemo4moodle')?>
                     </a>
                     <ul id="nav" class="right hide-on-med-and-down">
@@ -248,6 +244,10 @@ require_once(__DIR__.'/lemo_db_queries.php');
                     </div>
                 </div>
             </div>
+        </div>
+        <!-- Dialog box. -->
+        <div id = "dialog" title = "<?php echo get_string('dialogTitle', 'block_lemo4moodle')?>">
+            <?php echo get_string('download_dialog', 'block_lemo4moodle')?>
         </div>
         <div id="jsvariables">
             <input type='hidden' value=
