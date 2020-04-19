@@ -442,7 +442,6 @@ if ($_POST['allCharts'] == 'true') {
     <script>'.file_get_contents('js/lemo_barchart.js').'</script>
     <script>'.$linechartstringjs.'</script>
     <script>'.file_get_contents('js/lemo_heatmap.js').'</script>
-    <script>'.file_get_contents('js/lemo_treemap.js').'</script>
 
     <!-- General functions of the plugin. Must be included after the JS-files of the charts. -->
     <script>'.file_get_contents('js/lemo_view.js').'</script>
@@ -647,8 +646,6 @@ if ($_POST['allCharts'] == 'true') {
         $content .= '<script>'.$linechartstringjs.'</script>';
     } else if ($_POST['chart'] == 'heatmap') {
         $content .= '<script>'.file_get_contents('js/lemo_heatmap.js').'</script>';
-    } else if ($_POST['chart'] == 'treemap') {
-        $content .= '<script>'.file_get_contents('js/lemo_treemap.js').'</script>';
     }
 
     $content .= '

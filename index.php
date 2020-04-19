@@ -353,7 +353,6 @@ require_once(__DIR__.'/lemo_db_queries.php');
     <script src="js/lemo_barchart.js"></script>
     <script src="js/lemo_linechart.js"></script>
     <script src="js/lemo_heatmap.js"></script>
-    <!--<script src="js/lemo_treemap.js"></script>-->
 
     <!-- General functions of the plugin. Must be included after the JS-files of the charts. -->
     <script src="js/lemo_view.js"></script>
