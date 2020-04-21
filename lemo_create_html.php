@@ -96,7 +96,7 @@ if (!isset($_POST["mergeData"]) || $_POST["mergeData"] == "") {
 }
 $barchartarray = $alldata[1];
 $heatmaparray = $alldata[2];
-$treemaparray  = $alldata[3];
+//$treemaparray  = $alldata[3];
 $heatmap = $alldata[4]; // Two heatmap datasets, because of filter function.
 
 // Get the first recorded date of the datasets.
@@ -150,7 +150,7 @@ foreach ($barchartarray as $bar) {
     $j++;
 }
 
-
+/*
 // Create treemap data.
 $i = 1;
 $nodetitle; // Variable for node title.
@@ -174,7 +174,7 @@ foreach ($treemaparray as $tree) {
     }
     $i++;
 }
-
+*/
 
 // Create heatmap data.
 $heatmapdata = $heatmaparray;
@@ -430,7 +430,6 @@ if ($_POST['allCharts'] == 'true') {
     var barchartData = '.$barchartdata.';
     var linechartDataArray = ['.$linechart.'];
     var heatmapData = '.$heatmapdata.';
-    var treemapData = '.$treemapdata.';
 
     var linechartDataArrayFilter = ['.$linechartarray.'];
     var heatmapDataFilter = Object.entries('.$heatmapdatafilter.');
@@ -588,11 +587,6 @@ if ($_POST['allCharts'] == 'true') {
                 get_string("heatmap_sunday", "block_lemo4moodle") . '" id="heatmapSunday">
             <input type="hidden" value="' .
                 get_string("heatmap_checkSelection", "block_lemo4moodle") . '" id="heatmapCheckSelection">
-            <!-- Treemap. -->
-            <input type="hidden" value="' .
-                get_string("treemap_title", "block_lemo4moodle") . '" id="treemapTitle">
-            <input type="hidden" value="' .
-                get_string("treemap_clickCount", "block_lemo4moodle") . '" id="treemapClickCount">
             <!-- View. -->
             <input type="hidden" value="' .
                 get_string("view_dialogThis", "block_lemo4moodle") . '" id="viewDialogThis">
@@ -634,12 +628,10 @@ if ($_POST['allCharts'] == 'true') {
     } else if ($_POST['chart'] == 'heatmap') {
         $content .= 'var heatmapData = '.$heatmapdata.';
         var heatmapDataFilter = Object.entries('.$heatmapdatafilter.');';
-    } else if ($_POST['chart'] == 'treemap') {
-        $content .= 'var treemapData = '.$treemapdata.';';
     }
 
     $content .= '</script>
-        <!-- Barchart, linechart, heatmap and treemap are loaded. Must be included after the data-variables. -->';
+        <!-- Barchart, linechart and heatmap are loaded. Must be included after the data-variables. -->';
     if ($_POST['chart'] == 'barchart') {
         $content .= '<script>'.file_get_contents('js/lemo_barchart.js').'</script>';
     } else if ($_POST['chart'] == 'linechart') {
