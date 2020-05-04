@@ -202,7 +202,7 @@ $firstdateindex = $matches[0][2].'.'.(intval($matches[0][1]) + 1).'.'.$matches[0
 
 // SQL Query for bar chart data.
 
-$querybarchart = "SELECT count(LOGS.objectid) AS counter_hits, count(DISTINCT LOGS.userid)
+$querybarchart = "SELECT LOGS.id as nr, count(LOGS.objectid) AS counter_hits, count(DISTINCT LOGS.userid)
                         AS counter_user, LOGS.contextid, FILE.component, FILE.filename, FILE.itemid, FILE.filearea, RES.name
                     FROM mdl_logstore_standard_log AS LOGS
               INNER JOIN mdl_files AS FILE ON LOGS.contextid = FILE.contextid

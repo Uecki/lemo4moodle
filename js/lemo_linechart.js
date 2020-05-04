@@ -78,9 +78,9 @@ $(document).ready(function() {
             var xValuesDates = [];
             for (var i = 0; i < chartData.length; i++) {
                 var dateObject = chartData[i][0];
-                var day = dateObject.getUTCDate();
-                var month = (dateObject.getUTCMonth() + 1);
-                var year = dateObject.getUTCFullYear();
+                var day = dateObject.getDate();
+                var month = (dateObject.getMonth() + 1);
+                var year = dateObject.getFullYear();
                 xValuesDates.push(day + '.' + month + '.' + year);
 
                 if (day == 1) {
@@ -177,9 +177,9 @@ function block_lemo4moodle_drawLinechart() {
     var xValuesDates = [];
     for (var i = 0; i < linechartDataArray.length; i++) {
         var dateObject = linechartDataArray[i][0];
-        var day = dateObject.getUTCDate();
-        var month = (dateObject.getUTCMonth() + 1);
-        var year = dateObject.getUTCFullYear();
+        var day = dateObject.getDate();
+        var month = (dateObject.getMonth() + 1);
+        var year = dateObject.getFullYear();
         xValuesDates.push(day + '.' + month + '.' + year);
 
         if (day == 1) {
