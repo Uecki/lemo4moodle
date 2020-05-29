@@ -118,14 +118,17 @@ function block_lemo4moodle_drawBarchart() {
 	};
 
 	var data = [trace1, trace2];
-
+	var height_plot = 500;
+	if(barchartData.length > 25)
+		height_plot+= 10*barchartData.length;
 	var layout = {
+		height: height_plot,
         title: barchartTitle,
         barmode: 'group',
         margin: {
-            l: 150,
-            r: 20,
-            t: 200,
+            l: 200,
+            r: 10,
+            t: 100,
             b: 70
         }
 	};
