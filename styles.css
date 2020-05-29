@@ -46,6 +46,8 @@
     height: 80vh;
     min-height: 500px;
     min-width: 500px;
+	max-height:500px;
+	overflow-Y: scroll;
 }
 
 .block_lemo4moodle #linechart {
