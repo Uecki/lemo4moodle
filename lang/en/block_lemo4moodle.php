@@ -34,7 +34,7 @@ $string['lang'] = 'en';
 $string['download_dialog'] = '<b>Download only this graph or all graphs?</b>
     <br><br>Data security notice:
     <br>When you open the downloaded file, external, non-Moodle libraries are loaded
-    and used to visualize the downloaded data. You are now leaving the HWR area. The use
+    and used to visualize the downloaded data. The use
     is voluntary. The service cannot be provided without consent. By clicking on one of the
     download options, you accept that when you open the downloaded file, external services may access your
     IP address. These are the services JQuery, MaterializeCSS, Material Icons and Plotly.';
