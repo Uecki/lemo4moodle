@@ -79,8 +79,11 @@ function block_lemo4moodle_drawBarchart() {
     var yValues = [];
     counter = barchartData.length - 1;
     while (counter >= 1) {
+		var label = "<a href='www.gmx.de'>"+barchartData[counter][0]+"/a>";
+		
         yValues.push(
-            barchartData[counter][0]
+        //    barchartData[counter][0]
+		label;
         )
         counter-- ;
     }
@@ -138,12 +141,14 @@ function block_lemo4moodle_drawBarchart() {
 
     // Check, if the file info is available.
     // Necessary for downloaded file, where it is not available.
+	/*
     if ($('#barchartFileInfo').length > 0) {
 
         var barchartDataArray = JSON.parse($('#barchartFileInfo').val());
         var plotlyBarchart = document.getElementById('barchart');
         plotlyBarchart.on('plotly_click', function(data) {
             var clickVal = data.points[0].y;
+		
             barchartDataArray.forEach( function(item) {
                 if (clickVal == item[0]) {
                     var url = $('#wwwroot').val() + '/pluginfile.php/' + item[1] + '/' + item[2] + '/' + item[3] + '/' + item[4] + '/' + item[5];
@@ -152,5 +157,5 @@ function block_lemo4moodle_drawBarchart() {
                 }
             });
         });
-    }
+    }*/
 }
