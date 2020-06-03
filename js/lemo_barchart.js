@@ -78,12 +78,9 @@ function block_lemo4moodle_drawBarchart() {
     // Generate y value.
     var yValues = [];
     counter = barchartData.length - 1;
-    while (counter >= 1) {
-		var label = "<a href='www.gmx.de'>"+barchartData[counter][0]+"/a>";
-		
+    while (counter >= 1) {			
         yValues.push(
-        //    barchartData[counter][0]
-		label;
+			barchartData[counter][0]		
         )
         counter-- ;
     }
