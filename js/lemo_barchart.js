@@ -55,9 +55,12 @@ $(document).ready(function() {
  */
 function block_lemo4moodle_drawBarchart() {
 
-// Generate x values for clicks.
+    //If there is no barchart data, set values to empty arrays.
+    console.table(barchartData);
+
+    // Generate x values for clicks.
     var xValuesClicks = [];
-	counter = barchartData.length - 1;
+	var counter = barchartData.length - 1;
     while (counter >= 1) {
 		xValuesClicks.push(
             barchartData[counter][1]
@@ -78,9 +81,9 @@ function block_lemo4moodle_drawBarchart() {
     // Generate y value.
     var yValues = [];
     counter = barchartData.length - 1;
-    while (counter >= 1) {			
+    while (counter >= 1) {
         yValues.push(
-			barchartData[counter][0]		
+			barchartData[counter][0]
         )
         counter-- ;
     }
@@ -145,7 +148,7 @@ function block_lemo4moodle_drawBarchart() {
         var plotlyBarchart = document.getElementById('barchart');
         plotlyBarchart.on('plotly_click', function(data) {
             var clickVal = data.points[0].y;
-		
+
             barchartDataArray.forEach( function(item) {
                 if (clickVal == item[0]) {
                     var url = $('#wwwroot').val() + '/pluginfile.php/' + item[1] + '/' + item[2] + '/' + item[3] + '/' + item[4] + '/' + item[5];

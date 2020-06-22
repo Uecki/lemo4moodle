@@ -216,7 +216,7 @@ $querybarchart = "SELECT LOGS.id as nr, count(LOGS.objectid) AS counter_hits, co
 $barchart = $DB->get_records_sql($querybarchart);
 
 // Create barchart data.
-$j = 1;
+$j = 1; // Counter.
 $leng = count($barchart);
 // Array that stores the info needed to open files in moodle.
 $barchartfileinfo = array();
@@ -224,11 +224,18 @@ $barchartfileinfo = array();
 $barchartdataarray = array();
 
 $barchartdata = "[['".get_string('barchart_xlabel', 'block_lemo4moodle')."', '".get_string('barchart_ylabel',
-    'block_lemo4moodle')."', '".get_string('barchart_users', 'block_lemo4moodle')."'],";
+    'block_lemo4moodle')."', '".get_string('barchart_users', 'block_lemo4moodle')."']";
+
+//Check, if there are no objects in the moodle course.
+if ($leng != 0){
+    $barchartdata .= ", ";
+} else {
+    $barchartdata .= "]";
+}
 
 foreach ($barchart as $bar) {
     if ($j < $leng ) {
-        $barchartdata .= "['".$bar->name."', ".$bar->counter_hits.", ".$bar->counter_user."],";
+        $barchartdata .= "['".$bar->name."', ".$bar->counter_hits.", ".$bar->counter_user."], ";
     }
     if ($j == $leng ) {
         $barchartdata .= "['".$bar->name."', ".$bar->counter_hits.", ".$bar->counter_user."]]";
@@ -662,13 +669,20 @@ $lengtree = count($treemap);
 $treemapdataarray = array();
 $treemapdata =
     "[['Name', 'Parent', 'Size', 'Color'],
-        ['".get_string('treemap_global', 'block_lemo4moodle')."', null, 0, 0],";
+        ['".get_string('treemap_global', 'block_lemo4moodle')."', null, 0, 0]";
+
+//Check, if there are no objects in the moodle course.
+if ($leng != 0){
+    $treemapdata .= ", ";
+} else {
+    $treemapdata .= "]";
+}
 
 foreach ($treemap as $tree) {
 
     // If-clause for node title. (Maybe) To be expanded for forum, chat and assignments.
     if ($i < $lengtree ) {
-        $treemapdata .= "['".$tree->name."', '".$nodetitle."', ".$tree->counter_hits.", ".$color."],";
+        $treemapdata .= "['".$tree->name."', '".$nodetitle."', ".$tree->counter_hits.", ".$color."], ";
     }
     if ($i == $lengtree ) {
         $treemapdata .= "['".$tree->name."', '".$nodetitle."', ".$tree->counter_hits.", ".$color."]]";
