@@ -24,11 +24,23 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+/**
+ * Class that contains basic function needed for the block lemo4moodle.
+ */
 class block_lemo4moodle extends block_base {
+
+    /**
+     * Set the title when initialising the block.
+     */
     public function init() {
         $this->title = 'Lemo4Moodle';
     }
 
+    /**
+     * Custom comparator used for sorting the array with usort() function.
+     *
+     * @return Returns the content of the block..
+     */
     public function get_content() {
         // If content not empty return it.
         if ($this->content !== null) {
