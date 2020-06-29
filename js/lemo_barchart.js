@@ -55,9 +55,6 @@ $(document).ready(function() {
  */
 function block_lemo4moodle_drawBarchart() {
 
-    //If there is no barchart data, set values to empty arrays.
-    console.table(barchartData);
-
     // Generate x values for clicks.
     var xValuesClicks = [];
 	var counter = barchartData.length - 1;
