@@ -222,6 +222,8 @@ $leng = count($barchart);
 $barchartfileinfo = array();
 
 $barchartdataarray = array();
+$barchartdataarray[] = array(get_string('barchart_xlabel', 'block_lemo4moodle'), get_string('barchart_ylabel',
+    'block_lemo4moodle'), get_string('barchart_users', 'block_lemo4moodle'));
 
 $barchartdata = "[['".get_string('barchart_xlabel', 'block_lemo4moodle')."', '".get_string('barchart_ylabel',
     'block_lemo4moodle')."', '".get_string('barchart_users', 'block_lemo4moodle')."']";
@@ -667,6 +669,7 @@ $i = 1;
 $nodetitle = 'Global'; // Variable for node title.
 $lengtree = count($treemap);
 $treemapdataarray = array();
+$treemapdataarray[] = array(get_string('treemap_global', 'block_lemo4moodle'), null, 0, 0);
 $treemapdata =
     "[['Name', 'Parent', 'Size', 'Color'],
         ['".get_string('treemap_global', 'block_lemo4moodle')."', null, 0, 0]";
@@ -679,7 +682,6 @@ if ($leng != 0){
 }
 
 foreach ($treemap as $tree) {
-
     // If-clause for node title. (Maybe) To be expanded for forum, chat and assignments.
     if ($i < $lengtree ) {
         $treemapdata .= "['".$tree->name."', '".$nodetitle."', ".$tree->counter_hits.", ".$color."], ";
@@ -704,4 +706,5 @@ $dataarray[] = $heatmap;
 
 // Encode dataarray as JSON !JSON_NUMERIC_CHECK.
 // Gets encoded only to be decoded in lemo_create_html.php, probably not necessary.
-$alldata = json_encode($dataarray, JSON_NUMERIC_CHECK);
+$alldata = str_replace("'", "\'", json_encode($dataarray));
+$alldatahtml = str_replace("'", "&#39;", json_encode($dataarray));

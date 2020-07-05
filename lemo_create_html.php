@@ -98,7 +98,6 @@ $barchartarray = $alldata[1];
 $heatmaparray = $alldata[2];
 //$treemaparray  = $alldata[3];
 $heatmap = $alldata[4]; // Two heatmap datasets, because of filter function.
-
 // Get the first recorded date of the datasets.
 preg_match_all('/\d+/', $linechartdataarray[0][0], $matches);
 $firstdate = $matches[0][2].'.'.(intval($matches[0][1]) + 1).'.'.$matches[0][0]; // Month needs to be augmented by 1.
@@ -135,6 +134,8 @@ foreach ($linechartdataarray as $fo) {
 
 
 // Create barchart data.
+$barchartdata = json_encode($barchartarray);
+/*
 $j = 1;
 $leng = count($barchartarray);
 $barchartdata = '[["'. get_string('barchart_xlabel', 'block_lemo4moodle') .'", "'.
@@ -149,7 +150,7 @@ foreach ($barchartarray as $bar) {
     }
     $j++;
 }
-
+*/
 /*
 // Create treemap data.
 $i = 1;

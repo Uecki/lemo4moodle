@@ -146,9 +146,9 @@ require_once(__DIR__.'/lemo_db_queries.php');
                                             <?php echo get_string('html_download', 'block_lemo4moodle')?>
                                         </a>
                                         <!-- Variables that are to be posted to lemo_create_html.php.  -->
-                                        <input type='hidden' value='<?php echo $courseid ?>' name='id'>
-                                        <input type='hidden' value='<?php echo $userid ?>' name='userid'>
-                                        <input type='hidden' value='<?php echo $alldata ?>' name='data'>
+                                        <input type='hidden' value='<?php echo $courseid; ?>' name='id'>
+                                        <input type='hidden' value='<?php echo $userid; ?>' name='userid'>
+                                        <input type='hidden' value='<?php echo $alldatahtml; ?>' name='data'>
                                         <input type='hidden' value='barchart' name='chart'>
                                         <input type='hidden' value='' name='allCharts' id="allCharts1">
                                     </form>
@@ -188,9 +188,9 @@ require_once(__DIR__.'/lemo_db_queries.php');
                                             <?php echo get_string('html_download', 'block_lemo4moodle')?>
                                         </a>
                                         <!-- Variables that are to be posted to lemo_create_html.php.  -->
-                                        <input type='hidden' value='<?php echo $courseid ?>' name='id'>
-                                        <input type='hidden' value='<?php echo $userid ?>' name='userid'>
-                                        <input type='hidden' value='<?php echo $alldata ?>' name='data'>
+                                        <input type='hidden' value='<?php echo $courseid; ?>' name='id'>
+                                        <input type='hidden' value='<?php echo $userid; ?>' name='userid'>
+                                        <input type='hidden' value='<?php echo $alldatahtml; ?>' name='data'>
                                         <input type='hidden' value='linechart' name='chart'>
                                         <input type='hidden' value='' name='allCharts' id="allCharts2">
                                         <!-- For merging files (only for linechart atm). -->
@@ -232,9 +232,9 @@ require_once(__DIR__.'/lemo_db_queries.php');
                                             <?php echo get_string('html_download', 'block_lemo4moodle')?>
                                         </a>
                                         <!-- Variables that are to be posted to lemo_create_html.php.  -->
-                                        <input type='hidden' value='<?php echo $courseid ?>' name='id'>
-                                        <input type='hidden' value='<?php echo $userid ?>' name='userid'>
-                                        <input type='hidden' value='<?php echo $alldata ?>' name='data'>
+                                        <input type='hidden' value='<?php echo $courseid; ?>' name='id'>
+                                        <input type='hidden' value='<?php echo $userid; ?>' name='userid'>
+                                        <input type='hidden' value='<?php echo $alldatahtml;?>' name='data'>
                                         <input type='hidden' value='heatmap' name='chart'>
                                         <input type='hidden' value='' name='allCharts' id="allCharts3">
                                     </form>
@@ -324,10 +324,10 @@ require_once(__DIR__.'/lemo_db_queries.php');
 
     <script>
         // Data-variables from lemo_dq_queries.php made usable for the js-files.
-        var barchartData = <?php echo $barchartdata; ?>;
+        var barchartData = <?php echo json_encode($barchartdataarray, JSON_NUMERIC_CHECK | JSON_UNESCAPED_SLASHES); ?>;
         var linechartDataArray = [<?php echo $linechart; ?>];
         var heatmapData = <?php echo $heatmapdata; ?>;
-        var treemapData = <?php echo $treemapdata; ?>;
+        //var treemapData = <?php //echo json_encode($treemapdataarray, JSON_NUMERIC_CHECK | JSON_UNESCAPED_SLASHES); ?>;
         <?php
         // JS variables needed for the filter.
         $linechartdataarrayfilter = json_encode($finallinechartobject, JSON_NUMERIC_CHECK);
