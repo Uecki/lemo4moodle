@@ -19,7 +19,7 @@
  * The languae strings used here are initialised as variables in index.php.
  *
  * @package    block_lemo4moodle
- * @copyright  2020 Margarita Elkina
+ * @copyright  2020 Finn Ueckert, Margarita Elkina
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -35,7 +35,6 @@ $(document).ready(function() {
 
     // Line Chart - reset button.
     $('#rst_btn_2').click(function() {
-        var data = new google.visualization.DataTable();
         block_lemo4moodle_drawLinechart();
         $("#datepicker_3").val("");
         $("#datepicker_4").val("");
@@ -72,24 +71,74 @@ $(document).ready(function() {
                 var r = str.split(', ');
                 return [new Date(r[0], r[1], r[2]), it.accesses, it.ownhits, it.users];
             });
-            var data = new google.visualization.DataTable();
-                data.addColumn('date', linechartColDate);
-                data.addColumn('number', linechartColAccess);
-                data.addColumn('number', linechartColOwnAccess);
-                data.addColumn('number', linechartColUser);
-                data.addRows(chartData);
-            var options = {
-                chart: {
-                    title: linechartTitle
-                },
-                hAxis: {
+            // Variable that stores the start of each month for every month in the dataset.
+            var monthCounter = [];
+
+            // Generate x value.
+            var xValuesDates = [];
+            for (var i = 0; i < chartData.length; i++) {
+                var dateObject = chartData[i][0];
+                var day = dateObject.getDate();
+                var month = (dateObject.getMonth() + 1);
+                var year = dateObject.getFullYear();
+                xValuesDates.push(day + '.' + month + '.' + year);
+
+                if (day == 1) {
+                    monthCounter.push(day + '.' + month + '.' + year);
+                }
+            }
+
+            // Generate y values for overall accesses.
+            var yValuesAccesses = [];
+            for (var i = 0; i < chartData.length; i++) {
+                yValuesAccesses.push(chartData[i][1]);
+            }
+
+            // Generate y values for own accesses.
+            var yValuesOwnAccesses = [];
+            for (var i = 0; i < chartData.length; i++) {
+                yValuesOwnAccesses.push(chartData[i][2]);
+            }
+
+            // Generate y values for number of users.
+            var yValuesUsers = [];
+            for (var i = 0; i < chartData.length; i++) {
+                yValuesUsers.push(chartData[i][3]);
+            }
+
+            var trace1 = {
+                x: xValuesDates,
+                y: yValuesAccesses,
+                type: 'scatter',
+                name: linechartColAccess
+            };
+
+            var trace2 = {
+                x: xValuesDates,
+                y: yValuesOwnAccesses,
+                type: 'scatter',
+                name: linechartColOwnAccess
+            };
+
+            var trace3 = {
+                x: xValuesDates,
+                y: yValuesUsers,
+                type: 'scatter',
+                name: linechartColUser
+            };
+
+            var data = [trace1, trace2, trace3];
+
+            var layout = {
+                title: linechartTitle,
+                xaxis: {
                     title: linechartColDate,
-                    format:'d.M.yy'
+                    tickvals: monthCounter,
+                    ticktext: monthCounter
                 }
             };
 
-            var activitychart = new google.visualization.LineChart(document.getElementById('linechart'));
-            activitychart.draw(data, options);
+            Plotly.newPlot('linechart', data, layout);
         } else {
             Materialize.toast(linechartCheckSelection, 3000); // 3000 is the duration of the toast.
             $('#datepicker_3').val("");
@@ -115,29 +164,79 @@ $(document).ready(function() {
 });
 
 /**
- * Callback function that draws the linehchart.
+ * Callback function that draws the linechart.
  * See google charts documentation for linechart: https://developers.google.com/chart/interactive/docs/gallery/linechart
  * @method block_lemo4moodle_drawLinechart
  */
 function block_lemo4moodle_drawLinechart() {
 
-    var data = new google.visualization.DataTable();
-        data.addColumn('date', linechartColDate);
-        data.addColumn('number', linechartColAccess);
-        data.addColumn('number', linechartColOwnAccess);
-        data.addColumn('number', linechartColUser);
-        data.addRows(linechartDataArray);
-    var options = {
-        chart: {
-            title: linechartTitle
-        },
-        hAxis: {
-            title: linechartColDate,
-            format:'d.M.yy'
-        },
+    // Variable that stores the start of each month for every month in the dataset.
+    var monthCounter = [];
 
+    // Generate x value.
+    var xValuesDates = [];
+    for (var i = 0; i < linechartDataArray.length; i++) {
+        var dateObject = linechartDataArray[i][0];
+        var day = dateObject.getDate();
+        var month = (dateObject.getMonth() + 1);
+        var year = dateObject.getFullYear();
+        xValuesDates.push(day + '.' + month + '.' + year);
+
+        if (day == 1) {
+            monthCounter.push(day + '.' + month + '.' + year);
+        }
+    }
+
+    // Generate y values for overall accesses.
+    var yValuesAccesses = [];
+    for (var i = 0; i < linechartDataArray.length; i++) {
+        yValuesAccesses.push(linechartDataArray[i][1]);
+    }
+
+    // Generate y values for own accesses.
+    var yValuesOwnAccesses = [];
+    for (var i = 0; i < linechartDataArray.length; i++) {
+        yValuesOwnAccesses.push(linechartDataArray[i][2]);
+    }
+
+    // Generate y values for number of users.
+    var yValuesUsers = [];
+    for (var i = 0; i < linechartDataArray.length; i++) {
+        yValuesUsers.push(linechartDataArray[i][3]);
+    }
+
+    var trace1 = {
+        x: xValuesDates,
+        y: yValuesAccesses,
+        type: 'scatter',
+        name: linechartColAccess
     };
-    var activitychart = new google.visualization.LineChart(document.getElementById('linechart'));
-    activitychart.draw(data, options);
+
+    var trace2 = {
+        x: xValuesDates,
+        y: yValuesOwnAccesses,
+        type: 'scatter',
+        name: linechartColOwnAccess
+    };
+
+    var trace3 = {
+        x: xValuesDates,
+        y: yValuesUsers,
+        type: 'scatter',
+        name: linechartColUser
+    };
+
+    var data = [trace1, trace2, trace3];
+
+    var layout = {
+        title: linechartTitle,
+        xaxis: {
+            title: linechartColDate,
+            tickvals: monthCounter,
+            ticktext: monthCounter
+        }
+    };
+
+    Plotly.newPlot('linechart', data, layout);
 
 }

@@ -21,7 +21,7 @@
  * usable for the charts. This file is included in index.php.
  *
  * @package    block_lemo4moodle
- * @copyright  2020 Margarita Elkina
+ * @copyright  2020 Finn Ueckert, Margarita Elkina
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -46,7 +46,7 @@ $counter = 0;
  * Class that holds the results of the linechart query.
  *
  * @package    block_lemo4moodle
- * @copyright  2020 Margarita Elkina
+ * @copyright  2020 Finn Ueckert, Margarita Elkina
  * @license    http:// www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -202,7 +202,7 @@ $firstdateindex = $matches[0][2].'.'.(intval($matches[0][1]) + 1).'.'.$matches[0
 
 // SQL Query for bar chart data.
 
-$querybarchart = "SELECT count(LOGS.objectid) AS counter_hits, count(DISTINCT LOGS.userid)
+$querybarchart = "SELECT LOGS.id as nr, count(LOGS.objectid) AS counter_hits, count(DISTINCT LOGS.userid)
                         AS counter_user, LOGS.contextid, FILE.component, FILE.filename, FILE.itemid, FILE.filearea, RES.name
                     FROM mdl_logstore_standard_log AS LOGS
               INNER JOIN mdl_files AS FILE ON LOGS.contextid = FILE.contextid
@@ -216,19 +216,28 @@ $querybarchart = "SELECT count(LOGS.objectid) AS counter_hits, count(DISTINCT LO
 $barchart = $DB->get_records_sql($querybarchart);
 
 // Create barchart data.
-$j = 1;
+$j = 1; // Counter.
 $leng = count($barchart);
 // Array that stores the info needed to open files in moodle.
 $barchartfileinfo = array();
 
 $barchartdataarray = array();
+$barchartdataarray[] = array(get_string('barchart_xlabel', 'block_lemo4moodle'), get_string('barchart_ylabel',
+    'block_lemo4moodle'), get_string('barchart_users', 'block_lemo4moodle'));
 
 $barchartdata = "[['".get_string('barchart_xlabel', 'block_lemo4moodle')."', '".get_string('barchart_ylabel',
-    'block_lemo4moodle')."', '".get_string('barchart_users', 'block_lemo4moodle')."'],";
+    'block_lemo4moodle')."', '".get_string('barchart_users', 'block_lemo4moodle')."']";
+
+//Check, if there are no objects in the moodle course.
+if ($leng != 0){
+    $barchartdata .= ", ";
+} else {
+    $barchartdata .= "]";
+}
 
 foreach ($barchart as $bar) {
     if ($j < $leng ) {
-        $barchartdata .= "['".$bar->name."', ".$bar->counter_hits.", ".$bar->counter_user."],";
+        $barchartdata .= "['".$bar->name."', ".$bar->counter_hits.", ".$bar->counter_user."], ";
     }
     if ($j == $leng ) {
         $barchartdata .= "['".$bar->name."', ".$bar->counter_hits.", ".$bar->counter_user."]]";
@@ -660,15 +669,22 @@ $i = 1;
 $nodetitle = 'Global'; // Variable for node title.
 $lengtree = count($treemap);
 $treemapdataarray = array();
+$treemapdataarray[] = array(get_string('treemap_global', 'block_lemo4moodle'), null, 0, 0);
 $treemapdata =
     "[['Name', 'Parent', 'Size', 'Color'],
-        ['".get_string('treemap_global', 'block_lemo4moodle')."', null, 0, 0],";
+        ['".get_string('treemap_global', 'block_lemo4moodle')."', null, 0, 0]";
+
+//Check, if there are no objects in the moodle course.
+if ($leng != 0){
+    $treemapdata .= ", ";
+} else {
+    $treemapdata .= "]";
+}
 
 foreach ($treemap as $tree) {
-
     // If-clause for node title. (Maybe) To be expanded for forum, chat and assignments.
     if ($i < $lengtree ) {
-        $treemapdata .= "['".$tree->name."', '".$nodetitle."', ".$tree->counter_hits.", ".$color."],";
+        $treemapdata .= "['".$tree->name."', '".$nodetitle."', ".$tree->counter_hits.", ".$color."], ";
     }
     if ($i == $lengtree ) {
         $treemapdata .= "['".$tree->name."', '".$nodetitle."', ".$tree->counter_hits.", ".$color."]]";
@@ -690,4 +706,5 @@ $dataarray[] = $heatmap;
 
 // Encode dataarray as JSON !JSON_NUMERIC_CHECK.
 // Gets encoded only to be decoded in lemo_create_html.php, probably not necessary.
-$alldata = json_encode($dataarray, JSON_NUMERIC_CHECK);
+$alldata = str_replace("'", "\'", json_encode($dataarray));
+$alldatahtml = str_replace("'", "&#39;", json_encode($dataarray));

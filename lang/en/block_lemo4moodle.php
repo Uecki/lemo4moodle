@@ -18,7 +18,7 @@
  * This file contains all the english language strings used by this block.
  *
  * @package    block_lemo4moodle
- * @copyright  2020 Margarita Elkina
+ * @copyright  2020 Finn Ueckert, Margarita Elkina
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -26,15 +26,18 @@ $string['pluginname'] = 'Lemo4Moodle';
 $string['lemo4moodle'] = 'Lemo4Moodle';
 $string['lemo4moodle:addinstance'] = 'Add a new Lemo4moodle block';
 $string['lemo4moodle:myaddinstance'] = 'Add a new Lemo4moodle block to the My Moodle page';
-$string['blockstring'] = 'Hier könnte Ihre Werbung stehen';
 $string['content'] = 'CONTENT SETTINGS';
-$string['blocktitle'] = 'blocktitletest';
-$string['text'] = 'Inhalt des Blocks';
 $string['privacy:metadata'] = 'The lemo4moodle block only displays existing data for actions inside the course.';
 
 // General language strings (index.php).
 $string['lang'] = 'en';
-$string['download_dialog'] = 'Download only this graph or all graphs?';
+$string['download_dialog'] = '<b>Download only this graph or all graphs?</b>
+    <br><br>Data security notice:
+    <br>When you open the downloaded file, external, non-Moodle libraries are loaded
+    and used to visualize the downloaded data. The use
+    is voluntary. The service cannot be provided without consent. By clicking on one of the
+    download options, you accept that when you open the downloaded file, external services may access your
+    IP address. These are the services JQuery, MaterializeCSS, Material Icons and Plotly.';
 $string['modal_title'] = 'Merge files';
 $string['modal_content'] = 'Now choose the files you want to merge the data from.
     <br>At the moment, <u>only</u> the linechart data will be merged and displayed in the downloaded file.

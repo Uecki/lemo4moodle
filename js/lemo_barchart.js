@@ -19,7 +19,7 @@
  * The languae strings used here are initialised as variables in index.php.
  *
  * @package    block_lemo4moodle
- * @copyright  2020 Margarita Elkina
+ * @copyright  2020 Finn Ueckert, Margarita Elkina
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -27,6 +27,7 @@
 var barchartTitle = $('#barchartTitle').val();
 var barchartXLabel = $('#barchartXLabel').val();
 var barchartYLabel = $('#barchartYLabel').val();
+var barchartUser = $('#linechartColUser').val();
 
 $(document).ready(function() {
 
@@ -53,54 +54,105 @@ $(document).ready(function() {
  * @method block_lemo4moodle_drawBarchart
  */
 function block_lemo4moodle_drawBarchart() {
-    var data = google.visualization.arrayToDataTable(barchartData);
 
-    var materialOptionsBarchart = {
-        chart: {
-            title: barchartTitle
-        },
-        axes: {
-            x: {
-                distance: {label: barchartXLabel} // Bottom x-axis.
-            },
-            y: {
-                distance: {label: barchartYLabel} // Left y-axis.
-            }
-        },
-        legend: {
-            position: 'none'
+    // Generate x values for clicks.
+    var xValuesClicks = [];
+	var counter = barchartData.length - 1;
+    while (counter >= 1) {
+		xValuesClicks.push(
+            barchartData[counter][1]
+		)
+		counter-- ;
+    }
 
-        },
-        bars: 'horizontal'
-    };
+    // Generate x value for users.
+	var xValuesUser = [];
+	var counter = barchartData.length - 1;
+    while (counter >= 1) {
+		xValuesUser.push(
+            barchartData[counter][2]
+		)
+		counter-- ;
+    }
 
-    // Instantiate and draw the bar chart.
-    var materialBarchart = new google.charts.Bar(document.getElementById('barchart'));
-    materialBarchart.draw(data, google.charts.Bar.convertOptions(materialOptionsBarchart));
+    // Generate y value.
+    var yValues = [];
+    counter = barchartData.length - 1;
+    while (counter >= 1) {
+        yValues.push(
+			barchartData[counter][0]
+        )
+        counter-- ;
+    }
+
+    //Clicks
+	var trace1 = {
+	  x: xValuesClicks,
+	  y: yValues,
+	  type: 'bar',
+      orientation: 'h',
+	  name: barchartYLabel,
+	  marker: {
+		color: 'rgb(49,130,189)',
+        line: {
+            color: 'rgb(0,0,0)',
+            width: 1.5
+        }
+	  }
+	};
+
+    //User
+	var trace2 = {
+	  x: xValuesUser,
+	  y: yValues,
+	  type: 'bar',
+      orientation: 'h',
+	  name: barchartUser,
+	  marker: {
+		color: 'rgb(0, 153, 0)',
+        line: {
+            color: 'rgb(0,0,0)',
+            width: 1.5
+        }
+	  }
+	};
+
+	var data = [trace1, trace2];
+	var height_plot = 500;
+	if(barchartData.length > 25)
+		height_plot+= 10*barchartData.length;
+	var layout = {
+		height: height_plot,
+        title: barchartTitle,
+        barmode: 'group',
+        margin: {
+            l: 200,
+            r: 10,
+            t: 100,
+            b: 70
+        }
+	};
+
+
+	Plotly.newPlot('barchart', data, layout);
 
     // Check, if the file info is available.
     // Necessary for downloaded file, where it is not available.
+	/*
     if ($('#barchartFileInfo').length > 0) {
 
         var barchartDataArray = JSON.parse($('#barchartFileInfo').val());
+        var plotlyBarchart = document.getElementById('barchart');
+        plotlyBarchart.on('plotly_click', function(data) {
+            var clickVal = data.points[0].y;
 
-        // Add event listener that checks, which bar was clicked and then
-        // opens the corresponding file.
-        google.visualization.events.addListener(materialBarchart, 'select', function() {
-            if (typeof materialBarchart.getSelection()[0] !== 'undefined') {
-                var selection = data.getValue(materialBarchart.getSelection()[0].row, 0);
-                if (selection.length) {
-                    barchartDataArray.forEach( function(item) {
-                        if (selection == item[0]) {
-                            var url = $('#wwwroot').val() + '/pluginfile.php/' + item[1] + '/' + item[2] + '/' + item[3] + '/' + item[4] + '/' + item[5];
-                            window.open(url);
-                            materialBarchart.setSelection([]);
-                            return;
-                        }
-                    });
+            barchartDataArray.forEach( function(item) {
+                if (clickVal == item[0]) {
+                    var url = $('#wwwroot').val() + '/pluginfile.php/' + item[1] + '/' + item[2] + '/' + item[3] + '/' + item[4] + '/' + item[5];
+                    window.open(url);
+                    return;
                 }
-            }
+            });
         });
-    }
-
+    }*/
 }

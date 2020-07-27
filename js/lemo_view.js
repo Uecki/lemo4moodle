@@ -24,7 +24,7 @@
  *
  *
  * @package    block_lemo4moodle
- * @copyright  2020 Margarita Elkina
+ * @copyright  2020 Finn Ueckert, Margarita Elkina
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -37,6 +37,8 @@ var viewNoTimespan = $('#viewNoTimespan').val();
 var viewModalError = $('#viewModalError').val();
 
 $(document).ready(function() {
+
+    block_lemo4moodle_drawAllCharts();
 
     // Redraw charts when page is resized.
     $(window).resize(function() {
@@ -55,6 +57,8 @@ $(document).ready(function() {
     // Initializing the dialog box shown before the download.
     $( "#dialog" ).dialog({
         autoOpen: false,
+        minWidth: 500,
+        minHeight: 400,
         buttons: [
         {
             text: viewDialogThis,
@@ -110,19 +114,18 @@ $(document).ready(function() {
         $('#file_merge_filenames').empty();
         $('#file_merge_timespan').empty();
 
-        // Fill div with elements containing the filename.
-        for (var i = 0; i < input.files.length; ++i) {
-            $( '#file_merge_filenames' ).append('<li class="black-text">' + viewFile + (i + 1) + ': ' +
-                input.files[i].name + '</li><br>');
-        }
-
         // Fill div with timespans.
         for (var i = 0; i < input.files.length; ++i) {
 
             // Read file to get the timespan of the datasets.
             block_lemo4moodle_readFile(input.files[i], function(e) {
-                var fileStringDate = e.target.result;
 
+                // Fill div with elements containing the filename.
+                var file = this.file;
+                $( '#file_merge_filenames' ).append('<li class="black-text">' + viewFile + ': ' +
+                    file.name + '</li><br>');
+
+                var fileStringDate = e.target.result;
                 if (fileStringDate.includes('var firstdate ')) {
                     var root1 = fileStringDate.indexOf('var firstdate =');
                     var start1 = fileStringDate.indexOf('"', root1);
@@ -143,14 +146,6 @@ $(document).ready(function() {
     });
 
 });
-
-// Load Charts and the corechart package.
-google.charts.load('47', {
-    'packages': ['bar', 'line', 'treemap', 'corechart', 'controls']
-});
-
-// Draw all charts when Charts is loaded. (Even the Highchart, which is not from Google Charts).
-google.charts.setOnLoadCallback(block_lemo4moodle_drawAllCharts);
 
 // JQuery datepicker funtion (for filter).
 $(function() {
@@ -178,9 +173,6 @@ function block_lemo4moodle_drawAllCharts() {
     if (typeof block_lemo4moodle_drawHeatmap === "function") {
         block_lemo4moodle_drawHeatmap();
     }
-    if (typeof block_lemo4moodle_drawTreemap === "function") {
-        block_lemo4moodle_drawTreemap();
-    }
 }
 
 /**
@@ -198,6 +190,7 @@ function block_lemo4moodle_toTimestamp(strdate) {
 // Initialize the Materialize modal (PopUp).
 $(document).ready(function() {
      $('.modal').modal();
+     $( "#dialog" ).css('visibility', 'visible');
 });
 
 // Variables for filemerging.
@@ -278,6 +271,7 @@ $('#mergeButton').click(function() {
  */
 function block_lemo4moodle_readFile(file, onloadcallback) {
     var reader = new FileReader();
+    reader.file = file;
     reader.onload = onloadcallback;
     reader.readAsText(file);
 }

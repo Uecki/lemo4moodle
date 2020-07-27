@@ -23,7 +23,7 @@
  * In the end, the content of the file is echoed.
  *
  * @package    block_lemo4moodle
- * @copyright  2020 Margarita Elkina
+ * @copyright  2020 Finn Ueckert, Margarita Elkina
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -96,9 +96,8 @@ if (!isset($_POST["mergeData"]) || $_POST["mergeData"] == "") {
 }
 $barchartarray = $alldata[1];
 $heatmaparray = $alldata[2];
-$treemaparray  = $alldata[3];
+//$treemaparray  = $alldata[3];
 $heatmap = $alldata[4]; // Two heatmap datasets, because of filter function.
-
 // Get the first recorded date of the datasets.
 preg_match_all('/\d+/', $linechartdataarray[0][0], $matches);
 $firstdate = $matches[0][2].'.'.(intval($matches[0][1]) + 1).'.'.$matches[0][0]; // Month needs to be augmented by 1.
@@ -135,6 +134,8 @@ foreach ($linechartdataarray as $fo) {
 
 
 // Create barchart data.
+$barchartdata = json_encode($barchartarray);
+/*
 $j = 1;
 $leng = count($barchartarray);
 $barchartdata = '[["'. get_string('barchart_xlabel', 'block_lemo4moodle') .'", "'.
@@ -149,8 +150,8 @@ foreach ($barchartarray as $bar) {
     }
     $j++;
 }
-
-
+*/
+/*
 // Create treemap data.
 $i = 1;
 $nodetitle; // Variable for node title.
@@ -174,7 +175,7 @@ foreach ($treemaparray as $tree) {
     }
     $i++;
 }
-
+*/
 
 // Create heatmap data.
 $heatmapdata = $heatmaparray;
@@ -274,9 +275,6 @@ if ($_POST['allCharts'] == 'true') {
                     <li class="tab" id="tab_heatMap">
                         <a id="tab3" href="#chart3">Heatmap</a>
                     </li>
-                    <li class="tab" id="tab_treeMap">
-                        <a id="tab4" href="#chart4">Treemap</a>
-                    </li>
                 </ul>
             </div>
             <!-- Barchart. -->
@@ -336,20 +334,6 @@ if ($_POST['allCharts'] == 'true') {
                                 <button class="btn waves-effect waves-light grey darken-3 button"
                                     type="submit" name="action" id="rst_btn_3">'.
                                     get_string('reset', 'block_lemo4moodle').'</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- Treemap. -->
-            <div id="chart4" class="col s12">
-                <div class="row">
-                    <div class="col s9 chart">
-                        <div  id="treemap" class="block_lemo4moodle-chart"></div>
-                    </div>
-                        <div id="options" class="col s3">
-                            <div class="row">
-                                <div class="input-field col s12"></div>
                             </div>
                         </div>
                     </div>
@@ -447,7 +431,6 @@ if ($_POST['allCharts'] == 'true') {
     var barchartData = '.$barchartdata.';
     var linechartDataArray = ['.$linechart.'];
     var heatmapData = '.$heatmapdata.';
-    var treemapData = '.$treemapdata.';
 
     var linechartDataArrayFilter = ['.$linechartarray.'];
     var heatmapDataFilter = Object.entries('.$heatmapdatafilter.');
@@ -459,7 +442,6 @@ if ($_POST['allCharts'] == 'true') {
     <script>'.file_get_contents('js/lemo_barchart.js').'</script>
     <script>'.$linechartstringjs.'</script>
     <script>'.file_get_contents('js/lemo_heatmap.js').'</script>
-    <script>'.file_get_contents('js/lemo_treemap.js').'</script>
 
     <!-- General functions of the plugin. Must be included after the JS-files of the charts. -->
     <script>'.file_get_contents('js/lemo_view.js').'</script>
@@ -606,11 +588,6 @@ if ($_POST['allCharts'] == 'true') {
                 get_string("heatmap_sunday", "block_lemo4moodle") . '" id="heatmapSunday">
             <input type="hidden" value="' .
                 get_string("heatmap_checkSelection", "block_lemo4moodle") . '" id="heatmapCheckSelection">
-            <!-- Treemap. -->
-            <input type="hidden" value="' .
-                get_string("treemap_title", "block_lemo4moodle") . '" id="treemapTitle">
-            <input type="hidden" value="' .
-                get_string("treemap_clickCount", "block_lemo4moodle") . '" id="treemapClickCount">
             <!-- View. -->
             <input type="hidden" value="' .
                 get_string("view_dialogThis", "block_lemo4moodle") . '" id="viewDialogThis">
@@ -652,20 +629,16 @@ if ($_POST['allCharts'] == 'true') {
     } else if ($_POST['chart'] == 'heatmap') {
         $content .= 'var heatmapData = '.$heatmapdata.';
         var heatmapDataFilter = Object.entries('.$heatmapdatafilter.');';
-    } else if ($_POST['chart'] == 'treemap') {
-        $content .= 'var treemapData = '.$treemapdata.';';
     }
 
     $content .= '</script>
-        <!-- Barchart, linechart, heatmap and treemap are loaded. Must be included after the data-variables. -->';
+        <!-- Barchart, linechart and heatmap are loaded. Must be included after the data-variables. -->';
     if ($_POST['chart'] == 'barchart') {
         $content .= '<script>'.file_get_contents('js/lemo_barchart.js').'</script>';
     } else if ($_POST['chart'] == 'linechart') {
         $content .= '<script>'.$linechartstringjs.'</script>';
     } else if ($_POST['chart'] == 'heatmap') {
         $content .= '<script>'.file_get_contents('js/lemo_heatmap.js').'</script>';
-    } else if ($_POST['chart'] == 'treemap') {
-        $content .= '<script>'.file_get_contents('js/lemo_treemap.js').'</script>';
     }
 
     $content .= '

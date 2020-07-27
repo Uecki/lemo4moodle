@@ -24,7 +24,7 @@
  * general functionality.
  *
  * @package    block_lemo4moodle
- * @copyright  2020 Margarita Elkina
+ * @copyright  2020 Finn Ueckert, Margarita Elkina
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -68,16 +68,12 @@ require_once(__DIR__.'/lemo_db_queries.php');
 
 <body>
     <div class="block_lemo4moodle">
-        <!-- Dialog box. -->
-        <div id = "dialog" title = "<?php echo get_string('dialogTitle', 'block_lemo4moodle')?>">
-            <?php echo get_string('download_dialog', 'block_lemo4moodle')?>
-        </div>
         <!-- Header. -->
         <div class="container-fluid">
             <nav>
                 <div class="nav-wrapper">
                     <a onClick="window.location.reload()" class="brand-logo">
-                        <i class="material-icons medium">insert_chart</i>
+                        <i class="material-icons">insert_chart</i>
                         <?php echo get_string('pluginname', 'block_lemo4moodle')?>
                     </a>
                     <ul id="nav" class="right hide-on-med-and-down">
@@ -133,9 +129,6 @@ require_once(__DIR__.'/lemo_db_queries.php');
                         <li class="tab" id="tab_heatMap">
                             <a id="tab3" href="#chart3">Heatmap</a>
                         </li>
-                        <li class="tab" id="tab_treeMap">
-                            <a id="tab4" href="#chart4">Treemap</a>
-                        </li>
                     </ul>
                 </div>
                 <!-- Barchart. -->
@@ -153,9 +146,9 @@ require_once(__DIR__.'/lemo_db_queries.php');
                                             <?php echo get_string('html_download', 'block_lemo4moodle')?>
                                         </a>
                                         <!-- Variables that are to be posted to lemo_create_html.php.  -->
-                                        <input type='hidden' value='<?php echo $courseid ?>' name='id'>
-                                        <input type='hidden' value='<?php echo $userid ?>' name='userid'>
-                                        <input type='hidden' value='<?php echo $alldata ?>' name='data'>
+                                        <input type='hidden' value='<?php echo $courseid; ?>' name='id'>
+                                        <input type='hidden' value='<?php echo $userid; ?>' name='userid'>
+                                        <input type='hidden' value='<?php echo $alldatahtml; ?>' name='data'>
                                         <input type='hidden' value='barchart' name='chart'>
                                         <input type='hidden' value='' name='allCharts' id="allCharts1">
                                     </form>
@@ -195,9 +188,9 @@ require_once(__DIR__.'/lemo_db_queries.php');
                                             <?php echo get_string('html_download', 'block_lemo4moodle')?>
                                         </a>
                                         <!-- Variables that are to be posted to lemo_create_html.php.  -->
-                                        <input type='hidden' value='<?php echo $courseid ?>' name='id'>
-                                        <input type='hidden' value='<?php echo $userid ?>' name='userid'>
-                                        <input type='hidden' value='<?php echo $alldata ?>' name='data'>
+                                        <input type='hidden' value='<?php echo $courseid; ?>' name='id'>
+                                        <input type='hidden' value='<?php echo $userid; ?>' name='userid'>
+                                        <input type='hidden' value='<?php echo $alldatahtml; ?>' name='data'>
                                         <input type='hidden' value='linechart' name='chart'>
                                         <input type='hidden' value='' name='allCharts' id="allCharts2">
                                         <!-- For merging files (only for linechart atm). -->
@@ -239,9 +232,9 @@ require_once(__DIR__.'/lemo_db_queries.php');
                                             <?php echo get_string('html_download', 'block_lemo4moodle')?>
                                         </a>
                                         <!-- Variables that are to be posted to lemo_create_html.php.  -->
-                                        <input type='hidden' value='<?php echo $courseid ?>' name='id'>
-                                        <input type='hidden' value='<?php echo $userid ?>' name='userid'>
-                                        <input type='hidden' value='<?php echo $alldata ?>' name='data'>
+                                        <input type='hidden' value='<?php echo $courseid; ?>' name='id'>
+                                        <input type='hidden' value='<?php echo $userid; ?>' name='userid'>
+                                        <input type='hidden' value='<?php echo $alldatahtml;?>' name='data'>
                                         <input type='hidden' value='heatmap' name='chart'>
                                         <input type='hidden' value='' name='allCharts' id="allCharts3">
                                     </form>
@@ -250,113 +243,91 @@ require_once(__DIR__.'/lemo_db_queries.php');
                         </div>
                     </div>
                 </div>
-                <!-- Treemap. -->
-                <div id="chart4" class="col s12">
-                    <div class="row">
-                        <div class="col s9 chart">
-                            <div  id="treemap" class="block_lemo4moodle-chart"></div>
-                        </div>
-                        <div id="options" class="col s3">
-                            <div class="row">
-                                <div class="input-field col s12">
-                                    <p><?php echo get_string('backup', 'block_lemo4moodle')?></p>
-                                    <form action='lemo_create_html.php' method='post' id='download_form_4'>
-                                        <a class="btn waves-effect waves-light grey darken-3 button ajax" id="html_btn_4">
-                                            <?php echo get_string('html_download', 'block_lemo4moodle')?>
-                                        </a>
-                                        <!-- Variables that are to be posted to lemo_create_html.php.  -->
-                                        <input type='hidden' value='<?php echo $courseid ?>' name='id'>
-                                        <input type='hidden' value='<?php echo $userid ?>' name='userid'>
-                                        <input type='hidden' value='<?php echo $alldata ?>' name='data'>
-                                        <input type='hidden' value='treemap' name='chart'>
-                                        <input type='hidden' value='' name='allCharts' id="allCharts4">
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
+        <!-- Dialog box. -->
+        <div id = "dialog" title = "<?php echo get_string('dialogTitle', 'block_lemo4moodle')?>">
+            <?php echo get_string('download_dialog', 'block_lemo4moodle')?>
+        </div>
         <div id="jsvariables">
-            <input type='hidden' value='
-                <?php echo json_encode($barchartfileinfo); ?>' id='barchartFileInfo'>
-            <input type='hidden' value='
-                <?php echo $CFG->wwwroot; ?>' id="wwwroot">
+            <input type='hidden' value=
+                '<?php echo json_encode($barchartfileinfo); ?>' id='barchartFileInfo'>
+            <input type='hidden' value=
+                '<?php echo $CFG->wwwroot; ?>' id="wwwroot">
             <!-- Barchart. -->
-            <input type='hidden' value='
-                <?php echo get_string('barchart_title', 'block_lemo4moodle')?>' id="barchartTitle">
-            <input type='hidden' value='
-                <?php echo get_string('barchart_xlabel', 'block_lemo4moodle')?>' id="barchartXLabel">
-            <input type='hidden' value='
-                <?php echo get_string('barchart_ylabel', 'block_lemo4moodle')?>' id="barchartYLabel">
+            <input type='hidden' value=
+                '<?php echo get_string('barchart_title', 'block_lemo4moodle')?>' id="barchartTitle">
+            <input type='hidden' value=
+                '<?php echo get_string('barchart_xlabel', 'block_lemo4moodle')?>' id="barchartXLabel">
+            <input type='hidden' value=
+                '<?php echo get_string('barchart_ylabel', 'block_lemo4moodle')?>' id="barchartYLabel">
             <!-- Linechart. -->
-            <input type='hidden' value='
-                <?php echo get_string('linechart_colDate', 'block_lemo4moodle')?>' id="linechartColDate">
-            <input type='hidden' value='
-                <?php echo get_string('linechart_colAccess', 'block_lemo4moodle')?>' id="linechartColAccess">
-            <input type='hidden' value='
-                <?php echo get_string('linechart_colOwnAccess', 'block_lemo4moodle')?>' id="linechartColOwnAccess">
-            <input type='hidden' value='
-                <?php echo get_string('linechart_colUser', 'block_lemo4moodle')?>' id="linechartColUser">
-            <input type='hidden' value='
-                <?php echo get_string('linechart_title', 'block_lemo4moodle')?>' id="linechartTitle">
-            <input type='hidden' value='
-                <?php echo get_string('linechart_checkSelection', 'block_lemo4moodle')?>' id="linechartCheckSelection">
+            <input type='hidden' value=
+                '<?php echo get_string('linechart_colDate', 'block_lemo4moodle')?>' id="linechartColDate">
+            <input type='hidden' value=
+                '<?php echo get_string('linechart_colAccess', 'block_lemo4moodle')?>' id="linechartColAccess">
+            <input type='hidden' value=
+                '<?php echo get_string('linechart_colOwnAccess', 'block_lemo4moodle')?>' id="linechartColOwnAccess">
+            <input type='hidden' value=
+                '<?php echo get_string('linechart_colUser', 'block_lemo4moodle')?>' id="linechartColUser">
+            <input type='hidden' value=
+                '<?php echo get_string('linechart_title', 'block_lemo4moodle')?>' id="linechartTitle">
+            <input type='hidden' value=
+                '<?php echo get_string('linechart_checkSelection', 'block_lemo4moodle')?>' id="linechartCheckSelection">
             <!--Heatmap.  -->
-            <input type='hidden' value='
-                <?php echo get_string('heatmap_title', 'block_lemo4moodle')?>' id="heatmapTitle">
-            <input type='hidden' value='
-                <?php echo get_string('heatmap_all', 'block_lemo4moodle')?>' id="heatmapAll">
-            <input type='hidden' value='
-                <?php echo get_string('heatmap_own', 'block_lemo4moodle')?>' id="heatmapOwn">
-            <input type='hidden' value='
-                <?php echo get_string('heatmap_overall', 'block_lemo4moodle')?>' id="heatmapOverall">
-            <input type='hidden' value='
-                <?php echo get_string('heatmap_average', 'block_lemo4moodle')?>' id="heatmapAverage">
-            <input type='hidden' value='
-                <?php echo get_string('heatmap_monday', 'block_lemo4moodle')?>' id="heatmapMonday">
-            <input type='hidden' value='
-                <?php echo get_string('heatmap_tuesday', 'block_lemo4moodle')?>' id="heatmapTuesday">
-            <input type='hidden' value='
-                <?php echo get_string('heatmap_wednesday', 'block_lemo4moodle')?>' id="heatmapWednesday">
-            <input type='hidden' value='
-                <?php echo get_string('heatmap_thursday', 'block_lemo4moodle')?>' id="heatmapThursday">
-            <input type='hidden' value='
-                <?php echo get_string('heatmap_friday', 'block_lemo4moodle')?>' id="heatmapFriday">
-            <input type='hidden' value='
-                <?php echo get_string('heatmap_saturday', 'block_lemo4moodle')?>' id="heatmapSaturday">
-            <input type='hidden' value='
-                <?php echo get_string('heatmap_sunday', 'block_lemo4moodle')?>' id="heatmapSunday">
-            <input type='hidden' value='
-                <?php echo get_string('heatmap_checkSelection', 'block_lemo4moodle')?>' id="heatmapCheckSelection">
+            <input type='hidden' value=
+                '<?php echo get_string('heatmap_title', 'block_lemo4moodle')?>' id="heatmapTitle">
+            <input type='hidden' value=
+                '<?php echo get_string('heatmap_all', 'block_lemo4moodle')?>' id="heatmapAll">
+            <input type='hidden' value=
+                '<?php echo get_string('heatmap_own', 'block_lemo4moodle')?>' id="heatmapOwn">
+            <input type='hidden' value=
+                '<?php echo get_string('heatmap_overall', 'block_lemo4moodle')?>' id="heatmapOverall">
+            <input type='hidden' value=
+                '<?php echo get_string('heatmap_average', 'block_lemo4moodle')?>' id="heatmapAverage">
+            <input type='hidden' value=
+                '<?php echo get_string('heatmap_monday', 'block_lemo4moodle')?>' id="heatmapMonday">
+            <input type='hidden' value=
+                '<?php echo get_string('heatmap_tuesday', 'block_lemo4moodle')?>' id="heatmapTuesday">
+            <input type='hidden' value=
+                '<?php echo get_string('heatmap_wednesday', 'block_lemo4moodle')?>' id="heatmapWednesday">
+            <input type='hidden' value=
+                '<?php echo get_string('heatmap_thursday', 'block_lemo4moodle')?>' id="heatmapThursday">
+            <input type='hidden' value=
+                '<?php echo get_string('heatmap_friday', 'block_lemo4moodle')?>' id="heatmapFriday">
+            <input type='hidden' value=
+                '<?php echo get_string('heatmap_saturday', 'block_lemo4moodle')?>' id="heatmapSaturday">
+            <input type='hidden' value=
+                '<?php echo get_string('heatmap_sunday', 'block_lemo4moodle')?>' id="heatmapSunday">
+            <input type='hidden' value=
+                '<?php echo get_string('heatmap_checkSelection', 'block_lemo4moodle')?>' id="heatmapCheckSelection">
             <!-- Treemap. -->
-            <input type='hidden' value='
-                <?php echo get_string('treemap_title', 'block_lemo4moodle')?>' id="treemapTitle">
-            <input type='hidden' value='
-                <?php echo get_string('treemap_clickCount', 'block_lemo4moodle')?>' id="treemapClickCount">
+            <input type='hidden' value=
+                '<?php echo get_string('treemap_title', 'block_lemo4moodle')?>' id="treemapTitle">
+            <input type='hidden' value=
+                '<?php echo get_string('treemap_clickCount', 'block_lemo4moodle')?>' id="treemapClickCount">
             <!-- View. -->
-            <input type='hidden' value='
-                <?php echo get_string('view_dialogThis', 'block_lemo4moodle')?>' id="viewDialogThis">
-            <input type='hidden' value='
-                <?php echo get_string('view_dialogAll', 'block_lemo4moodle')?>' id="viewDialogAll">
-            <input type='hidden' value='
-                <?php echo get_string('view_file', 'block_lemo4moodle')?>' id="viewFile">
-            <input type='hidden' value='
-                <?php echo get_string('view_timespan', 'block_lemo4moodle')?>' id="viewTimespan">
-            <input type='hidden' value='
-                <?php echo get_string('view_noTimespan', 'block_lemo4moodle')?>' id="viewNoTimespan">
-            <input type='hidden' value='
-                <?php echo get_string('view_modalError', 'block_lemo4moodle')?>' id="viewModalError">
+            <input type='hidden' value=
+                '<?php echo get_string('view_dialogThis', 'block_lemo4moodle')?>' id="viewDialogThis">
+            <input type='hidden' value=
+                '<?php echo get_string('view_dialogAll', 'block_lemo4moodle')?>' id="viewDialogAll">
+            <input type='hidden' value=
+                '<?php echo get_string('view_file', 'block_lemo4moodle')?>' id="viewFile">
+            <input type='hidden' value=
+                '<?php echo get_string('view_timespan', 'block_lemo4moodle')?>' id="viewTimespan">
+            <input type='hidden' value=
+                '<?php echo get_string('view_noTimespan', 'block_lemo4moodle')?>' id="viewNoTimespan">
+            <input type='hidden' value=
+                '<?php echo get_string('view_modalError', 'block_lemo4moodle')?>' id="viewModalError">
         </div>
     </div>
 
     <script>
         // Data-variables from lemo_dq_queries.php made usable for the js-files.
-        var barchartData = <?php echo $barchartdata; ?>;
+        var barchartData = <?php echo json_encode($barchartdataarray, JSON_NUMERIC_CHECK | JSON_UNESCAPED_SLASHES); ?>;
         var linechartDataArray = [<?php echo $linechart; ?>];
         var heatmapData = <?php echo $heatmapdata; ?>;
-        var treemapData = <?php echo $treemapdata; ?>;
+        //var treemapData = <?php //echo json_encode($treemapdataarray, JSON_NUMERIC_CHECK | JSON_UNESCAPED_SLASHES); ?>;
         <?php
         // JS variables needed for the filter.
         $linechartdataarrayfilter = json_encode($finallinechartobject, JSON_NUMERIC_CHECK);
@@ -370,9 +341,6 @@ require_once(__DIR__.'/lemo_db_queries.php');
     <script src="lib/jquery/jquery.js"></script>
     <script src="lib/jquery/jquery-ui.js"></script>
 
-    <!-- Google Charts. -->
-    <script src="lib/google/loader.js"></script>
-
     <!-- Materialize CSS Framework - minified - JavaScript. -->
     <script src="lib/materialize/js/materialize.min.js"></script>
 
@@ -385,7 +353,6 @@ require_once(__DIR__.'/lemo_db_queries.php');
     <script src="js/lemo_barchart.js"></script>
     <script src="js/lemo_linechart.js"></script>
     <script src="js/lemo_heatmap.js"></script>
-    <script src="js/lemo_treemap.js"></script>
 
     <!-- General functions of the plugin. Must be included after the JS-files of the charts. -->
     <script src="js/lemo_view.js"></script>

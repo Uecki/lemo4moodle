@@ -18,17 +18,29 @@
  * This file holds the class definition for the block, and is used both to manage it as a plugin and to render it onscreen.
  *
  * @package    block_lemo4moodle
- * @copyright  2020 Margarita Elkina
+ * @copyright  2020 Finn Ueckert, Margarita Elkina
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
+/**
+ * Class that contains basic function needed for the block lemo4moodle.
+ */
 class block_lemo4moodle extends block_base {
+
+    /**
+     * Set the title when initialising the block.
+     */
     public function init() {
         $this->title = 'Lemo4Moodle';
     }
 
+    /**
+     * Custom comparator used for sorting the array with usort() function.
+     *
+     * @return Returns the content of the block..
+     */
     public function get_content() {
         // If content not empty return it.
         if ($this->content !== null) {
