@@ -202,13 +202,14 @@ $firstdateindex = $matches[0][2].'.'.(intval($matches[0][1]) + 1).'.'.$matches[0
 
 // SQL Query for bar chart data.
 
-$querybarchart = "SELECT LOGS.id as nr, count(LOGS.objectid) AS counter_hits, count(DISTINCT LOGS.userid)
-                        AS counter_user, LOGS.contextid, FILE.component, FILE.filename, FILE.itemid, FILE.filearea, RES.name
-                    FROM mdl_logstore_standard_log AS LOGS
-              INNER JOIN mdl_files AS FILE ON LOGS.contextid = FILE.contextid
-              INNER JOIN mdl_resource As RES ON LOGS.objectid = RES.id
-                   WHERE action = 'viewed' AND courseid = " . $courseid . " AND filename != '.'
-                GROUP BY objectid
+$querybarchart = "SELECT LOGS.id, count(LOGS.contextid) AS counter_hits, count(DISTINCT LOGS.userid)
+                        AS counter_user, LOGS.contextid, LOGS.component, LOGS2.other, IF(LOGS.component = 'mod_resource', RES.name, null) AS name
+                    FROM {logstore_standard_log} AS LOGS
+              INNER JOIN (SELECT contextid, other FROM {logstore_standard_log} WHERE other LIKE '{\"modulename\"%' AND action = 'created')
+                        AS LOGS2 ON LOGS.contextid = LOGS2.contextid
+              INNER JOIN {resource} AS RES ON LOGS.objectid = RES.id
+                   WHERE action = 'viewed' AND LOGS.courseid = 2
+                GROUP BY contextid
                 ORDER BY counter_hits DESC";
 
 
@@ -218,8 +219,10 @@ $barchart = $DB->get_records_sql($querybarchart);
 // Create barchart data.
 $j = 1; // Counter.
 $leng = count($barchart);
+/* Currently not necessary.
 // Array that stores the info needed to open files in moodle.
 $barchartfileinfo = array();
+*/
 
 $barchartdataarray = array();
 $barchartdataarray[] = array(get_string('barchart_xlabel', 'block_lemo4moodle'), get_string('barchart_ylabel',
@@ -235,15 +238,27 @@ if ($leng != 0){
     $barchartdata .= "]";
 }
 
+
+
 foreach ($barchart as $bar) {
+    // Get the name of the module from the database entry "other".
+    //$bar->other = str_replace
+    $contentName;
+    if ($bar->name == NULL) {
+        $contentName = substr($bar->other, strpos($bar->other, '"name":"') + 8, -2);
+    } else {
+        $contentName = $bar->name;
+    }
+
     if ($j < $leng ) {
-        $barchartdata .= "['".$bar->name."', ".$bar->counter_hits.", ".$bar->counter_user."], ";
+        $barchartdata .= "['".$contentName."', ".$bar->counter_hits.", ".$bar->counter_user."], ";
     }
     if ($j == $leng ) {
-        $barchartdata .= "['".$bar->name."', ".$bar->counter_hits.", ".$bar->counter_user."]]";
+        $barchartdata .= "['".$contentName."', ".$bar->counter_hits.", ".$bar->counter_user."]]";
     }
-    $barchartfileinfo[] = array($bar->name, $bar->contextid, $bar->component, $bar->filearea, $bar->itemid, $bar->filename);
-    $barchartdataarray[] = array($bar->name, $bar->counter_hits, $bar->counter_user);
+    // Fileinfo currently not needed.
+    // $barchartfileinfo[] = array($bar->other, $bar->contextid, $bar->component, $bar->filearea, $bar->itemid, $bar->filename);
+    $barchartdataarray[] = array($contentName, $bar->counter_hits, $bar->counter_user);
     $j++;
 }
 
@@ -658,6 +673,7 @@ while ($counter <= 6) {
 
 $heatmapdata .= "]";
 
+/* Treemap currently not in use/implemented.
 
 // Use barchart query for treemap.
 $treemap = $barchart;
@@ -694,6 +710,8 @@ foreach ($treemap as $tree) {
     $color = $color + 10;
 }
 
+*/
+
 // Create dataarray.
 // Data as JSON [activityData[date, overallHits, ownhits, users], barchartdata[name, hits, users],
 // treemapdata[name, title, hits, color(as int)]].
@@ -701,8 +719,8 @@ $dataarray = array();
 $dataarray[] = $linechartdataarray;
 $dataarray[] = $barchartdataarray;
 $dataarray[] = $heatmapdata;
-$dataarray[] = $treemapdataarray;
 $dataarray[] = $heatmap;
+//$dataarray[] = $treemapdataarray;
 
 // Encode dataarray as JSON !JSON_NUMERIC_CHECK.
 // Gets encoded only to be decoded in lemo_create_html.php, probably not necessary.
