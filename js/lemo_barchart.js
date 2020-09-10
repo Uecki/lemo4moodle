@@ -24,10 +24,13 @@
  */
 
 // Language file variables.
+var selectAll = $('#selectAll').val();
 var barchartTitle = $('#barchartTitle').val();
 var barchartXLabel = $('#barchartXLabel').val();
 var barchartYLabel = $('#barchartYLabel').val();
 var barchartUser = $('#linechartColUser').val();
+var barchartModule  = $('#barchartModule').val();
+var barchartDataFiltered = barchartData;
 
 $(document).ready(function() {
 
@@ -37,14 +40,33 @@ $(document).ready(function() {
         $( "#dialog" ).dialog("open");
     });
 
+
+    // Change event for the select field.
+    // Depending on which option is selected, different values are displayed by the chart.
+    $('#barchart_select_module').change(function() {
+        // Reset the filter variable.
+        if($('select option:selected').text()  == selectAll) {
+            barchartDataFiltered  = barchartData;
+        } else{
+            barchartDataFiltered = new Array();
+            barchartDataFiltered.push(barchartData[0]);
+            barchartData.forEach(function(item){
+                if($('select option:selected').text()  == item[3]) {
+                    barchartDataFiltered.push(item);
+                }
+            });
+        }
+        block_lemo4moodle_drawBarchart(barchartDataFiltered);
+    });
+
     // Redraw charts when page is resized.
     $(window).resize(function() {
-        block_lemo4moodle_drawBarchart();
+        block_lemo4moodle_drawBarchart(barchartDataFiltered);
     });
 
     // Minimalize tabs are being initialized, callback function
     // 'block_lemo4moodle_drawBarchart' is executed on tab change.
-    $('#tabs').tabs({ 'onShow': block_lemo4moodle_drawBarchart });
+    $('#tabs').tabs({ 'onShow': block_lemo4moodle_drawBarchart(barchartData) });
 
 });
 
@@ -53,34 +75,34 @@ $(document).ready(function() {
  * See google charts documentation for barchart: https://developers.google.com/chart/interactive/docs/gallery/barchart.
  * @method block_lemo4moodle_drawBarchart
  */
-function block_lemo4moodle_drawBarchart() {
+function block_lemo4moodle_drawBarchart(data) {
 
     // Generate x values for clicks.
-    var xValuesClicks = [];
-	var counter = barchartData.length - 1;
+  var xValuesClicks = [];
+	var counter = data.length - 1;
     while (counter >= 1) {
 		xValuesClicks.push(
-            barchartData[counter][1]
+            data[counter][1]
 		)
 		counter-- ;
     }
 
     // Generate x value for users.
 	var xValuesUser = [];
-	var counter = barchartData.length - 1;
+	var counter = data.length - 1;
     while (counter >= 1) {
 		xValuesUser.push(
-            barchartData[counter][2]
+            data[counter][2]
 		)
 		counter-- ;
     }
 
     // Generate y value.
     var yValues = [];
-    counter = barchartData.length - 1;
+    counter = data.length - 1;
     while (counter >= 1) {
         yValues.push(
-			barchartData[counter][0]
+			data[counter][0]
         )
         counter-- ;
     }
@@ -119,8 +141,8 @@ function block_lemo4moodle_drawBarchart() {
 
 	var data = [trace1, trace2];
 	var height_plot = 500;
-	if(barchartData.length > 25)
-		height_plot+= 10*barchartData.length;
+	if(data.length > 25)
+		height_plot+= 10*data.length;
 	var layout = {
 		height: height_plot,
         title: barchartTitle,
@@ -155,4 +177,33 @@ function block_lemo4moodle_drawBarchart() {
             });
         });
     }*/
+}
+
+/**
+ * Function to initialise the filter that makes it possible to filter all shown data
+ * depending on the chosen module (content type).
+ * See google charts documentation for barchart: https://developers.google.com/chart/interactive/docs/gallery/barchart.
+ * @method block_lemo4moodle_initFilterBarchart
+ */
+function block_lemo4moodle_initFilterBarchart(data) {
+    // Create selection list for each module type contained in the course.
+    var courseModules = new Array();
+    data.forEach(function(item){
+
+        // Prevent header from being in the list.
+        if(item[3] == barchartModule) {
+
+        } else {
+            if(courseModules.includes(item[3])) {
+
+            } else {
+                courseModules.push(item[3]);
+            }
+        }
+    });
+    courseModules.forEach(function(item, index) {
+        // Create element in the select field.
+        $('#barchart_select_module').append('<option value="' + index +
+                '" id="barchart_module' + index + '">' + item + '</option>');
+    });
 }

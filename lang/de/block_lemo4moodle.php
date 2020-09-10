@@ -57,14 +57,39 @@ $string['html_download'] = 'HTML Download';
 $string['dialogTitle'] = 'Auswahl';
 $string['filterStart'] = 'Beginn';
 $string['filterEnd'] = 'Ende';
+$string['selectStart'] = 'Module Filtern:';
+$string['selectAll'] = 'Alle';
 
-
+// Moodle module names.
+$string['mod_assign'] = '';
+$string['mod_assignment'] = 'Aufgabe';
+$string['mod_book'] = 'Buch';
+$string['mod_chat'] = 'Chat';
+$string['mod_choice'] = 'Auswahl';
+$string['mod_data'] = 'Daten';
+$string['mod_feedback'] = 'Feedback';
+$string['mod_folder'] = 'Ordner';
+$string['mod_forum'] = 'Forum';
+$string['mod_glossary'] = 'Glossar';
+$string['mod_imscp'] = 'Imscp';
+$string['mod_label'] = 'Label/Titel';
+$string['mod_lesson'] = 'Unterrichtseinheit';
+$string['mod_lti'] = 'Lti';
+$string['mod_page'] = 'Seite';
+$string['mod_quiz'] = 'Quiz';
+$string['mod_resource'] = 'Ressource/Datei';
+$string['mod_scorm'] = 'Scorm';
+$string['mod_survey'] = 'Umfrage';
+$string['mod_url'] = 'URL';
+$string['mod_wiki'] = 'Wiki';
+$string['mod_workshop'] = 'Workshop';
 
 // Barchart.
 $string['barchart_title'] = 'Zugriffe und Nutzer pro Datei';
 $string['barchart_xlabel'] = 'Dateiname';
 $string['barchart_ylabel'] = 'Zugriffe';
 $string['barchart_users'] = 'Nutzer';
+$string['barchart_module'] = 'Modul';
 
 // Linechart.
 $string['linechart_colDate'] = 'Datum';

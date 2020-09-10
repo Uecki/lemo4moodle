@@ -285,7 +285,13 @@ if ($_POST['allCharts'] == 'true') {
                     </div>
                     <div id="options" class="col s3">
                         <div class="row">
-                              <div class="input-field col s12"></div>
+                            <div class="input-field col s12">
+                                <p>'.get_string('selectStart', 'block_lemo4moodle').'</p>
+                                <select id="barchart_select_module">
+                                    <option value="all" selected>'.get_string('selectAll', 'block_lemo4moodle').'</option>
+                                </select>
+                            </div>
+                            <div class="divider"></div>
                         </div>
                     </div>
                 </div>
@@ -342,7 +348,11 @@ if ($_POST['allCharts'] == 'true') {
         </div>
         <div id="jsvariables">
             <!-- Language-string variables made accessible for JS. -->
+            <input type="hidden" value="' .
+                get_string("selectAll", "block_lemo4moodle") . '" id="selectAll">
             <!-- Barchart. -->
+            <input type="hidden" value="' .
+                get_string("barchart_module", "block_lemo4moodle") . '" id="barchartModule">
             <input type="hidden" value="' .
                 get_string("barchart_title", "block_lemo4moodle") . '" id="barchartTitle">
             <input type="hidden" value="' .
@@ -517,6 +527,12 @@ if ($_POST['allCharts'] == 'true') {
             <button class="btn waves-effect waves-light grey darken-3 button"
                 type="submit" name="action" id="rst_btn_2">'.
                 get_string('reset', 'block_lemo4moodle').'</button>';
+    } else if($_POST['chart'] == 'barchart'){
+        $content .=
+        '<p>'.get_string('selectStart', 'block_lemo4moodle').'</p>
+        <select id="barchart_select_module">
+            <option value="all" selected>'.get_string('selectAll', 'block_lemo4moodle').'</option>
+        </select>';
     } else if ($_POST['chart'] == 'heatmap') {
         $content .=
             '<div class="divider"></div>
@@ -541,7 +557,11 @@ if ($_POST['allCharts'] == 'true') {
         </div>
         <div id="jsvariables">
             <!-- Language-string variables made accessible for JS. -->
+            <input type="hidden" value="' .
+                get_string("selectAll", "block_lemo4moodle") . '" id="selectAll">
             <!-- Barchart. -->
+            <input type="hidden" value="' .
+                get_string("barchart_module", "block_lemo4moodle") . '" id="barchartModule">
             <input type="hidden" value="' .
                 get_string("barchart_title", "block_lemo4moodle") . '" id="barchartTitle">
             <input type="hidden" value="' .

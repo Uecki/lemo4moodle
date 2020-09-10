@@ -208,7 +208,7 @@ $querybarchart = "SELECT LOGS.id, count(LOGS.contextid) AS counter_hits, count(D
               INNER JOIN (SELECT contextid, other FROM {logstore_standard_log} WHERE other LIKE '{\"modulename\"%' AND action = 'created')
                         AS LOGS2 ON LOGS.contextid = LOGS2.contextid
               INNER JOIN {resource} AS RES ON LOGS.objectid = RES.id
-                   WHERE action = 'viewed' AND LOGS.courseid = 2
+                   WHERE action = 'viewed' AND LOGS.courseid = " . $courseid . "
                 GROUP BY contextid
                 ORDER BY counter_hits DESC";
 
@@ -226,10 +226,10 @@ $barchartfileinfo = array();
 
 $barchartdataarray = array();
 $barchartdataarray[] = array(get_string('barchart_xlabel', 'block_lemo4moodle'), get_string('barchart_ylabel',
-    'block_lemo4moodle'), get_string('barchart_users', 'block_lemo4moodle'));
+    'block_lemo4moodle'), get_string('barchart_users', 'block_lemo4moodle'), get_string('barchart_module', 'block_lemo4moodle'));
 
 $barchartdata = "[['".get_string('barchart_xlabel', 'block_lemo4moodle')."', '".get_string('barchart_ylabel',
-    'block_lemo4moodle')."', '".get_string('barchart_users', 'block_lemo4moodle')."']";
+    'block_lemo4moodle')."', '".get_string('barchart_users', 'block_lemo4moodle').", ".get_string('barchart_users', 'block_lemo4moodle')."']";
 
 //Check, if there are no objects in the moodle course.
 if ($leng != 0){
@@ -243,22 +243,25 @@ if ($leng != 0){
 foreach ($barchart as $bar) {
     // Get the name of the module from the database entry "other".
     //$bar->other = str_replace
-    $contentName;
+    $contentname;
     if ($bar->name == NULL) {
-        $contentName = substr($bar->other, strpos($bar->other, '"name":"') + 8, -2);
+        $contentname = substr($bar->other, strpos($bar->other, '"name":"') + 8, -2);
     } else {
-        $contentName = $bar->name;
+        $contentname = $bar->name;
     }
 
+    //Variable that stores the module type of the content.
+    $contentmodule = get_string($bar->component, 'block_lemo4moodle');
+
     if ($j < $leng ) {
-        $barchartdata .= "['".$contentName."', ".$bar->counter_hits.", ".$bar->counter_user."], ";
+        $barchartdata .= "['".$contentname."', ".$bar->counter_hits.", ".$bar->counter_user. ", " .$contentmodule. "], ";
     }
     if ($j == $leng ) {
-        $barchartdata .= "['".$contentName."', ".$bar->counter_hits.", ".$bar->counter_user."]]";
+        $barchartdata .= "['".$contentname."', ".$bar->counter_hits.", ".$bar->counter_user. ", " .$contentmodule."]]";
     }
     // Fileinfo currently not needed.
     // $barchartfileinfo[] = array($bar->other, $bar->contextid, $bar->component, $bar->filearea, $bar->itemid, $bar->filename);
-    $barchartdataarray[] = array($contentName, $bar->counter_hits, $bar->counter_user);
+    $barchartdataarray[] = array($contentname, $bar->counter_hits, $bar->counter_user, $contentmodule);
     $j++;
 }
 

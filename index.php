@@ -152,8 +152,15 @@ require_once(__DIR__.'/lemo_db_queries.php');
                                         <input type='hidden' value='barchart' name='chart'>
                                         <input type='hidden' value='' name='allCharts' id="allCharts1">
                                     </form>
-                                    <div class="divider"></div>
                                 </div>
+                                <div class="divider"><</div>
+                                <div class="input-field col s12">
+                                    <p><?php echo get_string('selectStart', 'block_lemo4moodle')?></p>
+                                    <select id="barchart_select_module">
+                                        <option value="all" selected><?php echo get_string('selectAll', 'block_lemo4moodle')?></option>
+                                    </select>
+                                </div>
+                                <div class="divider"></div>
                             </div>
                         </div>
                     </div>
@@ -254,7 +261,11 @@ require_once(__DIR__.'/lemo_db_queries.php');
                 '<?php echo json_encode($barchartfileinfo); ?>' id='barchartFileInfo'>
             <input type='hidden' value=
                 '<?php echo $CFG->wwwroot; ?>' id="wwwroot">
+            <input type='hidden' value=
+                '<?php echo get_string('selectAll', 'block_lemo4moodle')?>' id="selectAll">
             <!-- Barchart. -->
+            <input type='hidden' value=
+                '<?php echo get_string('barchart_module', 'block_lemo4moodle')?>' id="barchartModule">
             <input type='hidden' value=
                 '<?php echo get_string('barchart_title', 'block_lemo4moodle')?>' id="barchartTitle">
             <input type='hidden' value=

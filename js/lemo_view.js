@@ -165,7 +165,9 @@ $(function() {
  */
 function block_lemo4moodle_drawAllCharts() {
     if (typeof block_lemo4moodle_drawBarchart === "function") {
-        block_lemo4moodle_drawBarchart();
+        // The variable barchartData is initialized in index.php.
+        block_lemo4moodle_drawBarchart(barchartDataFiltered);
+        block_lemo4moodle_initFilterBarchart(barchartData);
     }
     if (typeof block_lemo4moodle_drawLinechart === "function") {
         block_lemo4moodle_drawLinechart();
@@ -187,10 +189,11 @@ function block_lemo4moodle_toTimestamp(strdate) {
     return date / 1000;
 }
 
-// Initialize the Materialize modal (PopUp).
+// Initialize the Materialize modal (PopUp) and select.
 $(document).ready(function() {
      $('.modal').modal();
      $( "#dialog" ).css('visibility', 'visible');
+     $('select').material_select();
 });
 
 // Variables for filemerging.
