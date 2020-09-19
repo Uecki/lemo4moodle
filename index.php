@@ -29,14 +29,21 @@
  */
 
 require(__DIR__ . '/../../config.php');
-require_login();
+
+// Login to current course.
+$courseid  = required_param('id', PARAM_INT);
+$course = $DB->get_record('course', array('id' => $courseid), '*', MUST_EXIST);
+require_login($course);
 
 // Defining PHP errorstatement.
 error_reporting(E_ALL | E_STRICT);
 ini_set('display_errors', 1);
 
-$courseid = $_GET['id'];
-$userid = $_GET['user'];
+// Get current logged in user and the right course.
+global $COURSE, $USER;
+$courseid = $COURSE->id; // Maybe redundant, but better to get it again from $COURSE.
+$userid = $USER->id;
+
 require_once(__DIR__.'/lemo_db_queries.php');
 
 ?>
