@@ -182,8 +182,9 @@ function block_lemo4moodle_drawBarchart(data) {
 /**
  * Function to initialise the filter that makes it possible to filter all shown data
  * depending on the chosen module (content type).
- * See google charts documentation for barchart: https://developers.google.com/chart/interactive/docs/gallery/barchart.
+ *
  * @method block_lemo4moodle_initFilterBarchart
+ * @param Array data Barchart dataarray that is created by lemo_db_queries.
  */
 function block_lemo4moodle_initFilterBarchart(data) {
     // Create selection list for each module type contained in the course.
