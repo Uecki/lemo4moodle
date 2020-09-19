@@ -28,11 +28,16 @@
  */
 
 require(__DIR__ . '/../../config.php');
-require_login();
+
+// Login to current course.
+$courseid  = required_param('id', PARAM_INT);
+$course = $DB->get_record('course', array('id' => $courseid), '*', MUST_EXIST);
+require_login($course);
 
 // Get courseid, userid and alldata (encoded data-arrays in JSON-format).
-$courseid = $_POST["id"];
-$userid = $_POST["userid"];
+global $USER, $COURSE;
+$courseid = $COURSE->id;
+$userid = $USER->id;
 $alldata = json_decode($_POST["data"], true);
 
 // Get today's date.
