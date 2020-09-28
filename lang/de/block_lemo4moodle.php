@@ -36,13 +36,8 @@ $string['privacy:metadata'] = 'The lemo4moodle block only displays existing data
 
 // General language strings (index.php).
 $string['lang'] = 'de';
-$string['download_dialog'] = '<b>Möchten Sie nur diesen Graphen oder alle Graphen herunterladen?</b>
-    <br><br>Hinweise zur Datensicherheit:
-    <br>Beim Öffnen der heruntergeladenen Datei werden externe, nicht zu Moodle gehörende Bibliotheken nachgeladen
-    und genutzt, um die heruntergeladenen Daten zu visualisieren. Sie verlassen damit den Bereich der Hochschule. Die Nutzung
-    ist freiwillig. Der Dienst kann ohne die Einwilligung nicht bereit gestellt werden. Mit dem Klick auf eine der
-    Download-Optionen akzeptieren Sie, dass beim Öffnen der heruntergeladenen Datei externe Dienste Zugriff auf Ihre
-    IP-Adresse bekommen. Es handelt sich hierbei um die Dienste JQuery, MaterializeCSS, Material Icons und Plotly.';
+$string['download_dialog'] = '<b>Möchten Sie nur diesen Graphen oder alle Graphen herunterladen?</b><br><br>Hinweise zur Datensicherheit:<br>Beim Öffnen der heruntergeladenen Datei werden externe, nicht zu Moodle gehörende Bibliotheken nachgeladen
+und genutzt, um die heruntergeladenen Daten zu visualisieren. Sie verlassen damit den Bereich der Hochschule. Die Nutzung ist freiwillig. Der Dienst kann ohne die Einwilligung nicht bereit gestellt werden. Mit dem Klick auf eine der Download-Optionen akzeptieren Sie, dass beim Öffnen der heruntergeladenen Datei externe Dienste Zugriff auf Ihre IP-Adresse bekommen. Es handelt sich hierbei um die Dienste JQuery, MaterializeCSS, Material Icons und Plotly.';
 $string['modal_title'] = 'Dateien zusammenfügen';
 $string['modal_content'] = 'Wählen Sie jetzt die Dateien, von denen die Daten zusammengefügt werden sollen.
     <br> Von den ausgewählten Dateien werden dann <u>nur</u> die Linechart-Daten zusammengefügt und in der heruntergeladenen Version dargestellt.

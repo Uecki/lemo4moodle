@@ -31,17 +31,9 @@ $string['privacy:metadata'] = 'The lemo4moodle block only displays existing data
 
 // General language strings (index.php).
 $string['lang'] = 'en';
-$string['download_dialog'] = '<b>Download only this graph or all graphs?</b>
-    <br><br>Data security notice:
-    <br>When you open the downloaded file, external, non-Moodle libraries are loaded
-    and used to visualize the downloaded data. The use
-    is voluntary. The service cannot be provided without consent. By clicking on one of the
-    download options, you accept that when you open the downloaded file, external services may access your
-    IP address. These are the services JQuery, MaterializeCSS, Material Icons and Plotly.';
+$string['download_dialog'] = '<b>Download only this graph or all graphs?</b><br><br>Data security notice:<br>When you open the downloaded file, external, non-Moodle libraries are loadedand used to visualize the downloaded data. The use is voluntary. The service cannot be provided without consent. By clicking on one of the download options, you accept that when you open the downloaded file, external services may access your IP address. These are the services JQuery, MaterializeCSS, Material Icons and Plotly.';
 $string['modal_title'] = 'Merge files';
-$string['modal_content'] = 'Now choose the files you want to merge the data from.
-    <br>At the moment, <u>only</u> the linechart data will be merged and displayed in the downloaded file.
-    <br>(Hold down the "ctrl"-button on your keyboard when selecting multiple files and click on each file you want to merge.)';
+$string['modal_content'] = 'Now choose the files you want to merge the data from.<br>At the moment, <u>only</u> the linechart data will be merged and displayed in the downloaded file.<br>(Hold down the "ctrl"-button on your keyboard when selecting multiple files and click on each file you want to merge.)';
 $string['logdata'] = 'Logdata since: ';
 $string['backup'] = 'Backup your data: ';
 $string['filter'] = 'Filter';
