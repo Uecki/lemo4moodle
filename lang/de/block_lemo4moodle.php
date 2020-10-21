@@ -56,28 +56,28 @@ $string['selectStart'] = 'Module Filtern:';
 $string['selectAll'] = 'Alle';
 
 // Moodle module names.
-$string['mod_assign'] = '';
+$string['mod_assign'] = 'Aufgabe';
 $string['mod_assignment'] = 'Aufgabe';
 $string['mod_book'] = 'Buch';
 $string['mod_chat'] = 'Chat';
-$string['mod_choice'] = 'Auswahl';
-$string['mod_data'] = 'Daten';
+$string['mod_choice'] = 'Abstimmung';
+$string['mod_data'] = 'Datenbank';
 $string['mod_feedback'] = 'Feedback';
-$string['mod_folder'] = 'Ordner';
+$string['mod_folder'] = 'Verzeichnis';
 $string['mod_forum'] = 'Forum';
 $string['mod_glossary'] = 'Glossar';
-$string['mod_imscp'] = 'Imscp';
-$string['mod_label'] = 'Label/Titel';
-$string['mod_lesson'] = 'Unterrichtseinheit';
-$string['mod_lti'] = 'Lti';
-$string['mod_page'] = 'Seite';
-$string['mod_quiz'] = 'Quiz';
-$string['mod_resource'] = 'Ressource/Datei';
-$string['mod_scorm'] = 'Scorm';
+$string['mod_imscp'] = 'IMS-Content';
+$string['mod_label'] = 'Textfeld';
+$string['mod_lesson'] = 'Lektion';
+$string['mod_lti'] = 'Externes Tool';
+$string['mod_page'] = 'Textseite';
+$string['mod_quiz'] = 'Test';
+$string['mod_resource'] = 'Arbeitsmaterial';
+$string['mod_scorm'] = 'Lernpaket';
 $string['mod_survey'] = 'Umfrage';
-$string['mod_url'] = 'URL';
+$string['mod_url'] = 'Link/URL';
 $string['mod_wiki'] = 'Wiki';
-$string['mod_workshop'] = 'Workshop';
+$string['mod_workshop'] = 'Gegenseitige Beurteilung';
 
 // Barchart.
 $string['barchart_title'] = 'Zugriffe und Nutzer pro Datei';
