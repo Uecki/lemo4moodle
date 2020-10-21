@@ -38,7 +38,23 @@ require_login($course);
 global $USER, $COURSE;
 $courseid = $COURSE->id;
 $userid = $USER->id;
-$alldata = json_decode($_POST["data"], true);
+
+$alldata;
+$linechartdata;
+$barchartdata;
+$heatmapdata;
+
+// Check, if the data received comes from two emrged files or from the index.php.
+if(!isset($_POST["mergeData"]) || $_POST["mergeData"] == "") {
+    $alldata = json_decode($_POST["data"], true);
+    $linechartdata = json_encode($alldata[0], JSON_NUMERIC_CHECK);
+    $barchartdata = json_encode($alldata[1], JSON_NUMERIC_CHECK);
+    $heatmapdata = json_encode($alldata[2], JSON_NUMERIC_CHECK);
+} else {
+    $alldata = json_decode($_POST["mergeData"], true);
+    $linechartdata = json_encode($alldata[0], JSON_NUMERIC_CHECK);
+
+}
 
 // Get today's date.
 $today = date("d.m.y");
@@ -46,100 +62,31 @@ $today = date("d.m.y");
 // Get date for filename.
 $todayfilename = date("Y_m_d");
 
-// Get each dataset from the data array.
-if (!isset($_POST["mergeData"]) || $_POST["mergeData"] == "") {
-    $linechartdataarray = $alldata[0];
-} else {
-    $linechartdataarray = json_decode($_POST["mergeData"], true);
+// Check timespan of logdata.
+$firstdate = 0;
+$lastdate = 0;
 
-    /**
-     * Custom comparator used for sorting the array with usort() function.
-     *
-     * @param array $a
-     * @param array $b
-     * @return strnatcmp String comparisons using a "natural order" algorithm.
-     */
-    function compare_date($a, $b) {
-        return strnatcmp($a[0], $b[0]);
-    }
-
-    // Sort alphabetically by name.
-    usort($linechartdataarray, 'compare_date');
-    // Add empty data for missing days.
-    $needle = array("new Date(", ")");
-    $length = count($linechartdataarray);
-    $replacement = str_replace($needle, '', $linechartdataarray[$length - 1][0]);
-    $replacement2 = str_replace($needle, '', $linechartdataarray[0][0]);
-    $datepartstart = explode(", ", $replacement2);
-    $startdate = $datepartstart[0].'-'.(intval($datepartstart[1]) + 1).'-'.$datepartstart[2];
-
-    $datepartend = explode(", ", $replacement);
-    $enddate = $datepartend[0].'-'.(intval($datepartend[1]) + 1).'-'.$datepartend[2];
-    $period = new DatePeriod(
-        new DateTime($startdate),
-        new DateInterval('P1D'),
-        new DateTime($enddate)
-    );
-    $datetimespan = iterator_to_array($period);
-    foreach ($datetimespan as $dt) {
-        $tempdatepart = explode("-", $dt->format('Y-m-d'));
-        $tempdate = $tempdatepart[0].', '.(intval($tempdatepart[1]) - 1).', '.$tempdatepart[2];
-        $dateincluded = false;
-        foreach ($linechartdataarray as $aa) {
-            if (strpos($aa[0], $tempdate) !== false) {
-                $dateincluded = true;
-                break;
-            }
+foreach($alldata as $value) {
+    if (isset($value[0])) {
+        if(($firstdate != 0 && $firstdate > strtotime($value[0][0]) && strtotime($value[0][0]) !== false) || $firstdate == 0) {
+            $firstdate = strtotime($value[0][0]);
         }
-        if ($dateincluded == false) {
-            array_push($linechartdataarray, ["new Date($tempdate)", 0, 0, 0]);
+
+        if(($lastdate != 0 && $lastdate < strtotime($value[sizeof($value)-1][0]) && strtotime($value[sizeof($value)-1][0]) !== false) || $lastdate == 0) {
+            $lastdate = strtotime($value[sizeof($value)-1][0]);
         }
     }
-
-    // Sort again alphabetically by name.
-    usort($linechartdataarray, 'compare_date');
 }
-$barchartarray = $alldata[1];
-$heatmaparray = $alldata[2];
-//$treemaparray  = $alldata[3];
-$heatmap = $alldata[3]; // Two heatmap datasets, because of filter function.
-// Get the first recorded date of the datasets.
-preg_match_all('/\d+/', $linechartdataarray[0][0], $matches);
-$firstdate = $matches[0][2].'.'.(intval($matches[0][1]) + 1).'.'.$matches[0][0]; // Month needs to be augmented by 1.
+
+$firstdate = date("d.m.Y", $firstdate);
+$lastdate = date("d.m.Y", $lastdate);
+
 
 // Get the last recorded date of the datasets.
 if (!isset($_POST["mergeData"]) || $_POST["mergeData"] == "") {
     $lastdate = date("d.m.Y");
-} else {
-    preg_match_all('/\d+/', $linechartdataarray[(count($linechartdataarray) - 1)][0], $matches);
-    $lastdate = $matches[0][2].'.'.(intval($matches[0][1]) + 1).'.'.$matches[0][0]; // Month needs to be augmented by 1.
 }
 
-// Create linechart data.
-$linechart = '';
-$linechartarray = '';
-$f = 0;
-$needle = array("new Date(", ")");
-$length = count($linechartdataarray);
-foreach ($linechartdataarray as $fo) {
-    $replacement = str_replace($needle, '', $fo[0]);
-    if ($f < $length - 1) {
-        $linechart .= "[(".$fo[0]."), ".$fo[1].", ".$fo[2].", ".$fo[3]."],";
-        $linechartarray .= "['".$replacement."', ".$fo[1].", ".$fo[2].", ".$fo[3]."],";
-    }
-    if ($f == $length - 1) {
-        $linechart .= "[(".$fo[0]."), ".$fo[1].", ".$fo[2].", ".$fo[3]."]";
-        $linechartarray .= "['".$replacement."', ".$fo[1].", ".$fo[2].", ".$fo[3]."]";
-    }
-
-    $f++;
-}
-
-
-
-
-// Create barchart data.
-$barchartdata = json_encode($barchartarray);
 /*
 $j = 1;
 $leng = count($barchartarray);
@@ -182,48 +129,6 @@ foreach ($treemaparray as $tree) {
 }
 */
 
-// Create heatmap data.
-$heatmapdata = $heatmaparray;
-
-
-
-// Filter array.
-$linechartdataarrayfilter = json_encode($linechartdataarray, JSON_NUMERIC_CHECK);
-$heatmapdatafilter = json_encode($heatmap, JSON_NUMERIC_CHECK);
-
-// Lemo_linechart.js-file needs adaptation to work as download. !Doesn't look good, but is functional.
-$linechartstringjs = str_replace(
-'var activityData = [];
-            linechartDataArrayFilter.forEach(function(item) {
-                if (item.timestamp >= startTimestamp && item.timestamp <= endTimestamp) {
-                    activityData.push({
-                        date: item.date,
-                        accesses: item.accesses,
-                        ownhits: item.ownhits,
-                        users: item.user
-                    });
-                }
-            });',
-'var activityData = [];
-linechartDataArrayFilter.forEach(function(item) {
-
-    var mydate = item[0];
-    mydate=mydate.split(", ");
-    mydate[1] = parseInt(mydate[1]) + 1;
-    mydate[1] = mydate[1].toString();
-    var newdate = mydate[1] + "/" + mydate[2] + "/" + mydate[0];
-    var nd = block_lemo4moodle_toTimestamp(newdate);
-    if (nd >= startTimestamp && nd <= endTimestamp) {
-        activityData.push({
-            date: item[0],
-            accesses: item[1],
-            ownhits: item[2],
-            users: item[3]
-        });
-    }
-});',
-file_get_contents('js/lemo_linechart.js')
-);
 
 // Initializing content variable.
 $content = "";
@@ -444,18 +349,16 @@ if ($_POST['allCharts'] == 'true') {
 
     <!-- Data-variables from lemo_dq_queries.php made usable for the js-files. -->
     var barchartData = '.$barchartdata.';
-    var linechartDataArray = ['.$linechart.'];
-    var heatmapData = '.$heatmapdata.';
 
-    var linechartDataArrayFilter = ['.$linechartarray.'];
-    var heatmapDataFilter = Object.entries('.$heatmapdatafilter.');
+    var linechartData = '.$linechartdata.';
+    var heatmapData = '.$heatmapdata.';
 
     var firstdate = "'.$firstdate.'";
     var lastdate = "'.$lastdate.'";
     </script>
 
     <script>'.file_get_contents('js/lemo_barchart.js').'</script>
-    <script>'.$linechartstringjs.'</script>
+    <script>'.file_get_contents('js/lemo_linechart.js').'</script>
     <script>'.file_get_contents('js/lemo_heatmap.js').'</script>
 
     <!-- General functions of the plugin. Must be included after the JS-files of the charts. -->
@@ -649,11 +552,9 @@ if ($_POST['allCharts'] == 'true') {
     if ($_POST['chart'] == 'barchart') {
         $content .= 'var barchartData = '.$barchartdata.';';
     } else if ($_POST['chart'] == 'linechart') {
-        $content .= 'var linechartDataArray = ['.$linechart.'];
-        var linechartDataArrayFilter = ['.$linechartarray.'];';
+        $content .= 'var linechartData = '.$linechartdata.';';
     } else if ($_POST['chart'] == 'heatmap') {
-        $content .= 'var heatmapData = '.$heatmapdata.';
-        var heatmapDataFilter = Object.entries('.$heatmapdatafilter.');';
+        $content .= 'var heatmapData = '.$heatmapdata.';';
     }
 
     $content .= '</script>
@@ -661,7 +562,7 @@ if ($_POST['allCharts'] == 'true') {
     if ($_POST['chart'] == 'barchart') {
         $content .= '<script>'.file_get_contents('js/lemo_barchart.js').'</script>';
     } else if ($_POST['chart'] == 'linechart') {
-        $content .= '<script>'.$linechartstringjs.'</script>';
+        $content .= '<script>'.file_get_contents('js/lemo_linechart.js').'</script>';
     } else if ($_POST['chart'] == 'heatmap') {
         $content .= '<script>'.file_get_contents('js/lemo_heatmap.js').'</script>';
     }

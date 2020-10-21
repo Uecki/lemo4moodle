@@ -15,6 +15,8 @@
 
 /**
  * JS file for all the general functionalities of this block.
+ * It is important to note, that this file needs to to be included after the
+ * files lemo_linechart, lemo_barchart and lemo_heatmap.js, else it will not work.
  *
  * The languae strings used here are initialised as variables in index.php.
  * Inluded are:
@@ -170,15 +172,14 @@ function block_lemo4moodle_drawAllCharts() {
         block_lemo4moodle_initFilterBarchart(barchartData);
     }
     if (typeof block_lemo4moodle_drawLinechart === "function") {
-        block_lemo4moodle_drawLinechart();
+        block_lemo4moodle_drawLinechart(linechartDefaultData);
     }
     if (typeof block_lemo4moodle_drawHeatmap === "function") {
-        block_lemo4moodle_drawHeatmap();
+        block_lemo4moodle_drawHeatmap(heatmapDefaultData);
     }
 }
 
-/**
- * Function to get the timestamp of a date-string.
+/* Function to get the timestamp of a date-string.
  *
  * @method block_lemo4moodle_toTimestamp
  * @param string $strdate Date in string format.
@@ -186,6 +187,38 @@ function block_lemo4moodle_drawAllCharts() {
  */
 function block_lemo4moodle_toTimestamp(strdate) {
     var date = Date.parse(strdate);
+    return date / 1000;
+}
+
+/**
+ * Function to get the starting timestamp of a filter from a JQuery datepicker.
+ *
+ * @method block_lemo4moodle_getStartTimestamp
+ * @param string $startDatepicker Value of a JQuery datepicker element.
+ * @return Date Timestamp of the date.
+ */
+function block_lemo4moodle_getStartTimestamp(startDatepicker) {
+    // Rewrite date.
+    var s = startDatepicker.split('.');
+    start = s[1] + '/' + s[0] + '/' + s[2];
+    start += ' 00:00:00';
+    var date = Date.parse(start);
+    return date / 1000;
+}
+
+/**
+ * Function to get the ending timestamp of a filter from a JQuery datepicker..
+ *
+ * @method block_lemo4moodle_getEndTimestamp
+ * @param string $endDatepicker Value of a jquery datepicker element.
+ * @return Date Timestamp of the date.
+ */
+function block_lemo4moodle_getEndTimestamp(endDatepicker) {
+    // Rewrite date.
+    var e = endDatepicker.split('.');
+    var end = e[1] + '/' + e[0] + '/' + e[2];
+    end += ' 23:59:59';
+    var date = Date.parse(end);
     return date / 1000;
 }
 
@@ -197,19 +230,30 @@ $(document).ready(function() {
 });
 
 // Variables for filemerging.
-var linechartData = "";
+var barchartDataExtracted = [];
+var linechartDataExtracted = [];
+var heatmapDataExtracted = [];
 
 // Functionality for filemerging.
 $('#mergeButton').click(function() {
     $("#modal_error2").text("");
     var filemerge = document.querySelector('#file_merge');
+
+    // Check, if 2 or more files were selected.
     if (filemerge.files.length < 2) {
         $("#modal_error2").text (viewModalError);
         return;
     }
+
+    // Empty merged data variable.
+    barchartDataExtracted = [];
+    linechartDataExtracted = [];
+    heatmapDataExtracted = [];
+
     var files = filemerge.files;
     var fileString;
-    var chartType = ["linechartDataArray"];
+    var chartType = ["linechartData"];
+    //var chartType = ["barchartData", "linechartData", "heatmapData"];
 
     // Variable to keep track of loop (for callback).
     var loop = 0;
@@ -226,39 +270,53 @@ $('#mergeButton').click(function() {
                 var end = fileString.indexOf(";", fileString.indexOf("var " + it + " ="));
                 var rawData = fileString.substring(start, end);
                 var data = rawData.substring(2, rawData.lastIndexOf("]]"));
+                data = data.replace(/["']/g, "");
                 var dataArray;
-                if (it == "linechartDataArray") {
+                if (it == "linechartData") {
                     dataArray = data.split("],[");
                 } else if (it == "heatmapData") {
-                    dataArray = data.split("], [");
+                    dataArray = data.split("],[");
+                } else if (it == "barchartData") {
+
                 }
+
                 dataArray.forEach(function(item) {
 
                     // Collect linechart data.
-                    if (it == "linechartDataArray" && item.toString().length > 2) { // Filter out the empty data.
-                        if (!(linechartData).includes(item.toString())) {
-                            linechartData += "[" + item.toString() + "],";
-                        }
-                        // Replace last index with ']' when last element is reached.
-                        if (dataArray[dataArray.length - 1] == item && loop == (files.length - 1)) {
-                            linechartData = linechartData.substring(1, linechartData.lastIndexOf("],"));
-                            var linechartDataArray = new Array();
-                            var tempArray = linechartData.split("],[");
-                            tempArray.forEach(function(it) {
-                                var tempElements1 = it.split(",");
-                                var tempElements2 = [it.substring(1, it.lastIndexOf(")")),
-                                    tempElements1[3], tempElements1[4], tempElements1[5]];
-                                linechartDataArray.push(tempElements2);
-                            });
-                            linechartData = "";
-                            var jsonArray = JSON.stringify(linechartDataArray);
-                            $("#allCharts2").val('false');
-                            $("#mergeData2").val(jsonArray);
-                            $("#download_form_2").submit();
-                            $("#mergeData2").val('');
+                    if (it == "linechartData" && item.toString().length > 2) { // Filter out the empty data.
+
+                        // Transform string to array.
+                        var splitValues = item.split(",");
+                        if (!(linechartDataExtracted).includes(splitValues)) {
+                            linechartDataExtracted.push(splitValues);
                         }
                     }
                 });
+
+                //Check, if all files were iterated.
+                if (chartType[chartType.length - 1] == it && loop == (files.length - 1)) {
+
+                    // Create array with all the merged datasets of each graph.
+                    var allDataArray = [];
+
+                    // Sort array.
+                    linechartDataExtracted.sort(function(a,b){
+                    // Turn your strings into dates, and then subtract them
+                    // to get a value that is either negative, positive, or zero.
+                    return new Date(b.date) - new Date(a.date);
+                    });
+
+                    allDataArray.push(linechartDataExtracted);
+                    allDataArray.push(barchartDataExtracted);
+                    allDataArray.push(heatmapDataExtracted);
+                    var jsonArray = JSON.stringify(allDataArray);
+                    console.log(jsonArray);
+                    // Reset the data variable.
+                    $("#allCharts2").val('false');
+                    $("#mergeData2").val(jsonArray);
+                    $("#download_form_2").submit();
+                    $("#mergeData2").val('');
+                }
             });
             loop++;
         });
