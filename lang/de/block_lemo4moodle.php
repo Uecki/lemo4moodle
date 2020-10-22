@@ -92,7 +92,6 @@ $string['linechart_colAccess'] = 'Zugriffe';
 $string['linechart_colOwnAccess'] = 'eigene Zugriffe';
 $string['linechart_colUser'] = 'Nutzer';
 $string['linechart_title'] = 'Zugriffe und Nutzer pro Tag';
-$string['linechart_checkSelection'] = 'Überprüfen Sie ihre Auswahl (Beginn < Ende)';
 
 // Heatmap.
 $string['heatmap_title'] = 'Aktionen pro Tag pro Zeitraum';
@@ -107,7 +106,6 @@ $string['heatmap_thursday'] = 'Donnerstag';
 $string['heatmap_friday'] = 'Freitag';
 $string['heatmap_saturday'] = 'Samstag';
 $string['heatmap_sunday'] = 'Sonntag';
-$string['heatmap_checkSelection'] = 'Überprüfen Sie ihre Auswahl (Beginn < Ende)';
 
 // Treemap.
 $string['treemap_title'] = 'Treemap für die Anzahl der Klicks pro Datei. Rechtsklick, um eine Ebene nach oben zu gelangen.';
@@ -116,6 +114,7 @@ $string['treemap_global'] = 'Global';
 $string['treemap_files'] = 'Dateien';
 
 // View.
+$string['view_checkSelection'] = 'Überprüfen Sie ihre Auswahl (Beginn < Ende).';
 $string['view_dialogThis'] = 'Dieser Graph';
 $string['view_dialogAll'] = 'Alle Graphen';
 $string['view_file'] = 'Datei ';
