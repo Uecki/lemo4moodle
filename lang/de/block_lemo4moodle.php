@@ -52,7 +52,7 @@ $string['html_download'] = 'HTML Download';
 $string['dialogTitle'] = 'Auswahl';
 $string['filterStart'] = 'Beginn';
 $string['filterEnd'] = 'Ende';
-$string['selectStart'] = 'Module Filtern:';
+$string['selectStart'] = 'Module auswählen:';
 $string['selectAll'] = 'Alle';
 
 // Moodle module names.
@@ -81,7 +81,7 @@ $string['mod_workshop'] = 'Gegenseitige Beurteilung';
 
 // Barchart.
 $string['barchart_title'] = 'Zugriffe und Nutzer pro Datei';
-$string['barchart_xlabel'] = 'Dateiname';
+$string['barchart_xlabel'] = 'Name';
 $string['barchart_ylabel'] = 'Zugriffe';
 $string['barchart_users'] = 'Nutzer';
 $string['barchart_module'] = 'Modul';
