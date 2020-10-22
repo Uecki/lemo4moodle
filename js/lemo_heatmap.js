@@ -60,7 +60,7 @@ $(document).ready(function() {
             block_lemo4moodle_drawHeatmap(filteredHeatmapData);
 
         } else {
-            Materialize.toast(heatmapCheckSelection, 3000); // 3000 is the duration of the toast.
+            Materialize.toast(viewCheckSelection, 3000); // 3000 is the duration of the toast.
             $('#datepicker_5').val("");
             $('#datepicker_6').val("");
         }

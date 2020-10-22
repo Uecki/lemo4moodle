@@ -49,7 +49,7 @@ $(document).ready(function() {
             var filteredLinechartData = block_lemo4moodle_createLinechartData(linechartData, startTimestamp, endTimestamp);
             block_lemo4moodle_drawLinechart(filteredLinechartData);
         } else {
-            Materialize.toast(linechartCheckSelection, 3000); // 3000 is the duration of the toast.
+            Materialize.toast(viewCheckSelection, 3000); // 3000 is the duration of the toast.
             $('#datepicker_3').val("");
             $('#datepicker_4').val("");
         }
@@ -143,7 +143,6 @@ function block_lemo4moodle_createLinechartData(dataArray, startTimestamp = 0, en
 
     preprocessedData.forEach(function(item) {
 
-        // Indices of item: 0->date, 1->allhits, 2->users, 3->ownhits, 4->timestamp.
         // Check, if the function was called by the filter or not.
         if(startTimestamp == 0 && endTimestamp == 0) {
             linechartDataFinal.push({date:item.date, allhits:item.allhits, ownhits:item.ownhits, users:item.users});
