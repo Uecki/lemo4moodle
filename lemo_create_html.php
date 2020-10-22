@@ -53,7 +53,8 @@ if(!isset($_POST["mergeData"]) || $_POST["mergeData"] == "") {
 } else {
     $alldata = json_decode($_POST["mergeData"], true);
     $linechartdata = json_encode($alldata[0], JSON_NUMERIC_CHECK);
-
+    $barchartdata = json_encode($alldata[1], JSON_NUMERIC_CHECK);
+    $heatmapdata = json_encode($alldata[2], JSON_NUMERIC_CHECK);
 }
 
 // Get today's date.
@@ -66,14 +67,22 @@ $todayfilename = date("Y_m_d");
 $firstdate = 0;
 $lastdate = 0;
 
+// Perform various checks to find the earliest dataset.
+// This is necessary, because the timespan of the logdata is displayed and datasets can be downloaded an merged separately from each other.
 foreach($alldata as $value) {
     if (isset($value[0])) {
-        if(($firstdate != 0 && $firstdate > strtotime($value[0][0]) && strtotime($value[0][0]) !== false) || $firstdate == 0) {
-            $firstdate = strtotime($value[0][0]);
+        if($firstdate == 0
+                || ($firstdate != 0
+                    && $firstdate > strtotime($value[0]["date"])
+                    && (strtotime($value[0]["date"]) !== false))) {
+            $firstdate = strtotime($value[0]["date"]);
         }
 
-        if(($lastdate != 0 && $lastdate < strtotime($value[sizeof($value)-1][0]) && strtotime($value[sizeof($value)-1][0]) !== false) || $lastdate == 0) {
-            $lastdate = strtotime($value[sizeof($value)-1][0]);
+        if($lastdate == 0
+                || ($lastdate != 0
+                    && $lastdate < strtotime($value[sizeof($value)-1]["date"])
+                    && strtotime($value[sizeof($value)-1]["date"]) !== false)) {
+            $lastdate = strtotime($value[sizeof($value)-1]["date"]);
         }
     }
 }
@@ -86,48 +95,6 @@ $lastdate = date("d.m.Y", $lastdate);
 if (!isset($_POST["mergeData"]) || $_POST["mergeData"] == "") {
     $lastdate = date("d.m.Y");
 }
-
-/*
-$j = 1;
-$leng = count($barchartarray);
-$barchartdata = '[["'. get_string('barchart_xlabel', 'block_lemo4moodle') .'", "'.
-    get_string('barchart_ylabel', 'block_lemo4moodle') .'", "'.
-    get_string('barchart_users', 'block_lemo4moodle') .'"],';
-foreach ($barchartarray as $bar) {
-    if ($j < $leng ) {
-        $barchartdata .= '["'.$bar[0].'", '.$bar[1].', '.$bar[2].'],';
-    }
-    if ($j == $leng ) {
-        $barchartdata .= '["'.$bar[0].'", '.$bar[1].', '.$bar[2].']]';
-    }
-    $j++;
-}
-*/
-/*
-// Create treemap data.
-$i = 1;
-$nodetitle; // Variable for node title.
-$lengtree = count($treemaparray);
-$treemapdata =
-    "[['Name', 'Parent', 'Size', 'Color'],
-        ['".get_string('treemap_global', 'block_lemo4moodle')."', null, 0, 0],
-            ['".get_string('treemap_files', 'block_lemo4moodle')."', '".
-                get_string('treemap_global', 'block_lemo4moodle')."', 0, 0],";
-
-foreach ($treemaparray as $tree) {
-    // If-clause for node title. (Maybe) To be expanded for forum, chat and assignments.
-    if ($tree[1] == 'content') {
-        $nodetitle = get_string('treemap_files', 'block_lemo4moodle');
-    }
-    if ($i < $lengtree ) {
-        $treemapdata .= "['".$tree[0]."', '".$tree[1]."', ".$tree[2].", ".$tree[3]."],";
-    }
-    if ($i == $lengtree ) {
-        $treemapdata .= "['".$tree[0]."', '".$tree[1]."', ".$tree[2].", ".$tree[3]."]]";
-    }
-    $i++;
-}
-*/
 
 
 // Initializing content variable.
@@ -200,8 +167,18 @@ if ($_POST['allCharts'] == 'true') {
                                 <select id="barchart_select_module">
                                     <option value="all" selected>'.get_string('selectAll', 'block_lemo4moodle').'</option>
                                 </select>
+                                <br>
+                                <div class="divider"></div>
+                                <p>'.get_string('filter', 'block_lemo4moodle').'</p>
+                                <input placeholder="Beginn" type="text" class="datepick " id="datepicker_1">
+                                <input placeholder="Ende" type="text" class="datepick " id="datepicker_2">
+                                <button class="btn waves-effect waves-light grey darken-3 button"
+                                    type="submit" name="action" id="dp_button_1">'.
+                                    get_string('update', 'block_lemo4moodle').'</button>
+                                <button class="btn waves-effect waves-light grey darken-3 button"
+                                    type="submit" name="action" id="rst_btn_1">'.
+                                    get_string('reset', 'block_lemo4moodle').'</button>
                             </div>
-                            <div class="divider"></div>
                         </div>
                     </div>
                 </div>
@@ -280,8 +257,6 @@ if ($_POST['allCharts'] == 'true') {
                 get_string("linechart_colUser", "block_lemo4moodle") . '" id="linechartColUser">
             <input type="hidden" value="' .
                 get_string("linechart_title", "block_lemo4moodle") . '" id="linechartTitle">
-            <input type="hidden" value="' .
-                get_string("linechart_checkSelection", "block_lemo4moodle") . '" id="linechartCheckSelection">
             <!--Heatmap.  -->
             <input type="hidden" value="' .
                 get_string("heatmap_title", "block_lemo4moodle") . '" id="heatmapTitle">
@@ -307,14 +282,14 @@ if ($_POST['allCharts'] == 'true') {
                 get_string("heatmap_saturday", "block_lemo4moodle") . '" id="heatmapSaturday">
             <input type="hidden" value="' .
                 get_string("heatmap_sunday", "block_lemo4moodle") . '" id="heatmapSunday">
-            <input type="hidden" value="' .
-                get_string("heatmap_checkSelection", "block_lemo4moodle") . '" id="heatmapCheckSelection">
             <!-- Treemap. -->
             <input type="hidden" value="' .
                 get_string("treemap_title", "block_lemo4moodle") . '" id="treemapTitle">
             <input type="hidden" value="' .
                 get_string("treemap_clickCount", "block_lemo4moodle") . '" id="treemapClickCount">
             <!-- View. -->
+            <input type="hidden" value="' .
+                get_string('view_checkSelection', 'block_lemo4moodle') . '" id="viewCheckSelection">
             <input type="hidden" value="' .
                 get_string("view_dialogThis", "block_lemo4moodle") . '" id="viewDialogThis">
             <input type="hidden" value="' .
@@ -440,7 +415,18 @@ if ($_POST['allCharts'] == 'true') {
         '<p>'.get_string('selectStart', 'block_lemo4moodle').'</p>
         <select id="barchart_select_module">
             <option value="all" selected>'.get_string('selectAll', 'block_lemo4moodle').'</option>
-        </select>';
+        </select>
+        <div class="divider"><</div>
+        <br>
+        <p>'.get_string('filter', 'block_lemo4moodle').'</p>
+        <input placeholder="Beginn" type="text" class="datepick " id="datepicker_1">
+        <input placeholder="Ende" type="text" class="datepick " id="datepicker_2">
+        <button class="btn waves-effect waves-light grey darken-3 button"
+            type="submit" name="action" id="dp_button_1">'.
+            get_string('update', 'block_lemo4moodle').'</button>
+        <button class="btn waves-effect waves-light grey darken-3 button"
+            type="submit" name="action" id="rst_btn_1">'.
+            get_string('reset', 'block_lemo4moodle').'</button>';
     } else if ($_POST['chart'] == 'heatmap') {
         $content .=
             '<div class="divider"></div>
@@ -487,8 +473,6 @@ if ($_POST['allCharts'] == 'true') {
                 get_string("linechart_colUser", "block_lemo4moodle") . '" id="linechartColUser">
             <input type="hidden" value="' .
                 get_string("linechart_title", "block_lemo4moodle") . '" id="linechartTitle">
-            <input type="hidden" value="' .
-                get_string("linechart_checkSelection", "block_lemo4moodle") . '" id="linechartCheckSelection">
             <!--Heatmap.  -->
             <input type="hidden" value="' .
                 get_string("heatmap_title", "block_lemo4moodle") . '" id="heatmapTitle">
@@ -514,9 +498,14 @@ if ($_POST['allCharts'] == 'true') {
                 get_string("heatmap_saturday", "block_lemo4moodle") . '" id="heatmapSaturday">
             <input type="hidden" value="' .
                 get_string("heatmap_sunday", "block_lemo4moodle") . '" id="heatmapSunday">
+            <!-- Treemap. -->
             <input type="hidden" value="' .
-                get_string("heatmap_checkSelection", "block_lemo4moodle") . '" id="heatmapCheckSelection">
+                get_string("treemap_title", "block_lemo4moodle") . '" id="treemapTitle">
+            <input type="hidden" value="' .
+                get_string("treemap_clickCount", "block_lemo4moodle") . '" id="treemapClickCount">
             <!-- View. -->
+            <input type="hidden" value="' .
+                get_string('view_checkSelection', 'block_lemo4moodle') . '" id="viewCheckSelection">
             <input type="hidden" value="' .
                 get_string("view_dialogThis", "block_lemo4moodle") . '" id="viewDialogThis">
             <input type="hidden" value="' .

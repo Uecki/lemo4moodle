@@ -37,34 +37,45 @@ $querylinechart = "SELECT FROM_UNIXTIME (timecreated, '%d-%m-%Y') AS 'date', COU
 
 $linechart = $DB->get_records_sql($querylinechart);
 
-// Transform result of the query from Object to array.
+// Transform result of the query from Object to an array of Objects.
 $linechartdata = array();
 foreach ($linechart as $l) {
-    $linechartdata[] = [$l->date, $l->allhits, $l->users, $l->ownhits];
+    $linechartdata[] = $l;
 }
 
 
 // Get the first recorded date of the datasets (used to indicate the first date of data-timespan in index.php).
-$splitdate = explode("-", $linechartdata[0][0]);
+$splitdate = explode("-", $linechartdata[0]->date);
 $firstdateindex = $splitdate[0] . '.' . $splitdate[1] . '.' . $splitdate[2];
 
 
 // SQL Query for bar chart data.
 
-$querybarchart = "SELECT LOGS.id, count(LOGS.contextid) AS counter_hits, count(DISTINCT LOGS.userid)
-                        AS counter_user, LOGS.contextid, LOGS.component, LOGS2.other, IF(LOGS.component = 'mod_resource', RES.name, null) AS name
+$querybarchart = "SELECT LOGS.id, FROM_UNIXTIME (timecreated, '%d-%m-%Y') AS 'date', LOGS.contextid AS contextid, LOGS.userid
+                        AS userid, LOGS.contextid, LOGS.component, LOGS2.other, IF(LOGS.component = 'mod_resource', RES.name, null) AS name
                     FROM {logstore_standard_log} AS LOGS
               INNER JOIN (SELECT contextid, other FROM {logstore_standard_log} WHERE other LIKE '{\"modulename\"%' AND action = 'created')
                         AS LOGS2 ON LOGS.contextid = LOGS2.contextid
               INNER JOIN {resource} AS RES ON LOGS.objectid = RES.id
-                   WHERE action = 'viewed' AND LOGS.courseid = " . $courseid . "
-                GROUP BY contextid
-                ORDER BY counter_hits DESC";
+                   WHERE action = 'viewed' AND LOGS.courseid ="  . $courseid;
 
 
 // Perform SQL-Query.
 $barchart = $DB->get_records_sql($querybarchart);
 
+// Transform result of the query from Object to an array of Objects and make some minor changes to the data format.
+$barchartdata = array();
+foreach ($barchart as $b) {
+    // If the content ha no name in the "name" field, then the name has to be exctracted from the "other" field.
+    if ($b->name == NULL) {
+        $b->name = substr($b->other, strpos($b->other, '"name":"') + 8, -2);
+    }
+    $b->component = get_string($b->component, 'block_lemo4moodle');
+
+    $barchartdata[] = $b;
+}
+
+/*
 // Create barchart data.
 $j = 1; // Counter.
 $leng = count($barchart);
@@ -72,7 +83,7 @@ $leng = count($barchart);
 // Array that stores the info needed to open files in moodle.
 $barchartfileinfo = array();
 */
-
+/*
 $barchartdataarray = array();
 $barchartdataarray[] = array(get_string('barchart_xlabel', 'block_lemo4moodle'), get_string('barchart_ylabel',
     'block_lemo4moodle'), get_string('barchart_users', 'block_lemo4moodle'), get_string('barchart_module', 'block_lemo4moodle'));
@@ -111,7 +122,7 @@ foreach ($barchart as $bar) {
     $barchartdataarray[] = array($contentname, $bar->counter_hits, $bar->counter_user, $contentmodule);
     $j++;
 }
-
+*/
 
 
 // Query for heatmap. Only minor changes to activity chart query.
@@ -124,10 +135,11 @@ $queryheatmap = "SELECT  id, timecreated, FROM_UNIXTIME(timecreated, '%W') AS 'w
 
 $heatmap = $DB->get_records_sql($queryheatmap);
 
-// Transform result of the query from Object to array.
+// Transform result of the query from Object to array of Objects.
 $heatmaptdata = array();
 foreach ($heatmap as $h) {
-    $heatmapdata[] = [$h->timecreated, $h->weekday, $h->hour, $h->allhits, $h->ownhits];
+    $h->date = $h->timecreated;
+    $heatmapdata[] = $h;
 }
 
 /* Treemap currently not in use/implemented.
@@ -169,13 +181,12 @@ foreach ($treemap as $tree) {
 
 */
 
-
 // Create dataarray.
 // Data as JSON [activityData[date, overallHits, ownhits, users], barchartdata[name, hits, users],
 // treemapdata[name, title, hits, color(as int)]].
 $dataarray = array();
 $dataarray[] = $linechartdata;
-$dataarray[] = $barchartdataarray;
+$dataarray[] = $barchartdata;
 $dataarray[] = $heatmapdata;
 //$dataarray[] = $treemapdataarray;
 
