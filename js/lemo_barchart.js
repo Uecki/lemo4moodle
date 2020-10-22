@@ -30,9 +30,45 @@ var barchartXLabel = $('#barchartXLabel').val();
 var barchartYLabel = $('#barchartYLabel').val();
 var barchartUser = $('#linechartColUser').val();
 var barchartModule  = $('#barchartModule').val();
-var barchartDataFiltered = barchartData;
+var barchartDefaultData = block_lemo4moodle_createBarchartData(barchartData);
+var barchartSelectedModuleData = barchartDefaultData;
 
 $(document).ready(function() {
+
+    // Barchart - filter reset button.
+    $('#rst_btn_1').click(function() {
+        block_lemo4moodle_drawBarchart(barchartDefaultData);
+        $("#datepicker_1").val("");
+        $("#datepicker_2").val("");
+    });
+
+    // Filter for barchart.
+    $('#dp_button_1').click(function() {
+
+        var startTimestamp = block_lemo4moodle_getStartTimestamp(document.getElementById('datepicker_1').value);
+        var endTimestamp = block_lemo4moodle_getEndTimestamp(document.getElementById('datepicker_2').value);
+        if (startTimestamp <= endTimestamp) {
+            var filteredBarchartData = block_lemo4moodle_createBarchartData(barchartData, startTimestamp, endTimestamp);
+
+            // Check, which module type is displayed and apply the selection to the filtered data.
+            if($('select option:selected').text()  == selectAll) {
+                barchartSelectedModuleData  = filteredBarchartData;
+            } else{
+                barchartSelectedModuleData = new Array();
+                barchartSelectedModuleData.push(filteredBarchartData[0]);
+                filteredBarchartData.forEach(function(item){
+                    if($('select option:selected').text()  == item[3]) {
+                        barchartSelectedModuleData.push(item);
+                    }
+                });
+            }
+            block_lemo4moodle_drawBarchart(barchartSelectedModuleData);
+        } else {
+            Materialize.toast(viewCheckSelection, 3000); // 3000 is the duration of the toast.
+            $('#datepicker_1').val("");
+            $('#datepicker_2').val("");
+        }
+    });
 
     // Download button for barchart tab.
     $('#html_btn_1').click(function() {
@@ -44,31 +80,109 @@ $(document).ready(function() {
     // Change event for the select field.
     // Depending on which option is selected, different values are displayed by the chart.
     $('#barchart_select_module').change(function() {
-        // Reset the filter variable.
+
+        // Reset the filter field.
+        $('#datepicker_1').val("");
+        $('#datepicker_2').val("");
+
+        // Reset the selection variable.
         if($('select option:selected').text()  == selectAll) {
-            barchartDataFiltered  = barchartData;
+            barchartSelectedModuleData  = barchartDefaultData;
         } else{
-            barchartDataFiltered = new Array();
-            barchartDataFiltered.push(barchartData[0]);
-            barchartData.forEach(function(item){
+            barchartSelectedModuleData = new Array();
+            barchartSelectedModuleData.push(barchartDefaultData[0]);
+            barchartDefaultData.forEach(function(item){
                 if($('select option:selected').text()  == item[3]) {
-                    barchartDataFiltered.push(item);
+                    barchartSelectedModuleData.push(item);
                 }
             });
         }
-        block_lemo4moodle_drawBarchart(barchartDataFiltered);
+        block_lemo4moodle_drawBarchart(barchartSelectedModuleData);
     });
 
     // Redraw charts when page is resized.
     $(window).resize(function() {
-        block_lemo4moodle_drawBarchart(barchartDataFiltered);
+        block_lemo4moodle_drawBarchart(barchartSelectedModuleData);
     });
 
     // Minimalize tabs are being initialized, callback function
     // 'block_lemo4moodle_drawBarchart' is executed on tab change.
-    $('#tabs').tabs({ 'onShow': block_lemo4moodle_drawBarchart(barchartData) });
+    $('#tabs').tabs({ 'onShow': block_lemo4moodle_drawBarchart(barchartDefaultData) });
 
 });
+
+/**
+ * Function that rearranges and processes the data enhanced by block_lemo4moodle_addEmptyLinechartData to fit into the right format for plotly.
+ * See plotly documentation for heatmap: https://plot.ly/javascript/heatmaps/
+ *
+ * @method block_lemo4moodle_createBarchartData
+ * @param Array dataArray Array of objects gotten from the database via lemo_db_queries.
+ * @param date startTimestamp Optional parameter, used as starting date if the data is to be filtered.
+ * @param date endTimestamp Optional parameter, used as ending date if the data is to be filtered.
+ */
+function block_lemo4moodle_createBarchartData(dataArray, startTimestamp = 0, endTimestamp = 0) {
+
+    var barchartDataFinal = [[barchartXLabel, barchartYLabel, barchartUser, barchartModule]];
+
+    // Array that serves to store, how many times a file or activity was accessed and by how many users.
+    var counterArray = [];
+
+    dataArray.forEach(function(item) {
+
+    });
+
+    // Iterate through the data.
+    dataArray.forEach(function(item) {
+
+        // Change date format.
+        var splitDate = item.date.split("-");
+        var mergedDate = new Date(splitDate[2] + ", " + splitDate[1] + ", " + splitDate[0]);
+        var date = splitDate[2] + ", " + splitDate[1] + ", " + splitDate[0];
+        var timestamp = Date.parse(mergedDate) / 1000;
+
+        // Check, if the function was called by the filter or not.
+        // Not the filter:
+        if(startTimestamp == 0 && endTimestamp == 0) {
+
+            // Check, if the element already exists in the counter Array.
+            if(counterArray.find(elem => elem.id === item.other)) {
+                var matchedElement = counterArray.find(elem => elem.id === item.other);
+                matchedElement.counter += 1;
+                if(!(matchedElement.users.includes(item.userid))) {
+                    matchedElement.users.push(item.userid);
+                }
+            } else {
+                counterArray.push({id:item.other, counter:1, users:[item.userid], module:item.component, name:item.name});
+            }
+
+            //Filter
+        } else if (timestamp >= startTimestamp && timestamp <= endTimestamp) {
+
+            // Check, if the element already exists in the counter Array.
+            if(counterArray.find(elem => elem.id === item.other)) {
+                var matchedElement = counterArray.find(elem => elem.id === item.other);
+                matchedElement.counter += 1;
+                if(!(matchedElement.users.includes(item.userid))) {
+                    matchedElement.users.push(item.userid);
+                }
+            } else {
+                counterArray.push({id:item.other, counter:1, users:[item.userid], module:item.component, name:item.name});
+            }
+
+        }
+    });
+
+    counterArray.forEach(function(item) {
+        barchartDataFinal.push([item.name, item.counter, item.users.length, item.module]);
+    });
+
+    // Sort the array of arrays by number of clicks per activity/file.
+    barchartDataFinal = barchartDataFinal.sort(function(a, b) {
+        return b[1] - a[1];
+    });
+
+    return barchartDataFinal;
+}
 
 /**
  * Callback function that draws the barchart.

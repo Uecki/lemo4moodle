@@ -146,7 +146,30 @@ require_once(__DIR__.'/lemo_db_queries.php');
                         </div>
                         <div id="options" class="col s3">
                             <div class="row">
+                                <!-- Elements for the module selection. -->
                                 <div class="input-field col s12">
+                                    <p><?php echo get_string('selectStart', 'block_lemo4moodle')?></p>
+                                    <select id="barchart_select_module">
+                                        <option value="all" selected><?php echo get_string('selectAll', 'block_lemo4moodle')?></option>
+                                    </select>
+                                </div>
+                                <div class="divider"></div>
+                                <div class="input-field col s12">
+                                    <!-- Elements for the filter. -->
+                                    <p><?php echo get_string('filter', 'block_lemo4moodle')?></p>
+                                    <input placeholder="<?php echo get_string('filterStart', 'block_lemo4moodle')?>"
+                                        type="text" class="datepick " id="datepicker_1">
+                                    <input placeholder="<?php echo get_string('filterEnd', 'block_lemo4moodle')?>"
+                                        type="text" class="datepick " id="datepicker_2">
+                                    <button class="btn waves-effect waves-light grey darken-3 button"
+                                            type="submit" name="action" id="dp_button_1">
+                                        <?php echo get_string('update', 'block_lemo4moodle')?>
+                                    </button>
+                                    <button class="btn waves-effect waves-light grey darken-3 button"
+                                            type="submit" name="action" id="rst_btn_1">
+                                        <?php echo get_string('reset', 'block_lemo4moodle')?>
+                                    </button>
+                                    <div class="divider"></div>
                                     <p><?php echo get_string('backup', 'block_lemo4moodle')?></p>
                                     <form action='lemo_create_html.php' method='post' id='download_form_1'>
                                         <a class="btn waves-effect waves-light grey darken-3 button ajax" id="html_btn_1">
@@ -161,13 +184,6 @@ require_once(__DIR__.'/lemo_db_queries.php');
                                     </form>
                                 </div>
                                 <div class="divider"><</div>
-                                <div class="input-field col s12">
-                                    <p><?php echo get_string('selectStart', 'block_lemo4moodle')?></p>
-                                    <select id="barchart_select_module">
-                                        <option value="all" selected><?php echo get_string('selectAll', 'block_lemo4moodle')?></option>
-                                    </select>
-                                </div>
-                                <div class="divider"></div>
                             </div>
                         </div>
                     </div>
@@ -182,6 +198,7 @@ require_once(__DIR__.'/lemo_db_queries.php');
                             <div class="row">
                                 <div class="input-field col s12">
                                     <div class="divider"></div>
+                                    <!-- Elements for the filter. -->
                                     <p><?php echo get_string('filter', 'block_lemo4moodle')?></p>
                                     <input placeholder="<?php echo get_string('filterStart', 'block_lemo4moodle')?>"
                                         type="text" class="datepick " id="datepicker_3">
@@ -226,6 +243,7 @@ require_once(__DIR__.'/lemo_db_queries.php');
                             <div class="row">
                                 <div class="input-field col s12">
                                     <div class="divider"></div>
+                                    <!-- Elements for the filter. -->
                                     <p><?php echo get_string('filter', 'block_lemo4moodle')?></p>
                                     <input placeholder="<?php echo get_string('filterStart', 'block_lemo4moodle')?>"
                                         type="text" class="datepick " id="datepicker_5">
@@ -290,8 +308,6 @@ require_once(__DIR__.'/lemo_db_queries.php');
                 '<?php echo get_string('linechart_colUser', 'block_lemo4moodle')?>' id="linechartColUser">
             <input type='hidden' value=
                 '<?php echo get_string('linechart_title', 'block_lemo4moodle')?>' id="linechartTitle">
-            <input type='hidden' value=
-                '<?php echo get_string('linechart_checkSelection', 'block_lemo4moodle')?>' id="linechartCheckSelection">
             <!--Heatmap.  -->
             <input type='hidden' value=
                 '<?php echo get_string('heatmap_title', 'block_lemo4moodle')?>' id="heatmapTitle">
@@ -317,14 +333,14 @@ require_once(__DIR__.'/lemo_db_queries.php');
                 '<?php echo get_string('heatmap_saturday', 'block_lemo4moodle')?>' id="heatmapSaturday">
             <input type='hidden' value=
                 '<?php echo get_string('heatmap_sunday', 'block_lemo4moodle')?>' id="heatmapSunday">
-            <input type='hidden' value=
-                '<?php echo get_string('heatmap_checkSelection', 'block_lemo4moodle')?>' id="heatmapCheckSelection">
             <!-- Treemap. -->
             <input type='hidden' value=
                 '<?php echo get_string('treemap_title', 'block_lemo4moodle')?>' id="treemapTitle">
             <input type='hidden' value=
                 '<?php echo get_string('treemap_clickCount', 'block_lemo4moodle')?>' id="treemapClickCount">
             <!-- View. -->
+            <input type='hidden' value=
+                '<?php echo get_string('view_checkSelection', 'block_lemo4moodle')?>' id="viewCheckSelection">
             <input type='hidden' value=
                 '<?php echo get_string('view_dialogThis', 'block_lemo4moodle')?>' id="viewDialogThis">
             <input type='hidden' value=
@@ -342,7 +358,7 @@ require_once(__DIR__.'/lemo_db_queries.php');
 
     <script>
         // Data-variables from lemo_dq_queries.php made usable for the js-files.
-        var barchartData = <?php echo json_encode($barchartdataarray, JSON_NUMERIC_CHECK | JSON_UNESCAPED_SLASHES); ?>;
+        var barchartData = <?php echo json_encode($barchartdata, JSON_NUMERIC_CHECK | JSON_UNESCAPED_SLASHES); ?>;
         //var treemapData = <?php //echo json_encode($treemapdataarray, JSON_NUMERIC_CHECK | JSON_UNESCAPED_SLASHES); ?>;
         <?php
         $linechartdataarray = json_encode($linechartdata, JSON_NUMERIC_CHECK);
