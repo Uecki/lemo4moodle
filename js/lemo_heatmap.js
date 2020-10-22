@@ -446,46 +446,46 @@ function block_lemo4moodle_createHeatmapData(queryResult, startTimestamp = 0, en
         // Check if the function is called by the filter or for the default graph.
         if(startTimestamp == 0 && endTimestamp == 0) {
             // Link timespan to column in heatmap.
-            if (parseInt(item[2]) >= 0  && parseInt(item[2]) < 6) {
+            if (parseInt(item.hour) >= 0  && parseInt(item.hour) < 6) {
                 timespan = "0to6";
-            } else if (parseInt(item[2]) >= 6  && parseInt(item[2]) < 12) {
+            } else if (parseInt(item.hour) >= 6  && parseInt(item.hour) < 12) {
                 timespan = "6to12";
-            } else if (parseInt(item[2]) >= 12  && parseInt(item[2]) < 18) {
+            } else if (parseInt(item.hour) >= 12  && parseInt(item.hour) < 18) {
                 timespan = "12to18";
-            } else if (parseInt(item[2]) >= 18  && parseInt(item[2]) < 24) {
+            } else if (parseInt(item.hour) >= 18  && parseInt(item.hour) < 24) {
                 timespan = "18to24";
             }
 
             // Data for specific day.
-            weekdays[item[1]][timespan]["all"]["value"] += parseInt(item[3]);
-            weekdays[item[1]][timespan]["own"]["value"] += parseInt(item[4]);
+            weekdays[item.weekday][timespan]["all"]["value"] += parseInt(item.allhits);
+            weekdays[item.weekday][timespan]["own"]["value"] += parseInt(item.ownhits);
 
             // Data for overall clicks.
-            totalHits[item[1]] += parseInt(item[3]);
-            totalOwnHits[item[1]] += parseInt(item[4]);
+            totalHits[item.weekday] += parseInt(item.allhits);
+            totalOwnHits[item.weekday] += parseInt(item.ownhits);
         }
         else {
             // Check, if the timestamp is included in the filter.
-            if (item[0] >= startTimestamp && item[0] <= endTimestamp) {
+            if (item.timecreated >= startTimestamp && item.timecreated <= endTimestamp) {
 
                 // Link timespan to column in heatmap.
-                if (parseInt(item[2]) >= 0  && parseInt(item[2]) < 6) {
+                if (parseInt(item.hour) >= 0  && parseInt(item.hour) < 6) {
                     timespan = "0to6";
-                } else if (parseInt(item[2]) >= 6  && parseInt(item[2]) < 12) {
+                } else if (parseInt(item.hour) >= 6  && parseInt(item.hour) < 12) {
                     timespan = "6to12";
-                } else if (parseInt(item[2]) >= 12  && parseInt(item[2]) < 18) {
+                } else if (parseInt(item.hour) >= 12  && parseInt(item.hour) < 18) {
                     timespan = "12to18";
-                } else if (parseInt(item[2]) >= 18  && parseInt(item[2]) < 24) {
+                } else if (parseInt(item.hour) >= 18  && parseInt(item.hour) < 24) {
                     timespan = "18to24";
                 }
 
                 // Data for specific day.
-                weekdays[item[1]][timespan]["all"]["value"] += parseInt(item[3]);
-                weekdays[item[1]][timespan]["own"]["value"] += parseInt(item[4]);
+                weekdays[item.weekday][timespan]["all"]["value"] += parseInt(item.allhits);
+                weekdays[item.weekday][timespan]["own"]["value"] += parseInt(item.ownhits);
 
                 // Data for overall clicks.
-                totalHits[item[1]] += parseInt(item[3]);
-                totalOwnHits[item[1]] += parseInt(item[4]);
+                totalHits[item.weekday] += parseInt(item.allhits);
+                totalOwnHits[item.weekday] += parseInt(item.ownhits);
             }
         }
     });

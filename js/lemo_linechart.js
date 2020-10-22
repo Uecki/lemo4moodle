@@ -92,32 +92,32 @@ function block_lemo4moodle_addEmptyLinechartData(queryResult) {
     // Then add these values to a new array.
     queryResult.forEach(function(item) {
         // Change date format.
-        var splitDate = item[0].split("-");
+        var splitDate = item.date.split("-");
         var mergedDate = new Date(splitDate[2] + ", " + splitDate[1] + ", " + splitDate[0]);
         var date = splitDate[2] + ", " + splitDate[1] + ", " + splitDate[0];
         var timestamp = Date.parse(mergedDate) / 1000;
         // Indices of item: 0->date, 1->allhits, 2->users, ->ownhits.
-        queryResultArray.push([date, item[1], item[2], item[3], timestamp]);
+        queryResultArray.push({date:date, allhits:item.allhits, users:item.users, ownhits:item.ownhits, timestamp:timestamp});
     });
 
     // Fill in emtpy datasets. This is necessary for correctly displaying the plotly chart.
     for(var i = 0; i < queryResultArray.length; i++) {
 
         // Add dataset with data to a new array.
-        data.push([new Date(queryResultArray[i][0]), queryResultArray[i][1],
-                queryResultArray[i][2], queryResultArray[i][3], queryResultArray[i][4]]);
+        data.push({date:new Date(queryResultArray[i].date), allhits:queryResultArray[i].allhits,
+                users:queryResultArray[i].users, ownhits:queryResultArray[i].ownhits, timestamp:queryResultArray[i].timestamp});
 
         // Check, if last element is reached. Otherwise, there would be an error at the last element.
         if(i != queryResultArray.length - 1) {
 
             // Use two date variables to check for the days in between data.
-            var nextDay = new Date(queryResultArray[i + 1][0]);
-            var currentLoopDay = new Date(queryResultArray[i][0]);
+            var nextDay = new Date(queryResultArray[i + 1].date);
+            var currentLoopDay = new Date(queryResultArray[i].date);
             currentLoopDay.setDate(currentLoopDay.getDate() + 1);
 
             // Create empty datasets, while the date is not already used for data.
             while(currentLoopDay < nextDay) {
-                var emptyData = [new Date(currentLoopDay), 0, 0, 0, Date.parse(new Date(currentLoopDay)) / 1000];
+                var emptyData = {date:new Date(currentLoopDay), allhits:0, users:0, ownhits:0, timestamp:Date.parse(new Date(currentLoopDay)) / 1000};
                 data.push(emptyData);
                 currentLoopDay.setDate(currentLoopDay.getDate() + 1);
             }
@@ -144,12 +144,12 @@ function block_lemo4moodle_createLinechartData(dataArray, startTimestamp = 0, en
     preprocessedData.forEach(function(item) {
 
         // Indices of item: 0->date, 1->allhits, 2->users, 3->ownhits, 4->timestamp.
-        // check, if the function was called by the filter or not.
+        // Check, if the function was called by the filter or not.
         if(startTimestamp == 0 && endTimestamp == 0) {
-            linechartDataFinal.push([item[0], item[1], item[3], item[2]]);
-        } else if (item[4]>= startTimestamp && item[4] <= endTimestamp) {
+            linechartDataFinal.push({date:item.date, allhits:item.allhits, ownhits:item.ownhits, users:item.users});
+        } else if (item.timestamp>= startTimestamp && item.timestamp <= endTimestamp) {
 
-            linechartDataFinal.push([item[0], item[1], item[3], item[2]]);
+            linechartDataFinal.push({date:item.date, allhits:item.allhits, ownhits:item.ownhits, users:item.users});
         }
     });
 
@@ -169,7 +169,7 @@ function block_lemo4moodle_drawLinechart(data) {
     // Generate x value.
     var xValuesDates = [];
     for (var i = 0; i < data.length; i++) {
-        var dateObject = data[i][0];
+        var dateObject = data[i].date;
         var day = dateObject.getDate();
         var month = (dateObject.getMonth() + 1);
         var year = dateObject.getFullYear();
@@ -183,19 +183,19 @@ function block_lemo4moodle_drawLinechart(data) {
     // Generate y values for overall accesses.
     var yValuesAccesses = [];
     for (var i = 0; i < data.length; i++) {
-        yValuesAccesses.push(data[i][1]);
+        yValuesAccesses.push(data[i].allhits);
     }
 
     // Generate y values for own accesses.
     var yValuesOwnAccesses = [];
     for (var i = 0; i < data.length; i++) {
-        yValuesOwnAccesses.push(data[i][2]);
+        yValuesOwnAccesses.push(data[i].users);
     }
 
     // Generate y values for number of users.
     var yValuesUsers = [];
     for (var i = 0; i < data.length; i++) {
-        yValuesUsers.push(data[i][3]);
+        yValuesUsers.push(data[i].ownhits);
     }
 
     var trace1 = {
