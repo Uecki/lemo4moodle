@@ -33,11 +33,13 @@ var barchartModule  = $('#barchartModule').val();
 var barchartDefaultData = block_lemo4moodle_createBarchartData(barchartData);
 var barchartSelectedModuleData = barchartDefaultData;
 
+
 $(document).ready(function() {
 
     // Barchart - filter reset button.
     $('#rst_btn_1').click(function() {
         block_lemo4moodle_drawBarchart(barchartDefaultData);
+        barchartSelectedModuleData = barchartDefaultData;
         $("#datepicker_1").val("");
         $("#datepicker_2").val("");
     });
