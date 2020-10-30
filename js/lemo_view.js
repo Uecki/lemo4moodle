@@ -130,15 +130,10 @@ $(document).ready(function() {
 
                 var fileStringDate = e.target.result;
                 if (fileStringDate.includes('var firstdate ')) {
-                    var root1 = fileStringDate.indexOf('var firstdate =');
-                    var start1 = fileStringDate.indexOf('"', root1);
-                    var end1 = fileStringDate.indexOf('"', start1 + 1);
-                    var date1 = fileStringDate.substring(start1 + 1, end1);
 
-                    var root2 = fileStringDate.indexOf('var lastdate =');
-                    var start2 = fileStringDate.indexOf('"', root2);
-                    var end2 = fileStringDate.indexOf('"', start2 + 1);
-                    var date2 = fileStringDate.substring(start2 + 1, end2);
+                    var date1 = block_lemo4moodle_extractDateVariable(fileStringDate, true);
+                    var date2 = block_lemo4moodle_extractDateVariable(fileStringDate, false);
+
                     $( '#file_merge_timespan' ).append('<li class="black-text">' + viewTimespan + date1 +
                         ' - ' + date2 + '</li><br>');
                 } else {
@@ -156,72 +151,6 @@ $(function() {
         dateFormat: 'dd.mm.yy'
     });
 });
-
-/**
- * Callback that draws all charts.
- * To be optimized to only load chart for current tab.
- * @method block_lemo4moodle_drawAllCharts
- * @see block_lemo4moodle_drawBarchart()
- * @see block_lemo4moodle_drawLinechart()
- * @see block_lemo4moodle_drawHeatmap()
- * @see block_lemo4moodle_drawTreemap()
- */
-function block_lemo4moodle_drawAllCharts() {
-    if (typeof block_lemo4moodle_drawBarchart === "function") {
-        // The variable barchartData is initialized in index.php.
-        block_lemo4moodle_drawBarchart(barchartSelectedModuleData);
-        block_lemo4moodle_initFilterBarchart(barchartDefaultData);
-    }
-    if (typeof block_lemo4moodle_drawLinechart === "function") {
-        block_lemo4moodle_drawLinechart(linechartDefaultData);
-    }
-    if (typeof block_lemo4moodle_drawHeatmap === "function") {
-        block_lemo4moodle_drawHeatmap(heatmapDefaultData);
-    }
-}
-
-/* Function to get the timestamp of a date-string.
- *
- * @method block_lemo4moodle_toTimestamp
- * @param string $strdate Date in string format.
- * @return Date Timestamp of the date.
- */
-function block_lemo4moodle_toTimestamp(strdate) {
-    var date = Date.parse(strdate);
-    return date / 1000;
-}
-
-/**
- * Function to get the starting timestamp of a filter from a JQuery datepicker.
- *
- * @method block_lemo4moodle_getStartTimestamp
- * @param string $startDatepicker Value of a JQuery datepicker element.
- * @return Date Timestamp of the date.
- */
-function block_lemo4moodle_getStartTimestamp(startDatepicker) {
-    // Rewrite date.
-    var s = startDatepicker.split('.');
-    start = s[1] + '/' + s[0] + '/' + s[2];
-    start += ' 00:00:00';
-    var date = Date.parse(start);
-    return date / 1000;
-}
-
-/**
- * Function to get the ending timestamp of a filter from a JQuery datepicker..
- *
- * @method block_lemo4moodle_getEndTimestamp
- * @param string $endDatepicker Value of a jquery datepicker element.
- * @return Date Timestamp of the date.
- */
-function block_lemo4moodle_getEndTimestamp(endDatepicker) {
-    // Rewrite date.
-    var e = endDatepicker.split('.');
-    var end = e[1] + '/' + e[0] + '/' + e[2];
-    end += ' 23:59:59';
-    var date = Date.parse(end);
-    return date / 1000;
-}
 
 // Initialize the Materialize modal (PopUp) and select.
 $(document).ready(function() {
@@ -256,7 +185,9 @@ $(document).ready(function() {
         var files = filemerge.files;
         var fileString;
         var chartType = ["linechartData", "barchartData", "heatmapData"];
-        //var chartType = ["barchartData", "linechartData", "heatmapData"];
+
+        // Variable that stores first and last date of each file to check for missing data.
+        var timespans = [];
 
         // Variable to keep track of loop (for callback).
         var loop = 0;
@@ -266,6 +197,18 @@ $(document).ready(function() {
             // Callback function.
             block_lemo4moodle_readFile(files[i], function(e) {
                 fileString = e.target.result;
+
+                // Get the values of the variables firstdate and lastdate.
+                var date1 = block_lemo4moodle_extractDateVariable(fileString, true);
+                var date2 = block_lemo4moodle_extractDateVariable(fileString, false);
+
+                var splitDate1 = date1.split(".");
+                var splitDate2 = date2.split(".");
+
+                splitDate1 = splitDate1[2] + "-" + splitDate1[1] + "-" + splitDate1[0];
+                splitDate2 = splitDate2[2] + "-" + splitDate2[1] + "-" + splitDate2[0];
+                timespans.push([new Date(splitDate1), new Date(splitDate2)]);
+
                 // Iterate through each chartType.
                 chartType.forEach(function(it) {
                     // Get the data from the file as an array of strings.
@@ -294,6 +237,7 @@ $(document).ready(function() {
                             splitValues[1] = splitValues[1].replace("allhits:", "");
                             splitValues[2] = splitValues[2].replace("users:", "");
                             splitValues[3] = splitValues[3].replace("ownhits:", "");
+
                             var splitValuesObject = {date: splitValues[0], allhits: splitValues[1], users: splitValues[2], ownhits: splitValues[3]};
                             if (linechartDataExtracted.some(elem => elem[0] === splitValues[0]) == false) {
                                 linechartDataExtracted.push(splitValuesObject);
@@ -339,11 +283,57 @@ $(document).ready(function() {
 
                     });
 
-                    //Check, if all files were iterated.
+                    // Check, if all files were iterated.
                     if (chartType[chartType.length - 1] == it && loop == (files.length - 1)) {
 
                         // Create array with all the merged datasets of each graph.
                         var allDataArray = [];
+
+                        // loops through the timespans of each file to indicate, that the data in this timespan is present.
+                        timespans.forEach(function(item) {
+                            var dateFlag = item[0];
+                            while(dateFlag <= item[1]) {
+                                var convertedDateFormat = block_lemo4moodle_formatDate(dateFlag);
+                                var containsDate = false;
+                                linechartDataExtracted.forEach(function(it) {
+                                    if(it.date == (convertedDateFormat)) {
+                                        containsDate = true;
+                                        return;
+                                    }
+                                });
+
+                                if(containsDate == false) {
+                                    linechartDataExtracted.push({date: convertedDateFormat, allhits: 0, users: 0, ownhits: 0});
+                                }
+                                dateFlag.setDate(dateFlag.getDate()+1);
+                            }
+                        });
+
+                        // Get the first and last date of the linechart dataset overall.
+                        var first = timespans[0][0];
+                        var last = timespans[0][1];
+                        timespans.forEach(function(item){
+                            if(item[0] < first) {
+                                first = item[0]
+                            }
+                            if(item[1] > last) {
+                                last = item[1]
+                            }
+                        });
+
+                        for(var i = first; i <= last; i.setDate(i.getDate()+1)) {
+                            var containsDate = false;
+                            linechartDataExtracted.forEach(function(item) {
+                                if(item.date == block_lemo4moodle_formatDate(i)) {
+                                    containsDate = true;
+                                    return;
+                                }
+                            });
+                            if(containsDate == false) {
+                                linechartDataExtracted.push({date: block_lemo4moodle_formatDate(i), allhits: -1, users: -1, ownhits: -1});
+                            }
+                        }
+
 
                         // Sort linechart data.
                         linechartDataExtracted.sort(function(a,b){
@@ -358,6 +348,7 @@ $(document).ready(function() {
 
                         return new Date(dateA) - new Date(dateB);
                         });
+                        console.table(linechartDataExtracted);
 
                         // Sort barchart data.
                         barchartDataExtracted.sort(function(a,b){
@@ -373,6 +364,7 @@ $(document).ready(function() {
                         return new Date(dateA) - new Date(dateB);
                         });
 
+
                         //Sort heatmap data.
                         heatmapDataExtracted.sort(function(a,b){
                         // Turn your strings into dates, and then subtract them
@@ -382,7 +374,8 @@ $(document).ready(function() {
                         return new Date(a.date * 1000) - new Date(b.date * 1000);
                         });
 
-                        //console.table(heatmapDataExtracted);
+                        console.table(linechartDataExtracted);
+
                         allDataArray.push(linechartDataExtracted);
                         allDataArray.push(barchartDataExtracted);
                         allDataArray.push(heatmapDataExtracted);
@@ -399,6 +392,114 @@ $(document).ready(function() {
         }
     });
 });
+
+/**
+ * Callback that draws all charts.
+ * To be optimized to only load chart for current tab.
+ * @method block_lemo4moodle_drawAllCharts
+ * @see block_lemo4moodle_drawBarchart()
+ * @see block_lemo4moodle_drawLinechart()
+ * @see block_lemo4moodle_drawHeatmap()
+ * @see block_lemo4moodle_drawTreemap()
+ */
+function block_lemo4moodle_drawAllCharts() {
+    if (typeof block_lemo4moodle_drawBarchart === "function") {
+        // The variable barchartData is initialized in index.php.
+        block_lemo4moodle_drawBarchart(barchartSelectedModuleData);
+        block_lemo4moodle_initFilterBarchart(barchartDefaultData);
+    }
+    if (typeof block_lemo4moodle_drawLinechart === "function") {
+        block_lemo4moodle_drawLinechart(linechartDefaultData);
+    }
+    if (typeof block_lemo4moodle_drawHeatmap === "function") {
+        block_lemo4moodle_drawHeatmap(heatmapDefaultData);
+    }
+}
+
+/* Function to get the timestamp of a date-string.
+ *
+ * @method block_lemo4moodle_toTimestamp
+ * @param string strdate Date in string format.
+ * @return Date Timestamp of the date.
+ */
+function block_lemo4moodle_toTimestamp(strdate) {
+    var date = Date.parse(strdate);
+    return date / 1000;
+}
+
+/* Function to format a date object and output it as dd-mm-yyyy.
+ *
+ * @method block_lemo4moodle_formatDate
+ * @param Date date Date that is to be formatted.
+ * @return string Formatted date-string.
+ */
+function block_lemo4moodle_formatDate(date) {
+    var d = new Date(date),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+
+    if (month.length < 2)
+        month = '0' + month;
+    if (day.length < 2)
+        day = '0' + day;
+
+    return [day, month, year].join('-');
+}
+
+
+/* Function that extracts the value of the variable firstdate from a filecontent string.
+ *
+ * @method block_lemo4moodle_extractDateVariable
+ * @param string fileContent File content in string format.
+ * @param boolean searchedVariable Either true for "var firstdate" or false for "var lastdate" depending on which is needed.
+ * @return string date Date in string form with the format dd.mm.yyyy.
+ */
+function block_lemo4moodle_extractDateVariable(fileContent, searchedVariable) {
+    var root;
+    if(searchedVariable == true) {
+        root = fileContent.indexOf('var firstdate =');
+    } else if(searchedVariable == false) {
+        root = fileContent.indexOf('var lastdate =');
+    }
+
+    var start = fileContent.indexOf('"', root);
+    var end = fileContent.indexOf('"', start + 1);
+    var date = fileContent.substring(start + 1, end);
+    return date;
+}
+
+/**
+ * Function to get the starting timestamp of a filter from a JQuery datepicker.
+ *
+ * @method block_lemo4moodle_getStartTimestamp
+ * @param string startDatepicker Value of a JQuery datepicker element.
+ * @return Date Timestamp of the date.
+ */
+function block_lemo4moodle_getStartTimestamp(startDatepicker) {
+    // Rewrite date.
+    var s = startDatepicker.split('.');
+    start = s[1] + '/' + s[0] + '/' + s[2];
+    start += ' 00:00:00';
+    var date = Date.parse(start);
+    return date / 1000;
+}
+
+/**
+ * Function to get the ending timestamp of a filter from a JQuery datepicker..
+ *
+ * @method block_lemo4moodle_getEndTimestamp
+ * @param string $endDatepicker Value of a jquery datepicker element.
+ * @return Date Timestamp of the date.
+ */
+function block_lemo4moodle_getEndTimestamp(endDatepicker) {
+    // Rewrite date.
+    var e = endDatepicker.split('.');
+    var end = e[1] + '/' + e[0] + '/' + e[2];
+    end += ' 23:59:59';
+    var date = Date.parse(end);
+    return date / 1000;
+}
 
 /**
  * Callback function for the FileReader. Reads file given as parameter.

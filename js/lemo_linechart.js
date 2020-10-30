@@ -182,19 +182,41 @@ function block_lemo4moodle_drawLinechart(data) {
     // Generate y values for overall accesses.
     var yValuesAccesses = [];
     for (var i = 0; i < data.length; i++) {
-        yValuesAccesses.push(data[i].allhits);
+        if(data[i].allhits == -1) {
+            yValuesAccesses.push("");
+        } else {
+            yValuesAccesses.push(data[i].allhits);
+        }
     }
 
     // Generate y values for own accesses.
     var yValuesOwnAccesses = [];
     for (var i = 0; i < data.length; i++) {
-        yValuesOwnAccesses.push(data[i].users);
+        if(data[i].ownhits == -1) {
+            yValuesOwnAccesses.push("");
+        } else {
+            yValuesOwnAccesses.push(data[i].ownhits);
+        }
     }
 
     // Generate y values for number of users.
     var yValuesUsers = [];
     for (var i = 0; i < data.length; i++) {
-        yValuesUsers.push(data[i].ownhits);
+        if(data[i].users == -1) {
+            yValuesUsers.push("");
+        } else {
+            yValuesUsers.push(data[i].users);
+        }
+    }
+
+    // Generate y values for missing data.
+    var yValuesMissingData = [];
+    for (var i = 0; i < data.length; i++) {
+        if(data[i].allhits == -1) {
+            yValuesMissingData.push(0);
+        } else {
+            yValuesMissingData.push("");
+        }
     }
 
     var trace1 = {
@@ -218,7 +240,14 @@ function block_lemo4moodle_drawLinechart(data) {
         name: linechartColUser
     };
 
-    var completeData = [trace1, trace2, trace3];
+    var trace4 = {
+        x: xValuesDates,
+        y: yValuesMissingData,
+        type: 'scatter',
+        name: 'Missing Data'
+    }
+
+    var completeData = [trace1, trace2, trace3, trace4];
 
     var layout = {
         title: linechartTitle,
