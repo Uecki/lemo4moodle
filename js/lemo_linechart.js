@@ -28,6 +28,7 @@ var linechartColDate = $('#linechartColDate').val();
 var linechartColAccess = $('#linechartColAccess').val();
 var linechartColOwnAccess = $('#linechartColOwnAccess').val();
 var linechartColUser = $('#linechartColUser').val();
+var linechartColMissingData = $('#linechartColMissingData').val();
 var linechartTitle = $('#linechartTitle').val();
 var linechartCheckSelection = $('#linechartCheckSelection').val();
 var linechartDefaultData = block_lemo4moodle_createLinechartData(linechartData);
@@ -244,7 +245,7 @@ function block_lemo4moodle_drawLinechart(data) {
         x: xValuesDates,
         y: yValuesMissingData,
         type: 'scatter',
-        name: 'Missing Data'
+        name: linechartColMissingData
     }
 
     var completeData = [trace1, trace2, trace3, trace4];

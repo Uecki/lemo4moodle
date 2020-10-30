@@ -307,6 +307,8 @@ require_once(__DIR__.'/lemo_db_queries.php');
             <input type='hidden' value=
                 '<?php echo get_string('linechart_colUser', 'block_lemo4moodle')?>' id="linechartColUser">
             <input type='hidden' value=
+                '<?php echo get_string('linechart_colMissingData', 'block_lemo4moodle')?>' id="linechartColMissingData">
+            <input type='hidden' value=
                 '<?php echo get_string('linechart_title', 'block_lemo4moodle')?>' id="linechartTitle">
             <!--Heatmap.  -->
             <input type='hidden' value=

@@ -84,6 +84,7 @@ $string['linechart_colDate'] = 'Date';
 $string['linechart_colAccess'] = 'Accesses';
 $string['linechart_colOwnAccess'] = 'Own accesses';
 $string['linechart_colUser'] = 'Users';
+$string['linechart_colMissingData'] = 'Missing Data';
 $string['linechart_title'] = 'Accesses and users per day';
 
 // Heatmap.

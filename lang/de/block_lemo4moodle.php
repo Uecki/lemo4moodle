@@ -89,8 +89,9 @@ $string['barchart_module'] = 'Modul';
 // Linechart.
 $string['linechart_colDate'] = 'Datum';
 $string['linechart_colAccess'] = 'Zugriffe';
-$string['linechart_colOwnAccess'] = 'eigene Zugriffe';
+$string['linechart_colOwnAccess'] = 'Eigene Zugriffe';
 $string['linechart_colUser'] = 'Nutzer';
+$string['linechart_colMissingData'] = 'Fehlende Daten';
 $string['linechart_title'] = 'Zugriffe und Nutzer pro Tag';
 
 // Heatmap.
