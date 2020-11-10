@@ -348,7 +348,6 @@ $(document).ready(function() {
 
                         return new Date(dateA) - new Date(dateB);
                         });
-                        console.table(linechartDataExtracted);
 
                         // Sort barchart data.
                         barchartDataExtracted.sort(function(a,b){
@@ -373,8 +372,6 @@ $(document).ready(function() {
                         // UNIX Timestamp needs to be converted by *1000.
                         return new Date(a.date * 1000) - new Date(b.date * 1000);
                         });
-
-                        console.table(linechartDataExtracted);
 
                         allDataArray.push(linechartDataExtracted);
                         allDataArray.push(barchartDataExtracted);
@@ -409,10 +406,10 @@ function block_lemo4moodle_drawAllCharts() {
         block_lemo4moodle_initFilterBarchart(barchartDefaultData);
     }
     if (typeof block_lemo4moodle_drawLinechart === "function") {
-        block_lemo4moodle_drawLinechart(linechartDefaultData);
+        block_lemo4moodle_drawLinechart(filteredLinechartData);
     }
     if (typeof block_lemo4moodle_drawHeatmap === "function") {
-        block_lemo4moodle_drawHeatmap(heatmapDefaultData);
+        block_lemo4moodle_drawHeatmap(filteredHeatmapData);
     }
 }
 

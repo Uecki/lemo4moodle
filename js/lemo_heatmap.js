@@ -38,12 +38,14 @@ var heatmapSaturday = $('#heatmapSaturday').val();
 var heatmapSunday = $('#heatmapSunday').val();
 var heatmapCheckSelection = $('#heatmapCheckSelection').val();
 var heatmapDefaultData = block_lemo4moodle_createHeatmapData(heatmapData);
+var filteredHeatmapData = heatmapDefaultData;
 
 $(document).ready(function() {
 
     // Heatmap - reset button.
     $('#rst_btn_3').click(function() {
         block_lemo4moodle_drawHeatmap(heatmapDefaultData);
+        flteredHeatmapData = heatmapDefaultData;
         $('#datepicker_5').val("");
         $('#datepicker_6').val("");
 
@@ -56,7 +58,7 @@ $(document).ready(function() {
         var endTimestamp = block_lemo4moodle_getEndTimestamp(document.getElementById('datepicker_6').value);
         if (startTimestamp <= endTimestamp) {
 
-            var filteredHeatmapData = block_lemo4moodle_createHeatmapData(heatmapData, startTimestamp, endTimestamp);
+            filteredHeatmapData = block_lemo4moodle_createHeatmapData(heatmapData, startTimestamp, endTimestamp);
             block_lemo4moodle_drawHeatmap(filteredHeatmapData);
 
         } else {

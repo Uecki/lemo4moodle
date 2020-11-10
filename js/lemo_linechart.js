@@ -32,12 +32,14 @@ var linechartColMissingData = $('#linechartColMissingData').val();
 var linechartTitle = $('#linechartTitle').val();
 var linechartCheckSelection = $('#linechartCheckSelection').val();
 var linechartDefaultData = block_lemo4moodle_createLinechartData(linechartData);
+var filteredLinechartData = linechartDefaultData;
 
 $(document).ready(function() {
 
     // Line Chart - reset button.
     $('#rst_btn_2').click(function() {
         block_lemo4moodle_drawLinechart(linechartDefaultData);
+        filteredLinechartData = linechartDefaultData;
         $("#datepicker_3").val("");
         $("#datepicker_4").val("");
     });
@@ -47,7 +49,7 @@ $(document).ready(function() {
         var startTimestamp = block_lemo4moodle_getStartTimestamp(document.getElementById('datepicker_3').value);
         var endTimestamp = block_lemo4moodle_getEndTimestamp(document.getElementById('datepicker_4').value);
         if (startTimestamp <= endTimestamp) {
-            var filteredLinechartData = block_lemo4moodle_createLinechartData(linechartData, startTimestamp, endTimestamp);
+            filteredLinechartData = block_lemo4moodle_createLinechartData(linechartData, startTimestamp, endTimestamp);
             block_lemo4moodle_drawLinechart(filteredLinechartData);
         } else {
             Materialize.toast(viewCheckSelection, 3000); // 3000 is the duration of the toast.
