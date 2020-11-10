@@ -138,7 +138,7 @@ $heatmap = $DB->get_records_sql($queryheatmap);
 // Transform result of the query from Object to array of Objects.
 $heatmaptdata = array();
 foreach ($heatmap as $h) {
-    $h->date = $h->timecreated;
+    $h->date = date("d-m-Y", $h->timecreated);
     $heatmapdata[] = $h;
 }
 
