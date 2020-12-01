@@ -27,15 +27,24 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+$DB->set_debug(true);
+
 // SQL Query -> ActivityChart (date, hits, user counter).
 $querylinechart = "SELECT FROM_UNIXTIME (timecreated, '%d-%m-%Y') AS 'date', COUNT(action) AS 'allHits',
-                                COUNT(DISTINCT userid) AS 'users', COUNT(case when userid = $userid then $userid end) AS 'ownhits'
+                                COUNT(DISTINCT userid) AS 'users', COUNT(CASE WHEN " .  $DB->sql_compare_text('userid') . " = " . $DB->sql_compare_text(':userid') . "
+                                THEN $userid END) AS 'ownhits'
                            FROM {logstore_standard_log}
-                          WHERE (action = 'viewed' AND courseid = '".$courseid."')
+                          WHERE (" .  $DB->sql_compare_text('action') . " = " . $DB->sql_compare_text(':action') . "
+                                AND " .  $DB->sql_compare_text('courseid') . " = " . $DB->sql_compare_text(':courseid') . ")
                        GROUP BY FROM_UNIXTIME (timecreated, '%y-%m-%d')
                        ORDER BY 'date'";
 
-$linechart = $DB->get_records_sql($querylinechart);
+//Query function parameters.
+$params = ['userid' => $userid, 'action' => 'viewed', 'courseid' => $courseid];
+
+$linechart = $DB->get_records_sql($querylinechart, $params);
+
+unset($params);
 
 // Transform result of the query from Object to an array of Objects.
 $linechartdata = array();
@@ -51,17 +60,23 @@ $firstdateindex = $splitdate[0] . '.' . $splitdate[1] . '.' . $splitdate[2];
 
 // SQL Query for bar chart data.
 
-$querybarchart = "SELECT LOGS.id, FROM_UNIXTIME (timecreated, '%d-%m-%Y') AS 'date', LOGS.contextid AS contextid, LOGS.userid
-                        AS userid, LOGS.contextid, LOGS.component, LOGS2.other, IF(LOGS.component = 'mod_resource', RES.name, null) AS name
-                    FROM {logstore_standard_log} AS LOGS
-              INNER JOIN (SELECT contextid, other FROM {logstore_standard_log} WHERE other LIKE '{\"modulename\"%' AND action = 'created')
-                        AS LOGS2 ON LOGS.contextid = LOGS2.contextid
-              INNER JOIN {resource} AS RES ON LOGS.objectid = RES.id
-                   WHERE action = 'viewed' AND LOGS.courseid ="  . $courseid;
+$querybarchart = "SELECT LOGS1.id, FROM_UNIXTIME (timecreated, '%d-%m-%Y') AS 'date', LOGS1.contextid AS 'contextid', LOGS1.userid
+                            AS 'userid', LOGS1.contextid, LOGS1.component, LOGS2.other, IF(LOGS1.component = 'mod_resource', RES.name, null) AS 'name'
+                    FROM {logstore_standard_log} LOGS1
+                    JOIN (SELECT contextid, other FROM {logstore_standard_log} WHERE " . $DB->sql_like('other', ':other') . "
+                            AND " .  $DB->sql_compare_text('action') . " = " . $DB->sql_compare_text(':action') . ") LOGS2
+                            ON LOGS1.contextid = LOGS2.contextid
+                    JOIN {resource} RES ON LOGS1.objectid = RES.id
+                   WHERE " .  $DB->sql_compare_text('LOGS1.action') . " = " . $DB->sql_compare_text(':action2') . "
+                            AND " .  $DB->sql_compare_text('LOGS1.courseid') . " = " . $DB->sql_compare_text(':courseid');
 
+//Query function parameters.
+$params = ['other' => '{"modulename"%', 'action' => 'created', 'action2' => 'viewed', 'courseid' => $courseid];
 
 // Perform SQL-Query.
-$barchart = $DB->get_records_sql($querybarchart);
+$barchart = $DB->get_records_sql($querybarchart, $params);
+
+unset($params);
 
 // Transform result of the query from Object to an array of Objects and make some minor changes to the data format.
 $barchartdata = array();
@@ -75,65 +90,23 @@ foreach ($barchart as $b) {
     $barchartdata[] = $b;
 }
 
-/*
-// Create barchart data.
-$j = 1; // Counter.
-$leng = count($barchart);
-/* Currently not necessary.
-// Array that stores the info needed to open files in moodle.
-$barchartfileinfo = array();
-*/
-/*
-$barchartdataarray = array();
-$barchartdataarray[] = array(get_string('barchart_xlabel', 'block_lemo4moodle'), get_string('barchart_ylabel',
-    'block_lemo4moodle'), get_string('barchart_users', 'block_lemo4moodle'), get_string('barchart_module', 'block_lemo4moodle'));
-
-$barchartdata = "[['".get_string('barchart_xlabel', 'block_lemo4moodle')."', '".get_string('barchart_ylabel',
-    'block_lemo4moodle')."', '".get_string('barchart_users', 'block_lemo4moodle').", ".get_string('barchart_users', 'block_lemo4moodle')."']";
-
-//Check, if there are no objects in the moodle course.
-if ($leng != 0){
-    $barchartdata .= ", ";
-} else {
-    $barchartdata .= "]";
-}
-
-foreach ($barchart as $bar) {
-    // Get the name of the module from the database entry "other".
-    //$bar->other = str_replace
-    $contentname;
-    if ($bar->name == NULL) {
-        $contentname = substr($bar->other, strpos($bar->other, '"name":"') + 8, -2);
-    } else {
-        $contentname = $bar->name;
-    }
-
-    //Variable that stores the module type of the content.
-    $contentmodule = get_string($bar->component, 'block_lemo4moodle');
-
-    if ($j < $leng ) {
-        $barchartdata .= "['".$contentname."', ".$bar->counter_hits.", ".$bar->counter_user. ", " .$contentmodule. "], ";
-    }
-    if ($j == $leng ) {
-        $barchartdata .= "['".$contentname."', ".$bar->counter_hits.", ".$bar->counter_user. ", " .$contentmodule."]]";
-    }
-    // Fileinfo currently not needed.
-    // $barchartfileinfo[] = array($bar->other, $bar->contextid, $bar->component, $bar->filearea, $bar->itemid, $bar->filename);
-    $barchartdataarray[] = array($contentname, $bar->counter_hits, $bar->counter_user, $contentmodule);
-    $j++;
-}
-*/
-
 
 // Query for heatmap. Only minor changes to activity chart query.
 
 $queryheatmap = "SELECT  id, timecreated, FROM_UNIXTIME(timecreated, '%W') AS 'weekday', FROM_UNIXTIME(timecreated, '%k') AS 'hour',
-                            COUNT(action) AS 'allHits',  COUNT(case when userid = $userid then $userid end) AS 'ownhits'
-                         FROM {logstore_standard_log}
-                        WHERE (courseid = '".$courseid."')
+                            COUNT(action) AS 'allHits',  COUNT(CASE WHEN " .  $DB->sql_compare_text('userid') . " = " . $DB->sql_compare_text(':userid') . "
+                            THEN $userid END) AS 'ownhits'
+                       FROM {logstore_standard_log}
+                      WHERE (" .  $DB->sql_compare_text('action') . " = " . $DB->sql_compare_text(':action') . "
+                            AND " .  $DB->sql_compare_text('courseid') . " = " . $DB->sql_compare_text(':courseid') . ")
                      GROUP BY timecreated"; // Group by hour.
 
-$heatmap = $DB->get_records_sql($queryheatmap);
+//Query function parameters.
+$params = ['userid' => $userid, 'action' => 'viewed', 'courseid' => $courseid];
+
+$heatmap = $DB->get_records_sql($queryheatmap, $params);
+
+unset($params);
 
 // Transform result of the query from Object to array of Objects.
 $heatmaptdata = array();
@@ -142,44 +115,8 @@ foreach ($heatmap as $h) {
     $heatmapdata[] = $h;
 }
 
-/* Treemap currently not in use/implemented.
+$DB->set_debug(false);
 
-// Use barchart query for treemap.
-$treemap = $barchart;
-
-
-// Create treemap data.
-$color = - 50; // Variable for node color.
-$i = 1;
-$nodetitle = 'Global'; // Variable for node title.
-$lengtree = count($treemap);
-$treemapdataarray = array();
-$treemapdataarray[] = array(get_string('treemap_global', 'block_lemo4moodle'), null, 0, 0);
-$treemapdata =
-    "[['Name', 'Parent', 'Size', 'Color'],
-        ['".get_string('treemap_global', 'block_lemo4moodle')."', null, 0, 0]";
-
-//Check, if there are no objects in the moodle course.
-if ($leng != 0){
-    $treemapdata .= ", ";
-} else {
-    $treemapdata .= "]";
-}
-
-foreach ($treemap as $tree) {
-    // If-clause for node title. (Maybe) To be expanded for forum, chat and assignments.
-    if ($i < $lengtree ) {
-        $treemapdata .= "['".$tree->name."', '".$nodetitle."', ".$tree->counter_hits.", ".$color."], ";
-    }
-    if ($i == $lengtree ) {
-        $treemapdata .= "['".$tree->name."', '".$nodetitle."', ".$tree->counter_hits.", ".$color."]]";
-    }
-    $treemapdataarray[] = array($tree->name, $nodetitle, $tree->counter_hits, $color);
-    $i++;
-    $color = $color + 10;
-}
-
-*/
 
 // Create dataarray.
 // Data as JSON [activityData[date, overallHits, ownhits, users], barchartdata[name, hits, users],
