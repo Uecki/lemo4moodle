@@ -360,13 +360,13 @@ require_once(__DIR__.'/lemo_db_queries.php');
 
     <script>
         // Data-variables from lemo_dq_queries.php made usable for the js-files.
-        var barchartData = <?php echo json_encode($barchartdata, JSON_NUMERIC_CHECK | JSON_UNESCAPED_SLASHES); ?>;
-        //var treemapData = <?php //echo json_encode($treemapdataarray, JSON_NUMERIC_CHECK | JSON_UNESCAPED_SLASHES); ?>;
         <?php
+        $barchartdataarray = json_encode($barchartdata, JSON_NUMERIC_CHECK | JSON_UNESCAPED_SLASHES);
+        echo "var barchartData = " . $barchartdataarray . ";\n";
         $linechartdataarray = json_encode($linechartdata, JSON_NUMERIC_CHECK);
-        echo "var linechartData = ". $linechartdataarray . ";\n";
+        echo "var linechartData = " . $linechartdataarray . ";\n";
         $heatmapdataarray = json_encode($heatmapdata, JSON_NUMERIC_CHECK);
-        echo "var heatmapData = ". $heatmapdataarray . ";\n";
+        echo "var heatmapData = " . $heatmapdataarray . ";\n";
         ?>
     </script>
 
