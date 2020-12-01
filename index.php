@@ -69,6 +69,13 @@ require_once(__DIR__.'/lemo_db_queries.php');
     <!-- styles.css -->
     <link rel="stylesheet" href="styles.css">
 
+    <script>
+    console.log("db_queries barchart query:");
+    console.table(<?php echo json_encode($barchart, JSON_NUMERIC_CHECK); ?>);
+    console.log("db_queries barchart data:");
+    console.table(<?php echo json_encode($barchartdata, JSON_NUMERIC_CHECK); ?>);
+    </script>
+
 </head>
 
 <!-- Start (for lemo_create_html.php). -->
