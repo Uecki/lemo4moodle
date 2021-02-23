@@ -99,6 +99,7 @@ $barchartdebug1 = $DB->get_records_sql($querybarchartdebug1, $params);
 
 unset($params);
 
+
 // Barchart query w/o LIKE and JOIN.
 $querybarchartdebug2 = "SELECT LOGS1.id, FROM_UNIXTIME (timecreated, '%d-%m-%Y') AS 'date', LOGS1.contextid, LOGS1.userid, LOGS1.component
                     FROM {logstore_standard_log} LOGS1
@@ -113,6 +114,7 @@ $barchartdebug2 = $DB->get_records_sql($querybarchartdebug2, $params);
 
 unset($params);
 
+
 // Barchart query w/o JOIN.
 $querybarchartdebug3 = "SELECT contextid, other FROM mdl_logstore_standard_log WHERE " . $DB->sql_like('other', ':other') . " AND " .  $DB->sql_compare_text('action') . " = " . $DB->sql_compare_text(':action') . " AND " .  $DB->sql_compare_text('courseid') . " = " . $DB->sql_compare_text(':courseid');
 
@@ -123,6 +125,35 @@ $params = ['other' => '%modulename%', 'action' => 'created', 'courseid' => $cour
 $barchartdebug3 = $DB->get_records_sql($querybarchartdebug3, $params);
 
 unset($params);
+
+
+// Barchart query w/o LIKE and JOIN.
+$querybarchartdebug4 = "SELECT contextid, other
+              FROM {logstore_standard_log}
+             WHERE " . $DB->sql_like('other', ':other') . "
+                  AND " .  $DB->sql_compare_text('action') . " = " . $DB->sql_compare_text(':action');
+
+//Query function parameters.
+$params = ['other' => '%modulename%', 'action' => 'created'];
+
+// Perform SQL-Query.
+$barchartdebug4 = $DB->get_records_sql($querybarchartdebug4, $params);
+
+unset($params);
+
+
+// Barchart old query 1.
+$querybarchartold1 = "SELECT LOGS.id as nr, count(LOGS.objectid) AS counter_hits, count(DISTINCT LOGS.userid)
+                        AS counter_user, LOGS.contextid, FILE.component, FILE.filename, FILE.itemid, FILE.filearea, RES.name
+                    FROM mdl_logstore_standard_log AS LOGS
+              INNER JOIN mdl_files AS FILE ON LOGS.contextid = FILE.contextid
+              INNER JOIN mdl_resource As RES ON LOGS.objectid = RES.id
+                   WHERE action = 'viewed' AND courseid = " . $courseid . " AND filename != '.'
+                GROUP BY objectid
+                ORDER BY counter_hits DESC";
+
+// Perform SQL-Query.
+$barchartold1 = $DB->get_records_sql($querybarchartold1);
 
 
 // Query to check mdl_logstore_standard_log..
