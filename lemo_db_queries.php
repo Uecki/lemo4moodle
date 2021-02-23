@@ -60,28 +60,102 @@ $firstdateindex = $splitdate[0] . '.' . $splitdate[1] . '.' . $splitdate[2];
 
 // SQL Query for bar chart data.
 
-$querybarchart = "SELECT LOGS1.id, FROM_UNIXTIME (timecreated, '%d-%m-%Y') AS 'date', LOGS1.contextid AS 'contextid', LOGS1.userid
-                            AS 'userid', LOGS1.contextid, LOGS1.component, LOGS2.other, IF(LOGS1.component = 'mod_resource', RES.name, null) AS 'name'
+$querybarchart = "SELECT LOGS1.id, FROM_UNIXTIME (timecreated, '%d-%m-%Y') AS 'date', LOGS1.contextid, LOGS1.userid, LOGS1.component,
+                            LOGS2.other, IF(LOGS1.component = 'mod_resource', RES.name, null) AS 'name'
                     FROM {logstore_standard_log} LOGS1
-                    JOIN (SELECT contextid, other FROM {logstore_standard_log} WHERE " . $DB->sql_like('other', ':other') . "
-                            AND " .  $DB->sql_compare_text('action') . " = " . $DB->sql_compare_text(':action') . ") LOGS2
-                            ON LOGS1.contextid = LOGS2.contextid
-                    JOIN {resource} RES ON LOGS1.objectid = RES.id
+              INNER JOIN (SELECT contextid, other
+                            FROM {logstore_standard_log}
+                           WHERE " . $DB->sql_like('other', ':other') . "
+                                AND " .  $DB->sql_compare_text('action') . " = " . $DB->sql_compare_text(':action') . ") LOGS2
+                              ON LOGS1.contextid = LOGS2.contextid
+              INNER JOIN {resource} RES ON LOGS1.objectid = RES.id
                    WHERE " .  $DB->sql_compare_text('LOGS1.action') . " = " . $DB->sql_compare_text(':action2') . "
                             AND " .  $DB->sql_compare_text('LOGS1.courseid') . " = " . $DB->sql_compare_text(':courseid');
 
 //Query function parameters.
-$params = ['other' => '{"modulename"%', 'action' => 'created', 'action2' => 'viewed', 'courseid' => $courseid];
+$params = ['other' => '%modulename%', 'action' => 'created', 'action2' => 'viewed', 'courseid' => $courseid];
 
 // Perform SQL-Query.
 $barchart = $DB->get_records_sql($querybarchart, $params);
 
 unset($params);
 
+//-------------------------------------------------------------------------------------------------------------------------------
+// Debugging barchart queries.
+
+//Barchart query w/o LIKE.
+$querybarchartdebug1 = "SELECT LOGS1.id, FROM_UNIXTIME (timecreated, '%d-%m-%Y') AS 'date', LOGS1.contextid, LOGS1.userid, LOGS1.component,
+                            LOGS1.other, IF(LOGS1.component = 'mod_resource', RES.name, null) AS 'name'
+                    FROM {logstore_standard_log} LOGS1
+              INNER JOIN {resource} RES ON LOGS1.objectid = RES.id
+                   WHERE " .  $DB->sql_compare_text('LOGS1.action') . " = " . $DB->sql_compare_text(':action2') . "
+                            AND " .  $DB->sql_compare_text('LOGS1.courseid') . " = " . $DB->sql_compare_text(':courseid');
+
+//Query function parameters.
+$params = ['action' => 'created', 'action2' => 'viewed', 'courseid' => $courseid];
+
+// Perform SQL-Query.
+$barchartdebug1 = $DB->get_records_sql($querybarchartdebug1, $params);
+
+unset($params);
+
+// Barchart query w/o LIKE and JOIN.
+$querybarchartdebug2 = "SELECT LOGS1.id, FROM_UNIXTIME (timecreated, '%d-%m-%Y') AS 'date', LOGS1.contextid, LOGS1.userid, LOGS1.component
+                    FROM {logstore_standard_log} LOGS1
+                   WHERE " .  $DB->sql_compare_text('LOGS1.action') . " = " . $DB->sql_compare_text(':action2') . "
+                            AND " .  $DB->sql_compare_text('LOGS1.courseid') . " = " . $DB->sql_compare_text(':courseid');
+
+//Query function parameters.
+$params = ['action2' => 'viewed', 'courseid' => $courseid];
+
+// Perform SQL-Query.
+$barchartdebug2 = $DB->get_records_sql($querybarchartdebug2, $params);
+
+unset($params);
+
+// Barchart query w/o JOIN.
+$querybarchartdebug3 = "SELECT contextid, other FROM mdl_logstore_standard_log WHERE " . $DB->sql_like('other', ':other') . " AND " .  $DB->sql_compare_text('action') . " = " . $DB->sql_compare_text(':action') . " AND " .  $DB->sql_compare_text('courseid') . " = " . $DB->sql_compare_text(':courseid');
+
+//Query function parameters.
+$params = ['other' => '%modulename%', 'action' => 'created', 'courseid' => $courseid];
+
+// Perform SQL-Query.
+$barchartdebug3 = $DB->get_records_sql($querybarchartdebug3, $params);
+
+unset($params);
+
+
+// Query to check mdl_logstore_standard_log..
+$querylogstore = "SELECT * FROM {logstore_standard_log} WHERE id = 1";
+
+// Perform SQL-Query.
+$logstore = $DB->get_records_sql($querylogstore);
+
+// Query for SQL Mode.
+$querysqlmode = "SELECT @@sql_mode";
+
+// Perform SQL-Query.
+$sqlmode = $DB->get_records_sql($querysqlmode);
+
+// Query for SQL Mode.
+$querycollation = "SHOW VARIABLES LIKE 'collation_database'";
+
+// Perform SQL-Query.
+$collation = $DB->get_records_sql($querycollation);
+
+// Query for SQL Mode.
+$querycharset = "SHOW VARIABLES LIKE 'character_set_database'";
+
+// Perform SQL-Query.
+$charset = $DB->get_records_sql($querycharset);
+
+
+//-------------------------------------------------------------------------------------------------------------------------------
+
 // Transform result of the query from Object to an array of Objects and make some minor changes to the data format.
 $barchartdata = array();
 foreach ($barchart as $b) {
-    // If the content ha no name in the "name" field, then the name has to be exctracted from the "other" field.
+    // If the content has no name in the "name" field, then the name has to be exctracted from the "other" field.
     if ($b->name == NULL) {
         $b->name = substr($b->other, strpos($b->other, '"name":"') + 8, -2);
     }
