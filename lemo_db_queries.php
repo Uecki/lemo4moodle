@@ -64,7 +64,8 @@ $querybarchart = "SELECT LOGS1.id, FROM_UNIXTIME (LOGS1.timecreated, '%d-%m-%Y')
                     FROM {logstore_standard_log} LOGS1
               INNER JOIN (SELECT contextid, timecreated, other
                             FROM {logstore_standard_log}
-                           WHERE " .  $DB->sql_compare_text('action') . " = " . $DB->sql_compare_text(':action') . ") LOGS2
+                           WHERE " .  $DB->sql_compare_text('action') . " = " . $DB->sql_compare_text(':action') . "
+                                AND " .  $DB->sql_compare_text('target') . " = " . $DB->sql_compare_text(':target') . ") LOGS2
                       ON LOGS1.contextid = LOGS2.contextid
                    WHERE " . $DB->sql_like('LOGS1.component', ':component') . "
                             AND " .  $DB->sql_compare_text('LOGS1.action') . " = " . $DB->sql_compare_text(':action2') . "
@@ -73,7 +74,7 @@ $querybarchart = "SELECT LOGS1.id, FROM_UNIXTIME (LOGS1.timecreated, '%d-%m-%Y')
                 ORDER BY LOGS2.timecreated ASC";
 
 //Query function parameters.
-$params = ['action' => 'created', 'component' => 'mod%', 'action2' => 'viewed', 'courseid' => $courseid];
+$params = ['action' => 'created', 'target' => 'course_module', 'component' => 'mod%', 'action2' => 'viewed', 'courseid' => $courseid];
 
 // Perform SQL-Query.
 $barchart = $DB->get_records_sql($querybarchart, $params);
