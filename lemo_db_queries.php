@@ -60,139 +60,80 @@ $firstdateindex = $splitdate[0] . '.' . $splitdate[1] . '.' . $splitdate[2];
 
 // SQL Query for bar chart data.
 
-$querybarchart = "SELECT LOGS1.id, FROM_UNIXTIME (timecreated, '%d-%m-%Y') AS 'date', LOGS1.contextid, LOGS1.userid, LOGS1.component,
-                            LOGS2.other, IF(LOGS1.component = 'mod_resource', RES.name, null) AS 'name'
+$querybarchart = "SELECT LOGS1.id, FROM_UNIXTIME (LOGS1.timecreated, '%d-%m-%Y') AS 'date', LOGS1.component, LOGS2.timecreated, LOGS2.other
                     FROM {logstore_standard_log} LOGS1
-              INNER JOIN (SELECT contextid, other
+              INNER JOIN (SELECT contextid, timecreated, other
                             FROM {logstore_standard_log}
-                           WHERE " . $DB->sql_like('other', ':other') . "
-                                AND " .  $DB->sql_compare_text('action') . " = " . $DB->sql_compare_text(':action') . ") LOGS2
-                              ON LOGS1.contextid = LOGS2.contextid
-              INNER JOIN {resource} RES ON LOGS1.objectid = RES.id
-                   WHERE " .  $DB->sql_compare_text('LOGS1.action') . " = " . $DB->sql_compare_text(':action2') . "
-                            AND " .  $DB->sql_compare_text('LOGS1.courseid') . " = " . $DB->sql_compare_text(':courseid');
+                           WHERE " .  $DB->sql_compare_text('action') . " = " . $DB->sql_compare_text(':action') . ") LOGS2
+                      ON LOGS1.contextid = LOGS2.contextid
+                   WHERE " . $DB->sql_like('LOGS1.component', ':component') . "
+                            AND " .  $DB->sql_compare_text('LOGS1.action') . " = " . $DB->sql_compare_text(':action2') . "
+                            AND " .  $DB->sql_compare_text('LOGS1.courseid') . " = " . $DB->sql_compare_text(':courseid') . "
+                            AND LOGS1.objecttable IS NOT NULL
+                ORDER BY LOGS2.timecreated ASC";
 
 //Query function parameters.
-$params = ['other' => '%modulename%', 'action' => 'created', 'action2' => 'viewed', 'courseid' => $courseid];
+$params = ['action' => 'created', 'component' => 'mod%', 'action2' => 'viewed', 'courseid' => $courseid];
 
 // Perform SQL-Query.
 $barchart = $DB->get_records_sql($querybarchart, $params);
 
 unset($params);
 
-//-------------------------------------------------------------------------------------------------------------------------------
-// Debugging barchart queries.
+// Get module information of the current course to later complement the query.
+GLOBAL $COURSE;
+// Use moodle function get_fast_modinfo().
+$modinfo = get_fast_modinfo($COURSE);
+$modules = array();
+// Add name and modulename of each object in the course to an associative array with the time an object was added to the course as key.
+foreach ($modinfo->get_cms() as $cminfo) {
+    $modules[$cminfo->added] = array('name' => $cminfo->name, 'module' => 'mod_' . $cminfo->modname);
+}
 
-//Barchart query w/o LIKE.
-$querybarchartdebug1 = "SELECT LOGS1.id, FROM_UNIXTIME (timecreated, '%d-%m-%Y') AS 'date', LOGS1.contextid, LOGS1.userid, LOGS1.component,
-                            LOGS1.other, IF(LOGS1.component = 'mod_resource', RES.name, null) AS 'name'
-                    FROM {logstore_standard_log} LOGS1
-              INNER JOIN {resource} RES ON LOGS1.objectid = RES.id
-                   WHERE " .  $DB->sql_compare_text('LOGS1.action') . " = " . $DB->sql_compare_text(':action2') . "
-                            AND " .  $DB->sql_compare_text('LOGS1.courseid') . " = " . $DB->sql_compare_text(':courseid');
+// Sort array by key.
+ksort($modules);
 
-//Query function parameters.
-$params = ['action' => 'created', 'action2' => 'viewed', 'courseid' => $courseid];
-
-// Perform SQL-Query.
-$barchartdebug1 = $DB->get_records_sql($querybarchartdebug1, $params);
-
-unset($params);
-
-
-// Barchart query w/o LIKE and JOIN.
-$querybarchartdebug2 = "SELECT LOGS1.id, FROM_UNIXTIME (timecreated, '%d-%m-%Y') AS 'date', LOGS1.contextid, LOGS1.userid, LOGS1.component
-                    FROM {logstore_standard_log} LOGS1
-                   WHERE " .  $DB->sql_compare_text('LOGS1.action') . " = " . $DB->sql_compare_text(':action2') . "
-                            AND " .  $DB->sql_compare_text('LOGS1.courseid') . " = " . $DB->sql_compare_text(':courseid');
-
-//Query function parameters.
-$params = ['action2' => 'viewed', 'courseid' => $courseid];
-
-// Perform SQL-Query.
-$barchartdebug2 = $DB->get_records_sql($querybarchartdebug2, $params);
-
-unset($params);
+// Transform associative array to array.
+$modulesarray = array();
+foreach($modules as $m) {
+    $modulesarray[] = $m;
+}
 
 
-// Barchart query w/o JOIN.
-$querybarchartdebug3 = "SELECT contextid, other FROM mdl_logstore_standard_log WHERE " . $DB->sql_like('other', ':other') . " AND " .  $DB->sql_compare_text('action') . " = " . $DB->sql_compare_text(':action') . " AND " .  $DB->sql_compare_text('courseid') . " = " . $DB->sql_compare_text(':courseid');
-
-//Query function parameters.
-$params = ['other' => '%modulename%', 'action' => 'created', 'courseid' => $courseid];
-
-// Perform SQL-Query.
-$barchartdebug3 = $DB->get_records_sql($querybarchartdebug3, $params);
-
-unset($params);
-
-
-// Barchart query w/o LIKE and JOIN.
-$querybarchartdebug4 = "SELECT contextid, other
-              FROM {logstore_standard_log}
-             WHERE " . $DB->sql_like('other', ':other') . "
-                  AND " .  $DB->sql_compare_text('action') . " = " . $DB->sql_compare_text(':action');
-
-//Query function parameters.
-$params = ['other' => '%modulename%', 'action' => 'created'];
-
-// Perform SQL-Query.
-$barchartdebug4 = $DB->get_records_sql($querybarchartdebug4, $params);
-
-unset($params);
-
-
-// Barchart old query 1.
-$querybarchartold1 = "SELECT LOGS.id as nr, count(LOGS.objectid) AS counter_hits, count(DISTINCT LOGS.userid)
-                        AS counter_user, LOGS.contextid, FILE.component, FILE.filename, FILE.itemid, FILE.filearea, RES.name
-                    FROM mdl_logstore_standard_log AS LOGS
-              INNER JOIN mdl_files AS FILE ON LOGS.contextid = FILE.contextid
-              INNER JOIN mdl_resource As RES ON LOGS.objectid = RES.id
-                   WHERE action = 'viewed' AND courseid = " . $courseid . " AND filename != '.'
-                GROUP BY objectid
-                ORDER BY counter_hits DESC";
-
-// Perform SQL-Query.
-$barchartold1 = $DB->get_records_sql($querybarchartold1);
-
-
-// Query to check mdl_logstore_standard_log..
-$querylogstore = "SELECT * FROM {logstore_standard_log} WHERE id = 1";
-
-// Perform SQL-Query.
-$logstore = $DB->get_records_sql($querylogstore);
-
-// Query for SQL Mode.
-$querysqlmode = "SELECT @@sql_mode";
-
-// Perform SQL-Query.
-$sqlmode = $DB->get_records_sql($querysqlmode);
-
-// Query for SQL Mode.
-$querycollation = "SHOW VARIABLES LIKE 'collation_database'";
-
-// Perform SQL-Query.
-$collation = $DB->get_records_sql($querycollation);
-
-// Query for SQL Mode.
-$querycharset = "SHOW VARIABLES LIKE 'character_set_database'";
-
-// Perform SQL-Query.
-$charset = $DB->get_records_sql($querycharset);
-
-
-//-------------------------------------------------------------------------------------------------------------------------------
-
-// Transform result of the query from Object to an array of Objects and make some minor changes to the data format.
+// Transform result of the query from Object to an array of Objects.
 $barchartdata = array();
 foreach ($barchart as $b) {
-    // If the content has no name in the "name" field, then the name has to be exctracted from the "other" field.
-    if ($b->name == NULL) {
-        $b->name = substr($b->other, strpos($b->other, '"name":"') + 8, -2);
-    }
-    $b->component = get_string($b->component, 'block_lemo4moodle');
-
     $barchartdata[] = $b;
+}
+
+$prevtime = 0; // Contains timestamp of the previous loop.
+$indexmodule = -1; // Index for modulesarray.
+
+// Assign the name, stored in modulesarray, to the barchartdata array.
+for($i = 0; $i < sizeof($barchartdata); $i++) {
+    // If the time of creation of the object is different, then it is the next unique
+    // object in the array and can be assigned the next name taken from $modulesarray.
+    if($barchartdata[$i]->timecreated != $prevtime) {
+        $indexmodule++;
+        // Because $modulesarray also stores the objects contained in folders, whose views
+        // are not contained in the logstore_standard_log, those have to be filtered out.
+        // To achieve this, the modulenames of both arrays sorted by time of creation are
+        // compared and diversions in $modulesarray are skipped.
+        if($barchartdata[$i]->component != $modulesarray[$indexmodule]['module']) {
+            $indexmodule++;
+        }
+        $barchartdata[$i]->name = $modulesarray[$indexmodule]['name'];
+    }
+    else {
+        // Assigns previous name, because both elements have the same time of creation and are
+        // therefore assumed to be the same.
+        $barchartdata[$i]->name = $barchartdata[$i - 1]->name;
+    }
+    $prevtime = $barchartdata[$i]->timecreated;
+
+    // Replace the component (module) name with the string from the language file.
+    $barchartdata[$i]->component = get_string($barchartdata[$i]->component, 'block_lemo4moodle');
+
 }
 
 

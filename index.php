@@ -45,7 +45,6 @@ $courseid = $COURSE->id; // Maybe redundant, but better to get it again from $CO
 $userid = $USER->id;
 
 require_once(__DIR__.'/lemo_db_queries.php');
-
 ?>
 
 <!DOCTYPE html>
@@ -74,26 +73,6 @@ require_once(__DIR__.'/lemo_db_queries.php');
     console.table(<?php echo json_encode($barchart, JSON_NUMERIC_CHECK); ?>);
     console.log("db_queries barchart data:");
     console.table(<?php echo json_encode($barchartdata, JSON_NUMERIC_CHECK); ?>);
-
-    // Query debugging.
-    console.log("db_queries barchart query w/o like:");
-    console.table(<?php echo json_encode($barchartdebug1, JSON_NUMERIC_CHECK); ?>);
-    console.log("db_queries barchart query w/o like and join:");
-    console.table(<?php echo json_encode($barchartdebug2, JSON_NUMERIC_CHECK); ?>);
-    console.log("db_queries barchart query w/o join:");
-    console.table(<?php echo json_encode($barchartdebug3, JSON_NUMERIC_CHECK); ?>);
-    console.log("db_queries barchart subquery:");
-    console.table(<?php echo json_encode($barchartdebug4, JSON_NUMERIC_CHECK); ?>);
-    console.log("db_queries barchart query old 1:");
-    console.table(<?php echo json_encode($barchartold1, JSON_NUMERIC_CHECK); ?>);
-    console.log("db_queries logstore:");
-    console.table(<?php echo json_encode($logstore, JSON_NUMERIC_CHECK); ?>);
-    console.log("db_queries sql mode:");
-    console.table(<?php echo json_encode($sqlmode, JSON_NUMERIC_CHECK); ?>);
-    console.log("db_queries database collation:");
-    console.table(<?php echo json_encode($collation, JSON_NUMERIC_CHECK); ?>);
-    console.log("db_queries database charset:");
-    console.table(<?php echo json_encode($charset, JSON_NUMERIC_CHECK); ?>);
     </script>
 
 </head>

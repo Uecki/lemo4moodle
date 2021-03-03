@@ -26,8 +26,8 @@
 // Language file variables.
 var selectAll = $('#selectAll').val();
 var barchartTitle = $('#barchartTitle').val();
-var barchartXLabel = $('#barchartXLabel').val();
-var barchartYLabel = $('#barchartYLabel').val();
+var barchartXLabel = $('#barchartXLabel').val(); // Name.
+var barchartYLabel = $('#barchartYLabel').val(); // Accesses.
 var barchartUser = $('#linechartColUser').val();
 var barchartModule  = $('#barchartModule').val();
 var barchartDefaultData = block_lemo4moodle_createBarchartData(barchartData);
@@ -126,14 +126,11 @@ $(document).ready(function() {
  */
 function block_lemo4moodle_createBarchartData(dataArray, startTimestamp = 0, endTimestamp = 0) {
 
+    // XLabel = name; YLabel = accesses.
     var barchartDataFinal = [[barchartXLabel, barchartYLabel, barchartUser, barchartModule]];
 
-    // Array that serves to store, how many times a file or activity was accessed and by how many users.
+    // Array that serves to store the amount of times a file or activity was accessed and by how many users it was accessed.
     var counterArray = [];
-
-    dataArray.forEach(function(item) {
-
-    });
 
     // Iterate through the data.
     dataArray.forEach(function(item) {
@@ -159,7 +156,7 @@ function block_lemo4moodle_createBarchartData(dataArray, startTimestamp = 0, end
                 counterArray.push({id:item.other, counter:1, users:[item.userid], module:item.component, name:item.name});
             }
 
-            //Filter
+        // Filter:
         } else if (timestamp >= startTimestamp && timestamp <= endTimestamp) {
 
             // Check, if the element already exists in the counter Array.
