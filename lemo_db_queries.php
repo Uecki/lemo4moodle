@@ -109,6 +109,9 @@ foreach ($barchart as $b) {
 
 $prevtime = 0; // Contains timestamp of the previous loop.
 $indexmodule = -1; // Index for modulesarray.
+// Counter that is used to check, if the size of $barchartdata is the same as amount of
+// object-names taken from $modulesarray.
+$modulearraylength = 0;
 
 // Assign the name, stored in modulesarray, to the barchartdata array.
 for($i = 0; $i < sizeof($barchartdata); $i++) {
@@ -131,7 +134,7 @@ for($i = 0; $i < sizeof($barchartdata); $i++) {
         $barchartdata[$i]->name = $barchartdata[$i - 1]->name;
     }
     $prevtime = $barchartdata[$i]->timecreated;
-
+    $modulearraylength++;
     // Replace the component (module) name with the string from the language file.
     $barchartdata[$i]->component = get_string($barchartdata[$i]->component, 'block_lemo4moodle');
 
