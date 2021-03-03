@@ -60,7 +60,7 @@ $firstdateindex = $splitdate[0] . '.' . $splitdate[1] . '.' . $splitdate[2];
 
 // SQL Query for bar chart data.
 
-$querybarchart = "SELECT LOGS1.id, FROM_UNIXTIME (LOGS1.timecreated, '%d-%m-%Y') AS 'date', LOGS1.component, LOGS2.timecreated, LOGS2.other
+$querybarchart = "SELECT LOGS1.id, FROM_UNIXTIME (LOGS1.timecreated, '%d-%m-%Y') AS 'date', LOGS2.contextid, LOGS2.timecreated, LOGS1.component, LOGS2.other
                     FROM {logstore_standard_log} LOGS1
               INNER JOIN (SELECT contextid, timecreated, other
                             FROM {logstore_standard_log}
