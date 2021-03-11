@@ -24,10 +24,10 @@
 
 $string['pluginname'] = 'Lemo4Moodle';
 $string['lemo4moodle'] = 'Lemo4Moodle';
-$string['lemo4moodle:addinstance'] = 'Add a new Lemo4moodle block';
-$string['lemo4moodle:myaddinstance'] = 'Add a new Lemo4moodle block to the My Moodle page';
+$string['lemo4moodle:addinstance'] = 'Add a new Lemo4Moodle block';
+$string['lemo4moodle:myaddinstance'] = 'Add a new Lemo4Moodle block to the My Moodle page';
 $string['content'] = 'CONTENT SETTINGS';
-$string['privacy:metadata'] = 'The lemo4moodle block only displays existing data for actions inside the course.';
+$string['privacy:metadata'] = 'The Lemo4Moodle block only displays existing data for actions inside the course.';
 
 // General language strings (index.php).
 $string['lang'] = 'en';
