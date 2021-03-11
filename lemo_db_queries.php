@@ -114,6 +114,10 @@ $indexmodule = -1; // Index for modulesarray.
 $modulearraylength = 0;
 
 // Assign the name, stored in modulesarray, to the barchartdata array.
+// This is done by iterating through the ordered $barchartdata and $modulesarray
+// --> !Attention: $barchartdata has an element for each action on an object, while $moduelsarray only has an element for each object.
+// While iterating through, the module type is compared between the two. if it doesnt match, then the counter for
+// $moudlesarray increases to skip an element that is included in folders, beacuse the actioons on those cannot be counted.
 for($i = 0; $i < sizeof($barchartdata); $i++) {
     // If the time of creation of the object is different, then it is the next unique
     // object in the array and can be assigned the next name taken from $modulesarray.
