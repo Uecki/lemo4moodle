@@ -142,32 +142,33 @@ function block_lemo4moodle_createBarchartData(dataArray, startTimestamp = 0, end
         var timestamp = Date.parse(mergedDate) / 1000;
 
         // Check, if the function was called by the filter or not.
+        // Info: Every distinct object gets its contextid as id, so that all corresponding actions can be assigned to it.
         // Not the filter:
         if(startTimestamp == 0 && endTimestamp == 0) {
 
             // Check, if the element already exists in the counter Array.
-            if(counterArray.find(elem => elem.id === item.other)) {
-                var matchedElement = counterArray.find(elem => elem.id === item.other);
+            if(counterArray.find(elem => elem.id === item.contextid)) {
+                var matchedElement = counterArray.find(elem => elem.id === item.contextid);
                 matchedElement.counter += 1;
                 if(!(matchedElement.users.includes(item.userid))) {
                     matchedElement.users.push(item.userid);
                 }
             } else {
-                counterArray.push({id:item.other, counter:1, users:[item.userid], module:item.component, name:item.name});
+                counterArray.push({id:item.contextid, counter:1, users:[item.userid], module:item.component, name:item.name});
             }
 
         // Filter:
         } else if (timestamp >= startTimestamp && timestamp <= endTimestamp) {
 
             // Check, if the element already exists in the counter Array.
-            if(counterArray.find(elem => elem.id === item.other)) {
-                var matchedElement = counterArray.find(elem => elem.id === item.other);
+            if(counterArray.find(elem => elem.id === item.contextid)) {
+                var matchedElement = counterArray.find(elem => elem.id === item.contextid);
                 matchedElement.counter += 1;
                 if(!(matchedElement.users.includes(item.userid))) {
                     matchedElement.users.push(item.userid);
                 }
             } else {
-                counterArray.push({id:item.other, counter:1, users:[item.userid], module:item.component, name:item.name});
+                counterArray.push({id:item.contextid, counter:1, users:[item.userid], module:item.component, name:item.name});
             }
 
         }

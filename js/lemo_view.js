@@ -168,7 +168,9 @@ $(document).ready(function() {
 
     // Functionality for filemerging.
     $('#mergeButton').click(function() {
+        // reset error field.
         $("#modal_error2").text("");
+
         var filemerge = document.querySelector('#file_merge');
 
         // Check, if 2 or more files were selected.
