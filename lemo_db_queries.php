@@ -127,10 +127,17 @@ for($i = 0; $i < sizeof($barchartdata); $i++) {
         // are not contained in the logstore_standard_log, those have to be filtered out.
         // To achieve this, the modulenames of both arrays sorted by time of creation are
         // compared and diversions in $modulesarray are skipped.
-        if($barchartdata[$i]->component != $modulesarray[$indexmodule]['module']) {
-            $indexmodule++;
+
+        while($indexmodule < sizeof($modulesarray)) {
+
+            if($barchartdata[$i]->component != $modulesarray[$indexmodule]['module']) {
+                $indexmodule++;
+            }
+            else {
+                $barchartdata[$i]->name = $modulesarray[$indexmodule]['name'];
+                break;
+            }
         }
-        $barchartdata[$i]->name = $modulesarray[$indexmodule]['name'];
     }
     else {
         // Assigns previous name, because both elements have the same time of creation and are
