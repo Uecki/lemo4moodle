@@ -46,13 +46,6 @@ $userid = $USER->id;
 
 require_once(__DIR__.'/lemo_db_queries.php');
 
-// Check, if the barchartdata is complemented correctly.
-if(sizeof($barchartdata) == $modulearraylength) {
-    echo("<script>console.log('SUCCESS, all objectnames should be displayed correctly!');</script>");
-} else {
-    echo("<script>console.log('ERROR, not all objectnames may be displayed correctly!');</script>");
-}
-
 ?>
 
 <!DOCTYPE html>

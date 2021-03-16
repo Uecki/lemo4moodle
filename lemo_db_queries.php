@@ -85,7 +85,8 @@ unset($params);
 GLOBAL $COURSE;
 // Use moodle function get_fast_modinfo().
 $modinfo = get_fast_modinfo($COURSE);
-$modules = array();
+$modulesarray = array();
+/*
 // Add name and modulename of each object in the course to an associative array with the time an object was added to the course as key.
 foreach ($modinfo->get_cms() as $cminfo) {
     $modules[$cminfo->added] = array('name' => $cminfo->name, 'module' => 'mod_' . $cminfo->modname);
@@ -99,6 +100,12 @@ $modulesarray = array();
 foreach($modules as $m) {
     $modulesarray[] = $m;
 }
+*/
+
+// Add name, modulename and contextid of each object in the course to an associative array with the time an object was added to the course as key.
+foreach ($modinfo->get_cms() as $cminfo) {
+    $modulesarray[] = array('name' => $cminfo->name, 'module' => 'mod_' . $cminfo->modname, 'contextid' => $cminfo->context->id);
+}
 
 
 // Transform result of the query from Object to an array of Objects.
@@ -107,6 +114,20 @@ foreach ($barchart as $b) {
     $barchartdata[] = $b;
 }
 
+// Assign the objectname to each result of the barchart query by comparing the contextids from the
+// objectlist ($modulesarray) with the contextid of each query result.
+foreach($barchartdata as $bd) {
+    foreach($modulesarray as $ma) {
+        if($ma['contextid'] == $bd->contextid) {
+            $bd->name = $ma['name'];
+            break;
+        }
+    }
+    // Replace the component (module) name with the string from the language file.
+    $bd->component = get_string($bd->component, 'block_lemo4moodle');
+}
+
+/*
 $prevtime = 0; // Contains timestamp of the previous loop.
 $indexmodule = -1; // Index for modulesarray.
 // Counter that is used to check, if the size of $barchartdata is the same as amount of
@@ -150,6 +171,7 @@ for($i = 0; $i < sizeof($barchartdata); $i++) {
     $barchartdata[$i]->component = get_string($barchartdata[$i]->component, 'block_lemo4moodle');
 
 }
+*/
 
 
 // Query for heatmap. Only minor changes to activity chart query.
