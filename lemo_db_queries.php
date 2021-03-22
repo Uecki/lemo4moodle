@@ -27,8 +27,6 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$DB->set_debug(true);
-
 // SQL Query -> ActivityChart (date, hits, user counter).
 $querylinechart = "SELECT FROM_UNIXTIME (timecreated, '%d-%m-%Y') AS 'date', COUNT(action) AS 'allHits',
                                 COUNT(DISTINCT userid) AS 'users', COUNT(CASE WHEN " .  $DB->sql_compare_text('userid') . " = " . $DB->sql_compare_text(':userid') . "
@@ -60,7 +58,7 @@ $firstdateindex = $splitdate[0] . '.' . $splitdate[1] . '.' . $splitdate[2];
 
 // SQL Query for bar chart data.
 
-$querybarchart = "SELECT LOGS1.id, FROM_UNIXTIME (LOGS1.timecreated, '%d-%m-%Y') AS 'date', LOGS2.contextid, LOGS2.timecreated, LOGS1.component, LOGS2.other
+$querybarchart = "SELECT LOGS1.id, FROM_UNIXTIME (LOGS1.timecreated, '%d-%m-%Y') AS 'date', LOGS2.contextid, LOGS1.userid, LOGS1.component, LOGS2.other
                     FROM {logstore_standard_log} LOGS1
               INNER JOIN (SELECT contextid, timecreated, other
                             FROM {logstore_standard_log}
@@ -86,27 +84,13 @@ GLOBAL $COURSE;
 // Use moodle function get_fast_modinfo().
 $modinfo = get_fast_modinfo($COURSE);
 $modulesarray = array();
-/*
-// Add name and modulename of each object in the course to an associative array with the time an object was added to the course as key.
-foreach ($modinfo->get_cms() as $cminfo) {
-    $modules[$cminfo->added] = array('name' => $cminfo->name, 'module' => 'mod_' . $cminfo->modname);
-}
 
-// Sort array by key.
-ksort($modules);
-
-// Transform associative array to array.
-$modulesarray = array();
-foreach($modules as $m) {
-    $modulesarray[] = $m;
-}
-*/
 
 // Add name, modulename and contextid of each object in the course to an associative array with the time an object was added to the course as key.
 foreach ($modinfo->get_cms() as $cminfo) {
     $modulesarray[] = array('name' => $cminfo->name, 'module' => 'mod_' . $cminfo->modname, 'contextid' => $cminfo->context->id);
 }
-
+echo("<script>console.table(".json_encode($modulesarray).");</script>");
 
 // Transform result of the query from Object to an array of Objects.
 $barchartdata = array();
@@ -126,52 +110,6 @@ foreach($barchartdata as $bd) {
     // Replace the component (module) name with the string from the language file.
     $bd->component = get_string($bd->component, 'block_lemo4moodle');
 }
-
-/*
-$prevtime = 0; // Contains timestamp of the previous loop.
-$indexmodule = -1; // Index for modulesarray.
-// Counter that is used to check, if the size of $barchartdata is the same as amount of
-// object-names taken from $modulesarray.
-$modulearraylength = 0;
-
-// Assign the name, stored in modulesarray, to the barchartdata array.
-// This is done by iterating through the ordered $barchartdata and $modulesarray
-// --> !Attention: $barchartdata has an element for each action on an object, while $moduelsarray only has an element for each object.
-// While iterating through, the module type is compared between the two. if it doesnt match, then the counter for
-// $moudlesarray increases to skip an element that is included in folders, beacuse the actioons on those cannot be counted.
-for($i = 0; $i < sizeof($barchartdata); $i++) {
-    // If the time of creation of the object is different, then it is the next unique
-    // object in the array and can be assigned the next name taken from $modulesarray.
-    if($barchartdata[$i]->timecreated != $prevtime) {
-        $indexmodule++;
-        // Because $modulesarray also stores the objects contained in folders, whose views
-        // are not contained in the logstore_standard_log, those have to be filtered out.
-        // To achieve this, the modulenames of both arrays sorted by time of creation are
-        // compared and diversions in $modulesarray are skipped.
-
-        while($indexmodule < sizeof($modulesarray)) {
-
-            if($barchartdata[$i]->component != $modulesarray[$indexmodule]['module']) {
-                $indexmodule++;
-            }
-            else {
-                $barchartdata[$i]->name = $modulesarray[$indexmodule]['name'];
-                break;
-            }
-        }
-    }
-    else {
-        // Assigns previous name, because both elements have the same time of creation and are
-        // therefore assumed to be the same.
-        $barchartdata[$i]->name = $barchartdata[$i - 1]->name;
-    }
-    $prevtime = $barchartdata[$i]->timecreated;
-    $modulearraylength++;
-    // Replace the component (module) name with the string from the language file.
-    $barchartdata[$i]->component = get_string($barchartdata[$i]->component, 'block_lemo4moodle');
-
-}
-*/
 
 
 // Query for heatmap. Only minor changes to activity chart query.
@@ -197,8 +135,6 @@ foreach ($heatmap as $h) {
     $h->date = date("d-m-Y", $h->timecreated);
     $heatmapdata[] = $h;
 }
-
-$DB->set_debug(false);
 
 
 // Create dataarray.
