@@ -257,8 +257,8 @@ function block_lemo4moodle_drawBarchart(data) {
 
 	var data = [trace1, trace2];
 	var height_plot = 500;
-	if(data.length > 25)
-		height_plot+= 10*data.length;
+	if(barchartData.length > 25)
+		height_plot+= 10*barchartData.length;
 	var layout = {
 		height: height_plot,
         title: barchartTitle,
