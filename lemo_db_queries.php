@@ -101,16 +101,32 @@ foreach ($barchart as $b) {
 // Assign the objectname to each result of the barchart query by comparing the contextids from the
 // objectlist ($modulesarray) with the contextid of each query result.
 foreach($barchartdata as $bd) {
+    //$found = false;
     foreach($modulesarray as $ma) {
         if($ma['contextid'] == $bd->contextid) {
             $bd->name = $ma['name'];
+            //$found = true;
             break;
         }
     }
+    /*
+    if($found == false) {
+        $bd->contextid = 0;
+    }
+    */
     // Replace the component (module) name with the string from the language file.
     $bd->component = get_string($bd->component, 'block_lemo4moodle');
 }
-
+/*
+echo sizeof($barchartdatatemp);
+$barchartdata = array();
+foreach($barchartdatatemp as $bd) {
+    if($bd->contextid != 0) {
+        $barchartdata[] = $bd;
+    }
+}
+echo sizeof($barchartdata);
+*/
 
 // Query for heatmap. Only minor changes to activity chart query.
 

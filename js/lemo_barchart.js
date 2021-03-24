@@ -255,10 +255,10 @@ function block_lemo4moodle_drawBarchart(data) {
 	  }
 	};
 
-	var data = [trace1, trace2];
+	var data1 = [trace1, trace2];
 	var height_plot = 500;
-	if(barchartData.length > 25)
-		height_plot+= 10*barchartData.length;
+	if(data.length > 25)
+		height_plot+= 10*data.length;
 	var layout = {
 		height: height_plot,
         title: barchartTitle,
@@ -272,7 +272,7 @@ function block_lemo4moodle_drawBarchart(data) {
 	};
 
 
-	Plotly.newPlot('barchart', data, layout);
+	Plotly.newPlot('barchart', data1, layout);
 
     // Check, if the file info is available.
     // Necessary for downloaded file, where it is not available.
