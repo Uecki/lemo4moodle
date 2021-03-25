@@ -93,40 +93,38 @@ foreach ($modinfo->get_cms() as $cminfo) {
 echo("<script>console.table(".json_encode($modulesarray).");</script>");
 
 // Transform result of the query from Object to an array of Objects.
-$barchartdata = array();
+$barchartdatatemp = array();
 foreach ($barchart as $b) {
-    $barchartdata[] = $b;
+    $barchartdatatemp[] = $b;
 }
 
 // Assign the objectname to each result of the barchart query by comparing the contextids from the
 // objectlist ($modulesarray) with the contextid of each query result.
-foreach($barchartdata as $bd) {
-    //$found = false;
+foreach($barchartdatatemp as $bd) {
+    $found = false;
     foreach($modulesarray as $ma) {
         if($ma['contextid'] == $bd->contextid) {
             $bd->name = $ma['name'];
-            //$found = true;
+            $found = true;
             break;
         }
     }
-    /*
+
     if($found == false) {
         $bd->contextid = 0;
     }
-    */
+
     // Replace the component (module) name with the string from the language file.
     $bd->component = get_string($bd->component, 'block_lemo4moodle');
 }
-/*
-echo sizeof($barchartdatatemp);
+
 $barchartdata = array();
 foreach($barchartdatatemp as $bd) {
     if($bd->contextid != 0) {
         $barchartdata[] = $bd;
     }
 }
-echo sizeof($barchartdata);
-*/
+
 
 // Query for heatmap. Only minor changes to activity chart query.
 
