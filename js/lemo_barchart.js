@@ -244,6 +244,7 @@ function block_lemo4moodle_drawBarchart(data) {
 	  x: xValuesUser,
 	  y: yValues,
 	  type: 'bar',
+      textposition: 'auto',
       orientation: 'h',
 	  name: barchartUser,
 	  marker: {
@@ -255,12 +256,12 @@ function block_lemo4moodle_drawBarchart(data) {
 	  }
 	};
 
-	var data1 = [trace1, trace2];
-	var height_plot = 500;
+	var dataFinal = [trace1, trace2];
+	var heightPlot = $('#barchart').height();;
 	if(data.length > 25)
-		height_plot+= 10*data.length;
+		heightPlot+= 10*data.length;
 	var layout = {
-		height: height_plot,
+		height: heightPlot,
         title: barchartTitle,
         barmode: 'group',
         margin: {
@@ -272,27 +273,8 @@ function block_lemo4moodle_drawBarchart(data) {
 	};
 
 
-	Plotly.newPlot('barchart', data1, layout);
+	Plotly.newPlot('barchart', dataFinal, layout);
 
-    // Check, if the file info is available.
-    // Necessary for downloaded file, where it is not available.
-	/*
-    if ($('#barchartFileInfo').length > 0) {
-
-        var barchartDataArray = JSON.parse($('#barchartFileInfo').val());
-        var plotlyBarchart = document.getElementById('barchart');
-        plotlyBarchart.on('plotly_click', function(data) {
-            var clickVal = data.points[0].y;
-
-            barchartDataArray.forEach( function(item) {
-                if (clickVal == item[0]) {
-                    var url = $('#wwwroot').val() + '/pluginfile.php/' + item[1] + '/' + item[2] + '/' + item[3] + '/' + item[4] + '/' + item[5];
-                    window.open(url);
-                    return;
-                }
-            });
-        });
-    }*/
 }
 
 /**
