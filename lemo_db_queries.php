@@ -58,21 +58,16 @@ $firstdateindex = $splitdate[0] . '.' . $splitdate[1] . '.' . $splitdate[2];
 
 // SQL Query for bar chart data.
 
-$querybarchart = "SELECT LOGS1.id, FROM_UNIXTIME (LOGS1.timecreated, '%d-%m-%Y') AS 'date', LOGS2.contextid, LOGS1.userid, LOGS1.component, LOGS2.other
+$querybarchart = "SELECT LOGS1.id, FROM_UNIXTIME (LOGS1.timecreated, '%d-%m-%Y') AS 'date', LOGS1.contextid, LOGS1.userid, LOGS1.component
                     FROM {logstore_standard_log} LOGS1
-              INNER JOIN (SELECT contextid, timecreated, other
-                            FROM {logstore_standard_log}
-                           WHERE " .  $DB->sql_compare_text('action') . " = " . $DB->sql_compare_text(':action') . "
-                                AND " .  $DB->sql_compare_text('target') . " = " . $DB->sql_compare_text(':target') . ") LOGS2
-                      ON LOGS1.contextid = LOGS2.contextid
                    WHERE " . $DB->sql_like('LOGS1.component', ':component') . "
                             AND " .  $DB->sql_compare_text('LOGS1.action') . " = " . $DB->sql_compare_text(':action2') . "
                             AND " .  $DB->sql_compare_text('LOGS1.courseid') . " = " . $DB->sql_compare_text(':courseid') . "
                             AND LOGS1.objecttable IS NOT NULL
-                ORDER BY LOGS2.timecreated ASC";
+                            AND " .  $DB->sql_compare_text('target') . " = " . $DB->sql_compare_text(':target');
 
 //Query function parameters.
-$params = ['action' => 'created', 'target' => 'course_module', 'component' => 'mod%', 'action2' => 'viewed', 'courseid' => $courseid];
+$params = ['component' => 'mod%', 'action2' => 'viewed', 'courseid' => $courseid, 'target' => 'course_module'];
 
 // Perform SQL-Query.
 $barchart = $DB->get_records_sql($querybarchart, $params);
