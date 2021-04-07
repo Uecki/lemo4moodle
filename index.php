@@ -29,14 +29,21 @@
  */
 
 require(__DIR__ . '/../../config.php');
-require_login();
+
+// Login to current course.
+$courseid  = required_param('id', PARAM_INT);
+$course = $DB->get_record('course', array('id' => $courseid), '*', MUST_EXIST);
+require_login($course);
 
 // Defining PHP errorstatement.
 error_reporting(E_ALL | E_STRICT);
 ini_set('display_errors', 1);
 
-$courseid = $_GET['id'];
-$userid = $_GET['user'];
+// Get current logged in user and the right course.
+global $COURSE, $USER;
+$courseid = $COURSE->id; // Maybe redundant, but better to get it again from $COURSE.
+$userid = $USER->id;
+
 require_once(__DIR__.'/lemo_db_queries.php');
 
 ?>
@@ -61,6 +68,13 @@ require_once(__DIR__.'/lemo_db_queries.php');
 
     <!-- styles.css -->
     <link rel="stylesheet" href="styles.css">
+
+    <script>
+    console.log("db_queries barchart query:");
+    console.table(<?php echo json_encode($barchart, JSON_NUMERIC_CHECK); ?>);
+    console.log("db_queries barchart data:");
+    console.table(<?php echo json_encode($barchartdata, JSON_NUMERIC_CHECK); ?>);
+    </script>
 
 </head>
 
@@ -139,7 +153,30 @@ require_once(__DIR__.'/lemo_db_queries.php');
                         </div>
                         <div id="options" class="col s3">
                             <div class="row">
+                                <!-- Elements for the module selection. -->
                                 <div class="input-field col s12">
+                                    <p><?php echo get_string('selectStart', 'block_lemo4moodle')?></p>
+                                    <select id="barchart_select_module">
+                                        <option value="all" selected><?php echo get_string('selectAll', 'block_lemo4moodle')?></option>
+                                    </select>
+                                </div>
+                                <div class="divider"></div>
+                                <div class="input-field col s12">
+                                    <!-- Elements for the filter. -->
+                                    <p><?php echo get_string('filter', 'block_lemo4moodle')?></p>
+                                    <input placeholder="<?php echo get_string('filterStart', 'block_lemo4moodle')?>"
+                                        type="text" class="datepick " id="datepicker_1">
+                                    <input placeholder="<?php echo get_string('filterEnd', 'block_lemo4moodle')?>"
+                                        type="text" class="datepick " id="datepicker_2">
+                                    <button class="btn waves-effect waves-light grey darken-3 button"
+                                            type="submit" name="action" id="dp_button_1">
+                                        <?php echo get_string('update', 'block_lemo4moodle')?>
+                                    </button>
+                                    <button class="btn waves-effect waves-light grey darken-3 button"
+                                            type="submit" name="action" id="rst_btn_1">
+                                        <?php echo get_string('reset', 'block_lemo4moodle')?>
+                                    </button>
+                                    <div class="divider"></div>
                                     <p><?php echo get_string('backup', 'block_lemo4moodle')?></p>
                                     <form action='lemo_create_html.php' method='post' id='download_form_1'>
                                         <a class="btn waves-effect waves-light grey darken-3 button ajax" id="html_btn_1">
@@ -152,8 +189,8 @@ require_once(__DIR__.'/lemo_db_queries.php');
                                         <input type='hidden' value='barchart' name='chart'>
                                         <input type='hidden' value='' name='allCharts' id="allCharts1">
                                     </form>
-                                    <div class="divider"></div>
                                 </div>
+                                <div class="divider"><</div>
                             </div>
                         </div>
                     </div>
@@ -168,6 +205,7 @@ require_once(__DIR__.'/lemo_db_queries.php');
                             <div class="row">
                                 <div class="input-field col s12">
                                     <div class="divider"></div>
+                                    <!-- Elements for the filter. -->
                                     <p><?php echo get_string('filter', 'block_lemo4moodle')?></p>
                                     <input placeholder="<?php echo get_string('filterStart', 'block_lemo4moodle')?>"
                                         type="text" class="datepick " id="datepicker_3">
@@ -193,7 +231,6 @@ require_once(__DIR__.'/lemo_db_queries.php');
                                         <input type='hidden' value='<?php echo $alldatahtml; ?>' name='data'>
                                         <input type='hidden' value='linechart' name='chart'>
                                         <input type='hidden' value='' name='allCharts' id="allCharts2">
-                                        <!-- For merging files (only for linechart atm). -->
                                         <input type='hidden' value='' name='mergeData' id="mergeData2" >
                                     </form>
                                     <div class="divider"></div>
@@ -212,6 +249,7 @@ require_once(__DIR__.'/lemo_db_queries.php');
                             <div class="row">
                                 <div class="input-field col s12">
                                     <div class="divider"></div>
+                                    <!-- Elements for the filter. -->
                                     <p><?php echo get_string('filter', 'block_lemo4moodle')?></p>
                                     <input placeholder="<?php echo get_string('filterStart', 'block_lemo4moodle')?>"
                                         type="text" class="datepick " id="datepicker_5">
@@ -254,7 +292,11 @@ require_once(__DIR__.'/lemo_db_queries.php');
                 '<?php echo json_encode($barchartfileinfo); ?>' id='barchartFileInfo'>
             <input type='hidden' value=
                 '<?php echo $CFG->wwwroot; ?>' id="wwwroot">
+            <input type='hidden' value=
+                '<?php echo get_string('selectAll', 'block_lemo4moodle')?>' id="selectAll">
             <!-- Barchart. -->
+            <input type='hidden' value=
+                '<?php echo get_string('barchart_module', 'block_lemo4moodle')?>' id="barchartModule">
             <input type='hidden' value=
                 '<?php echo get_string('barchart_title', 'block_lemo4moodle')?>' id="barchartTitle">
             <input type='hidden' value=
@@ -271,9 +313,9 @@ require_once(__DIR__.'/lemo_db_queries.php');
             <input type='hidden' value=
                 '<?php echo get_string('linechart_colUser', 'block_lemo4moodle')?>' id="linechartColUser">
             <input type='hidden' value=
-                '<?php echo get_string('linechart_title', 'block_lemo4moodle')?>' id="linechartTitle">
+                '<?php echo get_string('linechart_colMissingData', 'block_lemo4moodle')?>' id="linechartColMissingData">
             <input type='hidden' value=
-                '<?php echo get_string('linechart_checkSelection', 'block_lemo4moodle')?>' id="linechartCheckSelection">
+                '<?php echo get_string('linechart_title', 'block_lemo4moodle')?>' id="linechartTitle">
             <!--Heatmap.  -->
             <input type='hidden' value=
                 '<?php echo get_string('heatmap_title', 'block_lemo4moodle')?>' id="heatmapTitle">
@@ -299,14 +341,14 @@ require_once(__DIR__.'/lemo_db_queries.php');
                 '<?php echo get_string('heatmap_saturday', 'block_lemo4moodle')?>' id="heatmapSaturday">
             <input type='hidden' value=
                 '<?php echo get_string('heatmap_sunday', 'block_lemo4moodle')?>' id="heatmapSunday">
-            <input type='hidden' value=
-                '<?php echo get_string('heatmap_checkSelection', 'block_lemo4moodle')?>' id="heatmapCheckSelection">
             <!-- Treemap. -->
             <input type='hidden' value=
                 '<?php echo get_string('treemap_title', 'block_lemo4moodle')?>' id="treemapTitle">
             <input type='hidden' value=
                 '<?php echo get_string('treemap_clickCount', 'block_lemo4moodle')?>' id="treemapClickCount">
             <!-- View. -->
+            <input type='hidden' value=
+                '<?php echo get_string('view_checkSelection', 'block_lemo4moodle')?>' id="viewCheckSelection">
             <input type='hidden' value=
                 '<?php echo get_string('view_dialogThis', 'block_lemo4moodle')?>' id="viewDialogThis">
             <input type='hidden' value=
@@ -324,16 +366,13 @@ require_once(__DIR__.'/lemo_db_queries.php');
 
     <script>
         // Data-variables from lemo_dq_queries.php made usable for the js-files.
-        var barchartData = <?php echo json_encode($barchartdataarray, JSON_NUMERIC_CHECK | JSON_UNESCAPED_SLASHES); ?>;
-        var linechartDataArray = [<?php echo $linechart; ?>];
-        var heatmapData = <?php echo $heatmapdata; ?>;
-        //var treemapData = <?php //echo json_encode($treemapdataarray, JSON_NUMERIC_CHECK | JSON_UNESCAPED_SLASHES); ?>;
         <?php
-        // JS variables needed for the filter.
-        $linechartdataarrayfilter = json_encode($finallinechartobject, JSON_NUMERIC_CHECK);
-        echo "var linechartDataArrayFilter = ". $linechartdataarrayfilter . ";\n";
-        $heatmapdatafilter = json_encode($heatmap, JSON_NUMERIC_CHECK);
-        echo "var heatmapDataFilter = Object.entries(". $heatmapdatafilter . ");\n";
+        $barchartdataarray = json_encode($barchartdata, JSON_NUMERIC_CHECK | JSON_UNESCAPED_SLASHES);
+        echo "var barchartData = " . $barchartdataarray . ";\n";
+        $linechartdataarray = json_encode($linechartdata, JSON_NUMERIC_CHECK);
+        echo "var linechartData = " . $linechartdataarray . ";\n";
+        $heatmapdataarray = json_encode($heatmapdata, JSON_NUMERIC_CHECK);
+        echo "var heatmapData = " . $heatmapdataarray . ";\n";
         ?>
     </script>
 

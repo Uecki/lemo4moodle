@@ -28,12 +28,35 @@
  */
 
 require(__DIR__ . '/../../config.php');
-require_login();
+
+// Login to current course.
+$courseid  = required_param('id', PARAM_INT);
+$course = $DB->get_record('course', array('id' => $courseid), '*', MUST_EXIST);
+require_login($course);
 
 // Get courseid, userid and alldata (encoded data-arrays in JSON-format).
-$courseid = $_POST["id"];
-$userid = $_POST["userid"];
-$alldata = json_decode($_POST["data"], true);
+global $USER, $COURSE;
+$courseid = $COURSE->id;
+$userid = $USER->id;
+
+$alldata;
+$linechartdata;
+$barchartdata;
+$heatmapdata;
+
+// Check, if the data received comes from two merged files or from the index.php.
+if(!isset($_POST["mergeData"]) || $_POST["mergeData"] == "") {
+    $alldata = json_decode($_POST["data"], true);
+    $linechartdata = json_encode($alldata[0], JSON_NUMERIC_CHECK);
+    $barchartdata = json_encode($alldata[1], JSON_NUMERIC_CHECK);
+    $heatmapdata = json_encode($alldata[2], JSON_NUMERIC_CHECK);
+} else {
+    $alldata = json_decode($_POST["mergeData"], true);
+    $linechartdata = json_encode($alldata[0], JSON_NUMERIC_CHECK);
+    $barchartdata = json_encode($alldata[1], JSON_NUMERIC_CHECK);
+    $barchartdata = str_replace("\\\\", "\\", $barchartdata);
+    $heatmapdata = json_encode($alldata[2], JSON_NUMERIC_CHECK);
+}
 
 // Get today's date.
 $today = date("d.m.y");
@@ -41,184 +64,39 @@ $today = date("d.m.y");
 // Get date for filename.
 $todayfilename = date("Y_m_d");
 
-// Get each dataset from the data array.
-if (!isset($_POST["mergeData"]) || $_POST["mergeData"] == "") {
-    $linechartdataarray = $alldata[0];
-} else {
-    $linechartdataarray = json_decode($_POST["mergeData"], true);
+// Check timespan of logdata.
+$firstdate = 0;
+$lastdate = 0;
 
-    /**
-     * Custom comparator used for sorting the array with usort() function.
-     *
-     * @param array $a
-     * @param array $b
-     * @return strnatcmp String comparisons using a "natural order" algorithm.
-     */
-    function compare_date($a, $b) {
-        return strnatcmp($a[0], $b[0]);
-    }
-
-    // Sort alphabetically by name.
-    usort($linechartdataarray, 'compare_date');
-    // Add empty data for missing days.
-    $needle = array("new Date(", ")");
-    $length = count($linechartdataarray);
-    $replacement = str_replace($needle, '', $linechartdataarray[$length - 1][0]);
-    $replacement2 = str_replace($needle, '', $linechartdataarray[0][0]);
-    $datepartstart = explode(", ", $replacement2);
-    $startdate = $datepartstart[0].'-'.(intval($datepartstart[1]) + 1).'-'.$datepartstart[2];
-
-    $datepartend = explode(", ", $replacement);
-    $enddate = $datepartend[0].'-'.(intval($datepartend[1]) + 1).'-'.$datepartend[2];
-    $period = new DatePeriod(
-        new DateTime($startdate),
-        new DateInterval('P1D'),
-        new DateTime($enddate)
-    );
-    $datetimespan = iterator_to_array($period);
-    foreach ($datetimespan as $dt) {
-        $tempdatepart = explode("-", $dt->format('Y-m-d'));
-        $tempdate = $tempdatepart[0].', '.(intval($tempdatepart[1]) - 1).', '.$tempdatepart[2];
-        $dateincluded = false;
-        foreach ($linechartdataarray as $aa) {
-            if (strpos($aa[0], $tempdate) !== false) {
-                $dateincluded = true;
-                break;
-            }
+// Perform various checks to find the earliest dataset.
+// This is necessary, because the timespan of the logdata is displayed and datasets can be downloaded an merged separately from each other.
+foreach($alldata as $value) {
+    if (isset($value[0])) {
+        if($firstdate == 0
+                || ($firstdate != 0
+                    && $firstdate > strtotime($value[0]["date"])
+                    && (strtotime($value[0]["date"]) !== false))) {
+            $firstdate = strtotime($value[0]["date"]);
         }
-        if ($dateincluded == false) {
-            array_push($linechartdataarray, ["new Date($tempdate)", 0, 0, 0]);
+
+        if($lastdate == 0
+                || ($lastdate != 0
+                    && $lastdate < strtotime($value[sizeof($value)-1]["date"])
+                    && strtotime($value[sizeof($value)-1]["date"]) !== false)) {
+            $lastdate = strtotime($value[sizeof($value)-1]["date"]);
         }
     }
-
-    // Sort again alphabetically by name.
-    usort($linechartdataarray, 'compare_date');
 }
-$barchartarray = $alldata[1];
-$heatmaparray = $alldata[2];
-//$treemaparray  = $alldata[3];
-$heatmap = $alldata[4]; // Two heatmap datasets, because of filter function.
-// Get the first recorded date of the datasets.
-preg_match_all('/\d+/', $linechartdataarray[0][0], $matches);
-$firstdate = $matches[0][2].'.'.(intval($matches[0][1]) + 1).'.'.$matches[0][0]; // Month needs to be augmented by 1.
+
+$firstdate = date("d.m.Y", $firstdate);
+$lastdate = date("d.m.Y", $lastdate);
+
 
 // Get the last recorded date of the datasets.
 if (!isset($_POST["mergeData"]) || $_POST["mergeData"] == "") {
     $lastdate = date("d.m.Y");
-} else {
-    preg_match_all('/\d+/', $linechartdataarray[(count($linechartdataarray) - 1)][0], $matches);
-    $lastdate = $matches[0][2].'.'.(intval($matches[0][1]) + 1).'.'.$matches[0][0]; // Month needs to be augmented by 1.
 }
 
-// Create linechart data.
-$linechart = '';
-$linechartarray = '';
-$f = 0;
-$needle = array("new Date(", ")");
-$length = count($linechartdataarray);
-foreach ($linechartdataarray as $fo) {
-    $replacement = str_replace($needle, '', $fo[0]);
-    if ($f < $length - 1) {
-        $linechart .= "[(".$fo[0]."), ".$fo[1].", ".$fo[2].", ".$fo[3]."],";
-        $linechartarray .= "['".$replacement."', ".$fo[1].", ".$fo[2].", ".$fo[3]."],";
-    }
-    if ($f == $length - 1) {
-        $linechart .= "[(".$fo[0]."), ".$fo[1].", ".$fo[2].", ".$fo[3]."]";
-        $linechartarray .= "['".$replacement."', ".$fo[1].", ".$fo[2].", ".$fo[3]."]";
-    }
-
-    $f++;
-}
-
-
-
-
-// Create barchart data.
-$barchartdata = json_encode($barchartarray);
-/*
-$j = 1;
-$leng = count($barchartarray);
-$barchartdata = '[["'. get_string('barchart_xlabel', 'block_lemo4moodle') .'", "'.
-    get_string('barchart_ylabel', 'block_lemo4moodle') .'", "'.
-    get_string('barchart_users', 'block_lemo4moodle') .'"],';
-foreach ($barchartarray as $bar) {
-    if ($j < $leng ) {
-        $barchartdata .= '["'.$bar[0].'", '.$bar[1].', '.$bar[2].'],';
-    }
-    if ($j == $leng ) {
-        $barchartdata .= '["'.$bar[0].'", '.$bar[1].', '.$bar[2].']]';
-    }
-    $j++;
-}
-*/
-/*
-// Create treemap data.
-$i = 1;
-$nodetitle; // Variable for node title.
-$lengtree = count($treemaparray);
-$treemapdata =
-    "[['Name', 'Parent', 'Size', 'Color'],
-        ['".get_string('treemap_global', 'block_lemo4moodle')."', null, 0, 0],
-            ['".get_string('treemap_files', 'block_lemo4moodle')."', '".
-                get_string('treemap_global', 'block_lemo4moodle')."', 0, 0],";
-
-foreach ($treemaparray as $tree) {
-    // If-clause for node title. (Maybe) To be expanded for forum, chat and assignments.
-    if ($tree[1] == 'content') {
-        $nodetitle = get_string('treemap_files', 'block_lemo4moodle');
-    }
-    if ($i < $lengtree ) {
-        $treemapdata .= "['".$tree[0]."', '".$tree[1]."', ".$tree[2].", ".$tree[3]."],";
-    }
-    if ($i == $lengtree ) {
-        $treemapdata .= "['".$tree[0]."', '".$tree[1]."', ".$tree[2].", ".$tree[3]."]]";
-    }
-    $i++;
-}
-*/
-
-// Create heatmap data.
-$heatmapdata = $heatmaparray;
-
-
-
-// Filter array.
-$linechartdataarrayfilter = json_encode($linechartdataarray, JSON_NUMERIC_CHECK);
-$heatmapdatafilter = json_encode($heatmap, JSON_NUMERIC_CHECK);
-
-// Lemo_linechart.js-file needs adaptation to work as download. !Doesn't look good, but is functional.
-$linechartstringjs = str_replace(
-'var activityData = [];
-            linechartDataArrayFilter.forEach(function(item) {
-                if (item.timestamp >= startTimestamp && item.timestamp <= endTimestamp) {
-                    activityData.push({
-                        date: item.date,
-                        accesses: item.accesses,
-                        ownhits: item.ownhits,
-                        users: item.user
-                    });
-                }
-            });',
-'var activityData = [];
-linechartDataArrayFilter.forEach(function(item) {
-
-    var mydate = item[0];
-    mydate=mydate.split(", ");
-    mydate[1] = parseInt(mydate[1]) + 1;
-    mydate[1] = mydate[1].toString();
-    var newdate = mydate[1] + "/" + mydate[2] + "/" + mydate[0];
-    var nd = block_lemo4moodle_toTimestamp(newdate);
-    if (nd >= startTimestamp && nd <= endTimestamp) {
-        activityData.push({
-            date: item[0],
-            accesses: item[1],
-            ownhits: item[2],
-            users: item[3]
-        });
-    }
-});',
-file_get_contents('js/lemo_linechart.js')
-);
 
 // Initializing content variable.
 $content = "";
@@ -285,7 +163,23 @@ if ($_POST['allCharts'] == 'true') {
                     </div>
                     <div id="options" class="col s3">
                         <div class="row">
-                              <div class="input-field col s12"></div>
+                            <div class="input-field col s12">
+                                <p>'.get_string('selectStart', 'block_lemo4moodle').'</p>
+                                <select id="barchart_select_module">
+                                    <option value="all" selected>'.get_string('selectAll', 'block_lemo4moodle').'</option>
+                                </select>
+                                <br>
+                                <div class="divider"></div>
+                                <p>'.get_string('filter', 'block_lemo4moodle').'</p>
+                                <input placeholder="Beginn" type="text" class="datepick " id="datepicker_1">
+                                <input placeholder="Ende" type="text" class="datepick " id="datepicker_2">
+                                <button class="btn waves-effect waves-light grey darken-3 button"
+                                    type="submit" name="action" id="dp_button_1">'.
+                                    get_string('update', 'block_lemo4moodle').'</button>
+                                <button class="btn waves-effect waves-light grey darken-3 button"
+                                    type="submit" name="action" id="rst_btn_1">'.
+                                    get_string('reset', 'block_lemo4moodle').'</button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -342,7 +236,11 @@ if ($_POST['allCharts'] == 'true') {
         </div>
         <div id="jsvariables">
             <!-- Language-string variables made accessible for JS. -->
+            <input type="hidden" value="' .
+                get_string("selectAll", "block_lemo4moodle") . '" id="selectAll">
             <!-- Barchart. -->
+            <input type="hidden" value="' .
+                get_string("barchart_module", "block_lemo4moodle") . '" id="barchartModule">
             <input type="hidden" value="' .
                 get_string("barchart_title", "block_lemo4moodle") . '" id="barchartTitle">
             <input type="hidden" value="' .
@@ -359,9 +257,9 @@ if ($_POST['allCharts'] == 'true') {
             <input type="hidden" value="' .
                 get_string("linechart_colUser", "block_lemo4moodle") . '" id="linechartColUser">
             <input type="hidden" value="' .
-                get_string("linechart_title", "block_lemo4moodle") . '" id="linechartTitle">
+                get_string("linechart_colMissingData", "block_lemo4moodle") . '" id="linechartColMissingData">
             <input type="hidden" value="' .
-                get_string("linechart_checkSelection", "block_lemo4moodle") . '" id="linechartCheckSelection">
+                get_string("linechart_title", "block_lemo4moodle") . '" id="linechartTitle">
             <!--Heatmap.  -->
             <input type="hidden" value="' .
                 get_string("heatmap_title", "block_lemo4moodle") . '" id="heatmapTitle">
@@ -387,14 +285,14 @@ if ($_POST['allCharts'] == 'true') {
                 get_string("heatmap_saturday", "block_lemo4moodle") . '" id="heatmapSaturday">
             <input type="hidden" value="' .
                 get_string("heatmap_sunday", "block_lemo4moodle") . '" id="heatmapSunday">
-            <input type="hidden" value="' .
-                get_string("heatmap_checkSelection", "block_lemo4moodle") . '" id="heatmapCheckSelection">
             <!-- Treemap. -->
             <input type="hidden" value="' .
                 get_string("treemap_title", "block_lemo4moodle") . '" id="treemapTitle">
             <input type="hidden" value="' .
                 get_string("treemap_clickCount", "block_lemo4moodle") . '" id="treemapClickCount">
             <!-- View. -->
+            <input type="hidden" value="' .
+                get_string('view_checkSelection', 'block_lemo4moodle') . '" id="viewCheckSelection">
             <input type="hidden" value="' .
                 get_string("view_dialogThis", "block_lemo4moodle") . '" id="viewDialogThis">
             <input type="hidden" value="' .
@@ -429,18 +327,16 @@ if ($_POST['allCharts'] == 'true') {
 
     <!-- Data-variables from lemo_dq_queries.php made usable for the js-files. -->
     var barchartData = '.$barchartdata.';
-    var linechartDataArray = ['.$linechart.'];
-    var heatmapData = '.$heatmapdata.';
 
-    var linechartDataArrayFilter = ['.$linechartarray.'];
-    var heatmapDataFilter = Object.entries('.$heatmapdatafilter.');
+    var linechartData = '.$linechartdata.';
+    var heatmapData = '.$heatmapdata.';
 
     var firstdate = "'.$firstdate.'";
     var lastdate = "'.$lastdate.'";
     </script>
 
     <script>'.file_get_contents('js/lemo_barchart.js').'</script>
-    <script>'.$linechartstringjs.'</script>
+    <script>'.file_get_contents('js/lemo_linechart.js').'</script>
     <script>'.file_get_contents('js/lemo_heatmap.js').'</script>
 
     <!-- General functions of the plugin. Must be included after the JS-files of the charts. -->
@@ -517,6 +413,23 @@ if ($_POST['allCharts'] == 'true') {
             <button class="btn waves-effect waves-light grey darken-3 button"
                 type="submit" name="action" id="rst_btn_2">'.
                 get_string('reset', 'block_lemo4moodle').'</button>';
+    } else if($_POST['chart'] == 'barchart'){
+        $content .=
+        '<p>'.get_string('selectStart', 'block_lemo4moodle').'</p>
+        <select id="barchart_select_module">
+            <option value="all" selected>'.get_string('selectAll', 'block_lemo4moodle').'</option>
+        </select>
+        <div class="divider"><</div>
+        <br>
+        <p>'.get_string('filter', 'block_lemo4moodle').'</p>
+        <input placeholder="Beginn" type="text" class="datepick " id="datepicker_1">
+        <input placeholder="Ende" type="text" class="datepick " id="datepicker_2">
+        <button class="btn waves-effect waves-light grey darken-3 button"
+            type="submit" name="action" id="dp_button_1">'.
+            get_string('update', 'block_lemo4moodle').'</button>
+        <button class="btn waves-effect waves-light grey darken-3 button"
+            type="submit" name="action" id="rst_btn_1">'.
+            get_string('reset', 'block_lemo4moodle').'</button>';
     } else if ($_POST['chart'] == 'heatmap') {
         $content .=
             '<div class="divider"></div>
@@ -541,7 +454,11 @@ if ($_POST['allCharts'] == 'true') {
         </div>
         <div id="jsvariables">
             <!-- Language-string variables made accessible for JS. -->
+            <input type="hidden" value="' .
+                get_string("selectAll", "block_lemo4moodle") . '" id="selectAll">
             <!-- Barchart. -->
+            <input type="hidden" value="' .
+                get_string("barchart_module", "block_lemo4moodle") . '" id="barchartModule">
             <input type="hidden" value="' .
                 get_string("barchart_title", "block_lemo4moodle") . '" id="barchartTitle">
             <input type="hidden" value="' .
@@ -558,9 +475,9 @@ if ($_POST['allCharts'] == 'true') {
             <input type="hidden" value="' .
                 get_string("linechart_colUser", "block_lemo4moodle") . '" id="linechartColUser">
             <input type="hidden" value="' .
-                get_string("linechart_title", "block_lemo4moodle") . '" id="linechartTitle">
+                get_string("linechart_colMissingData", "block_lemo4moodle") . '" id="linechartColMissingData">
             <input type="hidden" value="' .
-                get_string("linechart_checkSelection", "block_lemo4moodle") . '" id="linechartCheckSelection">
+                get_string("linechart_title", "block_lemo4moodle") . '" id="linechartTitle">
             <!--Heatmap.  -->
             <input type="hidden" value="' .
                 get_string("heatmap_title", "block_lemo4moodle") . '" id="heatmapTitle">
@@ -586,9 +503,14 @@ if ($_POST['allCharts'] == 'true') {
                 get_string("heatmap_saturday", "block_lemo4moodle") . '" id="heatmapSaturday">
             <input type="hidden" value="' .
                 get_string("heatmap_sunday", "block_lemo4moodle") . '" id="heatmapSunday">
+            <!-- Treemap. -->
             <input type="hidden" value="' .
-                get_string("heatmap_checkSelection", "block_lemo4moodle") . '" id="heatmapCheckSelection">
+                get_string("treemap_title", "block_lemo4moodle") . '" id="treemapTitle">
+            <input type="hidden" value="' .
+                get_string("treemap_clickCount", "block_lemo4moodle") . '" id="treemapClickCount">
             <!-- View. -->
+            <input type="hidden" value="' .
+                get_string('view_checkSelection', 'block_lemo4moodle') . '" id="viewCheckSelection">
             <input type="hidden" value="' .
                 get_string("view_dialogThis", "block_lemo4moodle") . '" id="viewDialogThis">
             <input type="hidden" value="' .
@@ -624,11 +546,9 @@ if ($_POST['allCharts'] == 'true') {
     if ($_POST['chart'] == 'barchart') {
         $content .= 'var barchartData = '.$barchartdata.';';
     } else if ($_POST['chart'] == 'linechart') {
-        $content .= 'var linechartDataArray = ['.$linechart.'];
-        var linechartDataArrayFilter = ['.$linechartarray.'];';
+        $content .= 'var linechartData = '.$linechartdata.';';
     } else if ($_POST['chart'] == 'heatmap') {
-        $content .= 'var heatmapData = '.$heatmapdata.';
-        var heatmapDataFilter = Object.entries('.$heatmapdatafilter.');';
+        $content .= 'var heatmapData = '.$heatmapdata.';';
     }
 
     $content .= '</script>
@@ -636,7 +556,7 @@ if ($_POST['allCharts'] == 'true') {
     if ($_POST['chart'] == 'barchart') {
         $content .= '<script>'.file_get_contents('js/lemo_barchart.js').'</script>';
     } else if ($_POST['chart'] == 'linechart') {
-        $content .= '<script>'.$linechartstringjs.'</script>';
+        $content .= '<script>'.file_get_contents('js/lemo_linechart.js').'</script>';
     } else if ($_POST['chart'] == 'heatmap') {
         $content .= '<script>'.file_get_contents('js/lemo_heatmap.js').'</script>';
     }

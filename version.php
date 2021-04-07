@@ -25,5 +25,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'block_lemo4moodle';  // Recommended since 2.0.2 (MDL-26035). Required since 3.0 (MDL-48494).
-$plugin->version = 2020062900;  // YYYYMMDDHH (Releasedate of plugin).
+$plugin->version = 2020103000;  // YYYYMMDDHH (Releasedate of plugin).
 $plugin->requires = 2010112400; // YYYYMMDDHH (This is the release version for Moodle 2.0).
+$plugin->supported = [20, 39];
+$plugin->release = 'v2.0';
