@@ -85,7 +85,6 @@ $modulesarray = array();
 foreach ($modinfo->get_cms() as $cminfo) {
     $modulesarray[] = array('name' => $cminfo->name, 'module' => 'mod_' . $cminfo->modname, 'contextid' => $cminfo->context->id);
 }
-echo("<script>console.table(".json_encode($modulesarray).");</script>");
 
 // Transform result of the query from Object to an array of Objects.
 $barchartdatatemp = array();
@@ -113,6 +112,7 @@ foreach($barchartdatatemp as $bd) {
     $bd->component = get_string($bd->component, 'block_lemo4moodle');
 }
 
+// Filter out any not assigned/no longer existing objects.
 $barchartdata = array();
 foreach($barchartdatatemp as $bd) {
     if($bd->contextid != 0) {
@@ -121,15 +121,14 @@ foreach($barchartdatatemp as $bd) {
 }
 
 
-// Query for heatmap. Only minor changes to activity chart query.
-
+// Query for heatmap.
 $queryheatmap = "SELECT  id, timecreated, FROM_UNIXTIME(timecreated, '%W') AS 'weekday', FROM_UNIXTIME(timecreated, '%k') AS 'hour',
                             COUNT(action) AS 'allHits',  COUNT(CASE WHEN " .  $DB->sql_compare_text('userid') . " = " . $DB->sql_compare_text(':userid') . "
                             THEN $userid END) AS 'ownhits'
                        FROM {logstore_standard_log}
                       WHERE (" .  $DB->sql_compare_text('action') . " = " . $DB->sql_compare_text(':action') . "
                             AND " .  $DB->sql_compare_text('courseid') . " = " . $DB->sql_compare_text(':courseid') . ")
-                     GROUP BY timecreated"; // Group by hour.
+                     GROUP BY timecreated";
 
 //Query function parameters.
 $params = ['userid' => $userid, 'action' => 'viewed', 'courseid' => $courseid];
