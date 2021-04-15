@@ -168,7 +168,9 @@ $(document).ready(function() {
 
     // Functionality for filemerging.
     $('#mergeButton').click(function() {
+        // reset error field.
         $("#modal_error2").text("");
+
         var filemerge = document.querySelector('#file_merge');
 
         // Check, if 2 or more files were selected.
@@ -237,9 +239,8 @@ $(document).ready(function() {
                             splitValues[1] = splitValues[1].replace("allhits:", "");
                             splitValues[2] = splitValues[2].replace("users:", "");
                             splitValues[3] = splitValues[3].replace("ownhits:", "");
-
-                            var splitValuesObject = {date: splitValues[0], allhits: splitValues[1], users: splitValues[2], ownhits: splitValues[3]};
-                            if (linechartDataExtracted.some(elem => elem[0] === splitValues[0]) == false) {
+                            if (linechartDataExtracted.some(elem => elem['date'] === splitValues[0]) == false) {
+                                var splitValuesObject = {date: splitValues[0], allhits: splitValues[1], users: splitValues[2], ownhits: splitValues[3]};
                                 linechartDataExtracted.push(splitValuesObject);
                             }
                         }
@@ -254,11 +255,9 @@ $(document).ready(function() {
                             splitValues[2] = splitValues[2].replace("contextid:", "");
                             splitValues[3] = splitValues[3].replace("userid:", "");
                             splitValues[4] = splitValues[4].replace("component:", "");
-                            splitValues[5] = splitValues[5] + splitValues[6] + splitValues[7];
-                            splitValues[5] = splitValues[5].replace("other:", "");
-                            splitValues[6] = splitValues[8].replace("name:", "");
-                            var splitValuesObject = {id: splitValues[0], date: splitValues[1], contextid: splitValues[2], userid: splitValues[3], component: splitValues[4], other: splitValues[5], name: splitValues[6]};
-                            if(barchartDataExtracted.some(elem => elem[0] === splitValues[2]) == false) {
+                            splitValues[5] = splitValues[5].replace("name:", "");
+                            if(barchartDataExtracted.some(elem => elem['id'] === splitValues[0]) == false) {
+                                var splitValuesObject = {id: splitValues[0], date: splitValues[1], contextid: splitValues[2], userid: splitValues[3], component: splitValues[4], name: splitValues[5]};
                                 barchartDataExtracted.push(splitValuesObject);
                             }
                         }
@@ -275,8 +274,8 @@ $(document).ready(function() {
                             splitValues[4] = splitValues[4].replace("allhits:", "");
                             splitValues[5] = splitValues[5].replace("ownhits:", "");
                             splitValues[6] = splitValues[6].replace("date:", "");
-                            var splitValuesObject = {id: splitValues[0], timecreated: splitValues[1], weekday: splitValues[2], hour: splitValues[3], allhits: splitValues[4], ownhits: splitValues[5], date: splitValues[6]};
-                            if(heatmapDataExtracted.some(elem => elem.timecreated === splitValues[1]) == false) {
+                            if(heatmapDataExtracted.some(elem => elem['timecreated'] === splitValues[1]) == false) {
+                                var splitValuesObject = {id: splitValues[0], timecreated: splitValues[1], weekday: splitValues[2], hour: splitValues[3], allhits: splitValues[4], ownhits: splitValues[5], date: splitValues[6]};
                                 heatmapDataExtracted.push(splitValuesObject);
                             }
                         }
@@ -289,7 +288,7 @@ $(document).ready(function() {
                         // Create array with all the merged datasets of each graph.
                         var allDataArray = [];
 
-                        // loops through the timespans of each file to indicate, that the data in this timespan is present.
+                        // Loops through the timespans of each file to indicate, that the data in this timespan is present.
                         timespans.forEach(function(item) {
                             var dateFlag = item[0];
                             while(dateFlag <= item[1]) {
@@ -337,40 +336,40 @@ $(document).ready(function() {
 
                         // Sort linechart data.
                         linechartDataExtracted.sort(function(a,b){
-                        // Turn your strings into dates, and then subtract them
-                        // to get a value that is either negative, positive, or zero.
+                            // Turn your strings into dates, and then subtract them
+                            // to get a value that is either negative, positive, or zero.
 
-                        // Transform date strings to fit the format.
-                        var dateA = a.date.split("-");
-                        dateA = dateA[2] + "/" + dateA[1] + "/" + dateA[0];
-                        var dateB = b.date.split("-");
-                        dateB = dateB[2] + "/" + dateB[1] + "/" + dateB[0];
+                            // Transform date strings to fit the format.
+                            var dateA = a.date.split("-");
+                            dateA = dateA[2] + "/" + dateA[1] + "/" + dateA[0];
+                            var dateB = b.date.split("-");
+                            dateB = dateB[2] + "/" + dateB[1] + "/" + dateB[0];
 
-                        return new Date(dateA) - new Date(dateB);
+                            return new Date(dateA) - new Date(dateB);
                         });
 
                         // Sort barchart data.
                         barchartDataExtracted.sort(function(a,b){
-                        // Turn your strings into dates, and then subtract them
-                        // to get a value that is either negative, positive, or zero.
+                            // Turn your strings into dates, and then subtract them
+                            // to get a value that is either negative, positive, or zero.
 
-                        // Transform date strings to fit the format.
-                        var dateA = a.date.split("-");
-                        dateA = dateA[2] + "/" + dateA[1] + "/" + dateA[0];
-                        var dateB = b.date.split("-");
-                        dateB = dateB[2] + "/" + dateB[1] + "/" + dateB[0];
+                            // Transform date strings to fit the format.
+                            var dateA = a.date.split("-");
+                            dateA = dateA[2] + "/" + dateA[1] + "/" + dateA[0];
+                            var dateB = b.date.split("-");
+                            dateB = dateB[2] + "/" + dateB[1] + "/" + dateB[0];
 
-                        return new Date(dateA) - new Date(dateB);
+                            return new Date(dateA) - new Date(dateB);
                         });
 
 
                         //Sort heatmap data.
                         heatmapDataExtracted.sort(function(a,b){
-                        // Turn your strings into dates, and then subtract them
-                        // to get a value that is either negative, positive, or zero.
+                            // Turn your strings into dates, and then subtract them
+                            // to get a value that is either negative, positive, or zero.
 
-                        // UNIX Timestamp needs to be converted by *1000.
-                        return new Date(a.date * 1000) - new Date(b.date * 1000);
+                            // UNIX Timestamp needs to be converted by *1000.
+                            return new Date(a.date * 1000) - new Date(b.date * 1000);
                         });
 
                         allDataArray.push(linechartDataExtracted);

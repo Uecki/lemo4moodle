@@ -26,8 +26,8 @@
 // Language file variables.
 var selectAll = $('#selectAll').val();
 var barchartTitle = $('#barchartTitle').val();
-var barchartXLabel = $('#barchartXLabel').val();
-var barchartYLabel = $('#barchartYLabel').val();
+var barchartXLabel = $('#barchartXLabel').val(); // Name.
+var barchartYLabel = $('#barchartYLabel').val(); // Accesses.
 var barchartUser = $('#linechartColUser').val();
 var barchartModule  = $('#barchartModule').val();
 var barchartDefaultData = block_lemo4moodle_createBarchartData(barchartData);
@@ -126,14 +126,11 @@ $(document).ready(function() {
  */
 function block_lemo4moodle_createBarchartData(dataArray, startTimestamp = 0, endTimestamp = 0) {
 
+    // XLabel = name; YLabel = accesses.
     var barchartDataFinal = [[barchartXLabel, barchartYLabel, barchartUser, barchartModule]];
 
-    // Array that serves to store, how many times a file or activity was accessed and by how many users.
+    // Array that serves to store the amount of times a file or activity was accessed and by how many users it was accessed.
     var counterArray = [];
-
-    dataArray.forEach(function(item) {
-
-    });
 
     // Iterate through the data.
     dataArray.forEach(function(item) {
@@ -145,32 +142,33 @@ function block_lemo4moodle_createBarchartData(dataArray, startTimestamp = 0, end
         var timestamp = Date.parse(mergedDate) / 1000;
 
         // Check, if the function was called by the filter or not.
+        // Info: Every distinct object gets its contextid as id, so that all corresponding actions can be assigned to it.
         // Not the filter:
         if(startTimestamp == 0 && endTimestamp == 0) {
 
             // Check, if the element already exists in the counter Array.
-            if(counterArray.find(elem => elem.id === item.other)) {
-                var matchedElement = counterArray.find(elem => elem.id === item.other);
+            if(counterArray.find(elem => elem.id === item.contextid)) {
+                var matchedElement = counterArray.find(elem => elem.id === item.contextid);
                 matchedElement.counter += 1;
                 if(!(matchedElement.users.includes(item.userid))) {
                     matchedElement.users.push(item.userid);
                 }
             } else {
-                counterArray.push({id:item.other, counter:1, users:[item.userid], module:item.component, name:item.name});
+                counterArray.push({id:item.contextid, counter:1, users:[item.userid], module:item.component, name:item.name});
             }
 
-            //Filter
+        // Filter:
         } else if (timestamp >= startTimestamp && timestamp <= endTimestamp) {
 
             // Check, if the element already exists in the counter Array.
-            if(counterArray.find(elem => elem.id === item.other)) {
-                var matchedElement = counterArray.find(elem => elem.id === item.other);
+            if(counterArray.find(elem => elem.id === item.contextid)) {
+                var matchedElement = counterArray.find(elem => elem.id === item.contextid);
                 matchedElement.counter += 1;
                 if(!(matchedElement.users.includes(item.userid))) {
                     matchedElement.users.push(item.userid);
                 }
             } else {
-                counterArray.push({id:item.other, counter:1, users:[item.userid], module:item.component, name:item.name});
+                counterArray.push({id:item.contextid, counter:1, users:[item.userid], module:item.component, name:item.name});
             }
 
         }
@@ -246,6 +244,7 @@ function block_lemo4moodle_drawBarchart(data) {
 	  x: xValuesUser,
 	  y: yValues,
 	  type: 'bar',
+      textposition: 'auto',
       orientation: 'h',
 	  name: barchartUser,
 	  marker: {
@@ -257,12 +256,12 @@ function block_lemo4moodle_drawBarchart(data) {
 	  }
 	};
 
-	var data = [trace1, trace2];
-	var height_plot = 500;
+	var dataFinal = [trace1, trace2];
+	var heightPlot = $('#barchart').height();;
 	if(data.length > 25)
-		height_plot+= 10*data.length;
+		heightPlot+= 10*data.length;
 	var layout = {
-		height: height_plot,
+		height: heightPlot,
         title: barchartTitle,
         barmode: 'group',
         margin: {
@@ -274,27 +273,8 @@ function block_lemo4moodle_drawBarchart(data) {
 	};
 
 
-	Plotly.newPlot('barchart', data, layout);
+	Plotly.newPlot('barchart', dataFinal, layout);
 
-    // Check, if the file info is available.
-    // Necessary for downloaded file, where it is not available.
-	/*
-    if ($('#barchartFileInfo').length > 0) {
-
-        var barchartDataArray = JSON.parse($('#barchartFileInfo').val());
-        var plotlyBarchart = document.getElementById('barchart');
-        plotlyBarchart.on('plotly_click', function(data) {
-            var clickVal = data.points[0].y;
-
-            barchartDataArray.forEach( function(item) {
-                if (clickVal == item[0]) {
-                    var url = $('#wwwroot').val() + '/pluginfile.php/' + item[1] + '/' + item[2] + '/' + item[3] + '/' + item[4] + '/' + item[5];
-                    window.open(url);
-                    return;
-                }
-            });
-        });
-    }*/
 }
 
 /**

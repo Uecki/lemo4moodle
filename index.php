@@ -231,7 +231,6 @@ require_once(__DIR__.'/lemo_db_queries.php');
                                         <input type='hidden' value='<?php echo $alldatahtml; ?>' name='data'>
                                         <input type='hidden' value='linechart' name='chart'>
                                         <input type='hidden' value='' name='allCharts' id="allCharts2">
-                                        <!-- For merging files (only for linechart atm). -->
                                         <input type='hidden' value='' name='mergeData' id="mergeData2" >
                                     </form>
                                     <div class="divider"></div>

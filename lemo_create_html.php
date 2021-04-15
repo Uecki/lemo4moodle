@@ -44,7 +44,7 @@ $linechartdata;
 $barchartdata;
 $heatmapdata;
 
-// Check, if the data received comes from two emrged files or from the index.php.
+// Check, if the data received comes from two merged files or from the index.php.
 if(!isset($_POST["mergeData"]) || $_POST["mergeData"] == "") {
     $alldata = json_decode($_POST["data"], true);
     $linechartdata = json_encode($alldata[0], JSON_NUMERIC_CHECK);
@@ -54,6 +54,7 @@ if(!isset($_POST["mergeData"]) || $_POST["mergeData"] == "") {
     $alldata = json_decode($_POST["mergeData"], true);
     $linechartdata = json_encode($alldata[0], JSON_NUMERIC_CHECK);
     $barchartdata = json_encode($alldata[1], JSON_NUMERIC_CHECK);
+    $barchartdata = str_replace("\\\\", "\\", $barchartdata);
     $heatmapdata = json_encode($alldata[2], JSON_NUMERIC_CHECK);
 }
 
