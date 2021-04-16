@@ -27,15 +27,15 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-// SQL Query -> ActivityChart (date, hits, user counter).
-$querylinechart = "SELECT FROM_UNIXTIME (timecreated, '%d-%m-%Y') AS 'date', COUNT(action) AS 'allHits',
-                                COUNT(DISTINCT userid) AS 'users', COUNT(CASE WHEN " .  $DB->sql_compare_text('userid') . " = " . $DB->sql_compare_text(':userid') . "
+// SQL Query -> Linechart (date, hits, user counter).
+$querylinechart = "SELECT id, timecreated AS 'date', COUNT(action) AS 'allhits',
+                                COUNT(CASE WHEN " .  $DB->sql_compare_text('userid') . " = " . $DB->sql_compare_text(':userid') . "
                                 THEN $userid END) AS 'ownhits'
                            FROM {logstore_standard_log}
                           WHERE (" .  $DB->sql_compare_text('action') . " = " . $DB->sql_compare_text(':action') . "
                                 AND " .  $DB->sql_compare_text('courseid') . " = " . $DB->sql_compare_text(':courseid') . ")
-                       GROUP BY FROM_UNIXTIME (timecreated, '%y-%m-%d')
-                       ORDER BY 'date'";
+                       GROUP BY id
+                       ORDER BY id ASC";
 
 //Query function parameters.
 $params = ['userid' => $userid, 'action' => 'viewed', 'courseid' => $courseid];
@@ -45,9 +45,31 @@ $linechart = $DB->get_records_sql($querylinechart, $params);
 unset($params);
 
 // Transform result of the query from Object to an array of Objects.
-$linechartdata = array();
+// Also, change UNIX timestamps to a string with the format dd-mm-yyyy.
+$linechartdatatemp = array();
+
 foreach ($linechart as $l) {
-    $linechartdata[] = $l;
+
+    // Assign timestamp in correct format.
+    $l->date = date("d-m-Y", $l->date);
+    $linechartdatatemp[] = $l;
+}
+
+// Group dates and values by day.
+$linechartdata = array();
+$linechartdata[] = $linechartdatatemp[0];
+$linechartdatacounter = 0;
+
+for ($i = 1; $i < sizeof($linechartdatatemp); $i++) {
+
+    if($linechartdatatemp[$i]->date == $linechartdata[$linechartdatacounter]->date) {
+        $linechartdata[$linechartdatacounter]->allhits+=$linechartdatatemp[$i]->allhits;
+        $linechartdata[$linechartdatacounter]->ownhits+=$linechartdatatemp[$i]->ownhits;
+    } else {
+        $linechartdatacounter++;
+        $linechartdata[$linechartdatacounter] = $linechartdatatemp[$i];
+    }
+
 }
 
 
@@ -58,7 +80,7 @@ $firstdateindex = $splitdate[0] . '.' . $splitdate[1] . '.' . $splitdate[2];
 
 // SQL Query for bar chart data.
 
-$querybarchart = "SELECT LOGS1.id, FROM_UNIXTIME (LOGS1.timecreated, '%d-%m-%Y') AS 'date', LOGS1.contextid, LOGS1.userid, LOGS1.component
+$querybarchart = "SELECT LOGS1.id, LOGS1.timecreated AS 'date', LOGS1.contextid, LOGS1.userid, LOGS1.component
                     FROM {logstore_standard_log} LOGS1
                    WHERE " . $DB->sql_like('LOGS1.component', ':component') . "
                             AND " .  $DB->sql_compare_text('LOGS1.action') . " = " . $DB->sql_compare_text(':action2') . "
@@ -94,7 +116,9 @@ foreach ($barchart as $b) {
 
 // Assign the objectname to each result of the barchart query by comparing the contextids from the
 // objectlist ($modulesarray) with the contextid of each query result.
+// Also, change UNIX timestamps to a string with the format dd-mm-yyyy.
 foreach($barchartdatatemp as $bd) {
+    // Assign objectname.
     $found = false;
     foreach($modulesarray as $ma) {
         if($ma['contextid'] == $bd->contextid) {
@@ -107,6 +131,9 @@ foreach($barchartdatatemp as $bd) {
     if($found == false) {
         $bd->contextid = 0;
     }
+
+    // Assign timestamp in correct format.
+    $bd->date = date("d-m-Y", $bd->date);
 
     // Replace the component (module) name with the string from the language file.
     $bd->component = get_string($bd->component, 'block_lemo4moodle');
@@ -122,8 +149,8 @@ foreach($barchartdatatemp as $bd) {
 
 
 // Query for heatmap.
-$queryheatmap = "SELECT  id, timecreated, FROM_UNIXTIME(timecreated, '%W') AS 'weekday', FROM_UNIXTIME(timecreated, '%k') AS 'hour',
-                            COUNT(action) AS 'allHits',  COUNT(CASE WHEN " .  $DB->sql_compare_text('userid') . " = " . $DB->sql_compare_text(':userid') . "
+$queryheatmap = "SELECT  id, timecreated, COUNT(action) AS 'allHits',
+                            COUNT(CASE WHEN " .  $DB->sql_compare_text('userid') . " = " . $DB->sql_compare_text(':userid') . "
                             THEN $userid END) AS 'ownhits'
                        FROM {logstore_standard_log}
                       WHERE (" .  $DB->sql_compare_text('action') . " = " . $DB->sql_compare_text(':action') . "
@@ -137,10 +164,12 @@ $heatmap = $DB->get_records_sql($queryheatmap, $params);
 
 unset($params);
 
-// Transform result of the query from Object to array of Objects.
+// Transform result of the query from Object to array of Objects get real date from timestamp.
 $heatmaptdata = array();
 foreach ($heatmap as $h) {
     $h->date = date("d-m-Y", $h->timecreated);
+    $h->weekday = date("l", $h->timecreated);
+    $h->hour = date("G", $h->timecreated);;
     $heatmapdata[] = $h;
 }
 
