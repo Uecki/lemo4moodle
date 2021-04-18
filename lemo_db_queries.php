@@ -28,9 +28,9 @@
 defined('MOODLE_INTERNAL') || die();
 
 // SQL Query -> Linechart (date, hits, user counter).
-$querylinechart = "SELECT id, timecreated AS 'date', COUNT(action) AS 'allhits',
+$querylinechart = "SELECT id, timecreated AS date, COUNT(action) AS allhits,
                                 COUNT(CASE WHEN " .  $DB->sql_compare_text('userid') . " = " . $DB->sql_compare_text(':userid') . "
-                                THEN $userid END) AS 'ownhits'
+                                THEN $userid END) AS ownhits
                            FROM {logstore_standard_log}
                           WHERE (" .  $DB->sql_compare_text('action') . " = " . $DB->sql_compare_text(':action') . "
                                 AND " .  $DB->sql_compare_text('courseid') . " = " . $DB->sql_compare_text(':courseid') . ")
@@ -80,7 +80,7 @@ $firstdateindex = $splitdate[0] . '.' . $splitdate[1] . '.' . $splitdate[2];
 
 // SQL Query for bar chart data.
 
-$querybarchart = "SELECT LOGS1.id, LOGS1.timecreated AS 'date', LOGS1.contextid, LOGS1.userid, LOGS1.component
+$querybarchart = "SELECT LOGS1.id, LOGS1.timecreated AS date, LOGS1.contextid, LOGS1.userid, LOGS1.component
                     FROM {logstore_standard_log} LOGS1
                    WHERE " . $DB->sql_like('LOGS1.component', ':component') . "
                             AND " .  $DB->sql_compare_text('LOGS1.action') . " = " . $DB->sql_compare_text(':action2') . "
@@ -149,13 +149,13 @@ foreach($barchartdatatemp as $bd) {
 
 
 // Query for heatmap.
-$queryheatmap = "SELECT  id, timecreated, COUNT(action) AS 'allHits',
+$queryheatmap = "SELECT  id, timecreated, COUNT(action) AS allHits,
                             COUNT(CASE WHEN " .  $DB->sql_compare_text('userid') . " = " . $DB->sql_compare_text(':userid') . "
-                            THEN $userid END) AS 'ownhits'
+                            THEN $userid END) AS ownhits
                        FROM {logstore_standard_log}
                       WHERE (" .  $DB->sql_compare_text('action') . " = " . $DB->sql_compare_text(':action') . "
                             AND " .  $DB->sql_compare_text('courseid') . " = " . $DB->sql_compare_text(':courseid') . ")
-                     GROUP BY timecreated";
+                     GROUP BY id";
 
 //Query function parameters.
 $params = ['userid' => $userid, 'action' => 'viewed', 'courseid' => $courseid];
