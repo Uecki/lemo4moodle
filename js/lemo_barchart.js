@@ -32,8 +32,6 @@ var barchartUser = $('#linechartColUser').val();
 var barchartModule  = $('#barchartModule').val();
 var barchartDefaultData = block_lemo4moodle_createBarchartData(barchartData);
 var barchartSelectedModuleData = barchartDefaultData;
-console.log("barchart.js:");
-console.table(barchartDefaultData);
 
 
 $(document).ready(function() {
