@@ -51,8 +51,10 @@ $linechartdatatemp = array();
 foreach ($linechart as $l) {
 
     // Assign timestamp in correct format.
-    $l->date = date("d-m-Y", $l->date);
+    $datelinechart =  new DateTime("@$l->date", core_date::get_user_timezone_object());
+    $l->date = $datelinechart->format('d-m-Y');
     $linechartdatatemp[] = $l;
+    unset($datelinechart);
 }
 
 // Group dates and values by day.
@@ -133,7 +135,9 @@ foreach($barchartdatatemp as $bd) {
     }
 
     // Assign timestamp in correct format.
-    $bd->date = date("d-m-Y", $bd->date);
+    $datebarchart =  new DateTime("@$bd->date", core_date::get_user_timezone_object());
+    $bd->date = $datebarchart->format('d-m-Y');
+    unset($datebarchart);
 
     // Replace the component (module) name with the string from the language file.
     $bd->component = get_string($bd->component, 'block_lemo4moodle');
@@ -167,10 +171,12 @@ unset($params);
 // Transform result of the query from Object to array of Objects get real date from timestamp.
 $heatmaptdata = array();
 foreach ($heatmap as $h) {
-    $h->date = date("d-m-Y", $h->timecreated);
-    $h->weekday = date("l", $h->timecreated);
-    $h->hour = date("G", $h->timecreated);;
+    $dateheatmap =  new DateTime("@$h->timecreated", core_date::get_user_timezone_object());
+    $h->date = $dateheatmap->format('d-m-Y');
+    $h->weekday = $dateheatmap->format('l');
+    $h->hour = $dateheatmap->format('G');;
     $heatmapdata[] = $h;
+    unset($dateheatmap);
 }
 
 
