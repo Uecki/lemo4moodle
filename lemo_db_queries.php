@@ -107,7 +107,7 @@ $modulesarray = array();
 
 // Add name, modulename and contextid of each object in the course to an associative array with the time an object was added to the course as key.
 foreach ($modinfo->get_cms() as $cminfo) {
-    $modulesarray[] = array('name' => $cminfo->name, 'module' => 'mod_' . $cminfo->modname, 'contextid' => $cminfo->context->id);
+    $modulesarray[] = array('name' => $cminfo->name, 'module' => $cminfo->modname, 'contextid' => $cminfo->context->id);
 }
 
 // Transform result of the query from Object to an array of Objects.
@@ -140,7 +140,12 @@ foreach($barchartdatatemp as $bd) {
     unset($datebarchart);
 
     // Replace the component (module) name with the string from the language file.
+    $bd->component = substr_replace($bd->component, '', 0, 4);
     $bd->component = get_string($bd->component, 'block_lemo4moodle');
+    if(strpos($bd->component, '[[') !== false) {
+        $bd->component = substr_replace($bd->component, '', 0, 2);
+        $bd->component = substr_replace($bd->component, '', strlen($bd->component)-2, strlen($bd->component));
+    }
 }
 
 // Filter out any not assigned/no longer existing objects.
