@@ -33,32 +33,35 @@ class block_lemo4moodle extends block_base {
      * Set the title when initialising the block.
      */
     public function init() {
-        $this->title = 'Lemo4Moodle';
+        $this->title = get_string('lemo4moodle', 'block_lemo4moodle');
     }
 
     /**
      * Custom comparator used for sorting the array with usort() function.
      *
-     * @return Returns the content of the block..
+     * @return Returns the content of the block.
      */
     public function get_content() {
-        // If content not empty return it.
-        if ($this->content !== null) {
-            return $this->content;
-        }
-        // Create new standard class for plugin.
-        $this->content = new stdClass;
-        $this->content->items = array();
 
         // Import global vars -> (config.php).
         global $CFG;
         global $COURSE;
         global $USER;
 
+        // If content not empty return it.
+        if ($this->content !== null) {
+            return $this->content;
+        }
+
+        // Create new standard class for plugin.
+        $this->content = new stdClass;
+
         // Add text to plugin body.
-        $this->content->footer = '<a href= "'.$CFG->wwwroot.'/blocks/lemo4moodle/index.php?id='.$COURSE->id.'&user='.$USER->id.
+        $this->content->text = '<a href= "'.$CFG->wwwroot.'/blocks/lemo4moodle/index.php?id='.$COURSE->id.'&user='.$USER->id.
             '" target="_blank"><img src="'.$CFG->wwwroot.
-            '/blocks/lemo4moodle/pix/logo_180.png" alt="Logo Lemo4moodle" width="100" height="100"/></a>';
+            '/blocks/lemo4moodle/pix/logo_180.png" alt="Logo Lemo4moodle" width="100px" height="100px"></a>';
+
+        $this->content->footer = '';
 
         // Return content.
         return $this->content;
