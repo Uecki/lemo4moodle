@@ -48,28 +48,28 @@ $string['selectStart'] = 'Select modules:';
 $string['selectAll'] = 'All';
 
 // Moodle module names.
-$string['mod_assign'] = 'Assignment';
-$string['mod_assignment'] = 'Assignment';
-$string['mod_book'] = 'Book';
-$string['mod_chat'] = 'Chat';
-$string['mod_choice'] = 'Choice';
-$string['mod_data'] = 'Database';
-$string['mod_feedback'] = 'Feedback';
-$string['mod_folder'] = 'Folder';
-$string['mod_forum'] = 'Forum';
-$string['mod_glossary'] = 'Glossary';
-$string['mod_imscp'] = 'IMS content package';
-$string['mod_label'] = 'Label';
-$string['mod_lesson'] = 'Lesson';
-$string['mod_lti'] = 'External Tool';
-$string['mod_page'] = 'Page';
-$string['mod_quiz'] = 'Quiz';
-$string['mod_resource'] = 'File';
-$string['mod_scorm'] = 'SCORM package';
-$string['mod_survey'] = 'Survey';
-$string['mod_url'] = 'URL';
-$string['mod_wiki'] = 'Wiki';
-$string['mod_workshop'] = 'Workshop';
+$string['assign'] = 'Assignment';
+$string['assignment'] = 'Assignment';
+$string['book'] = 'Book';
+$string['chat'] = 'Chat';
+$string['choice'] = 'Choice';
+$string['data'] = 'Database';
+$string['feedback'] = 'Feedback';
+$string['folder'] = 'Folder';
+$string['forum'] = 'Forum';
+$string['glossary'] = 'Glossary';
+$string['imscp'] = 'IMS content package';
+$string['label'] = 'Label';
+$string['lesson'] = 'Lesson';
+$string['lti'] = 'External Tool';
+$string['page'] = 'Page';
+$string['quiz'] = 'Quiz';
+$string['resource'] = 'File';
+$string['scorm'] = 'SCORM package';
+$string['survey'] = 'Survey';
+$string['url'] = 'URL';
+$string['wiki'] = 'Wiki';
+$string['workshop'] = 'Workshop';
 
 
 // Barchart.
