@@ -311,6 +311,7 @@ if ($_POST['allCharts'] == 'true') {
           <!-- JQuery and JQuery Datepicker. -->
           <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
         <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+        <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/i18n/jquery-ui-i18n.min.js"></script>
 
           <!-- Google Charts. -->
         <script src="https://www.gstatic.com/charts/loader.js"></script>
@@ -531,6 +532,7 @@ if ($_POST['allCharts'] == 'true') {
         '<!-- JQuery and JQuery Datepicker. -->
         <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
         <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+        <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/i18n/jquery-ui-i18n.min.js"></script>
 
         <!-- Google Charts. -->
         <script src="https://www.gstatic.com/charts/loader.js"></script>

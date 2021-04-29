@@ -56,4 +56,11 @@
         <license>MIT</license>
         <licenseversion></licenseversion>
     </library>
+    <library>
+        <location>lib/jquery/jquery-ui-i18n.min.js</location>
+        <name>JQuery UI i18n (datepicker language data)</name>
+        <version>v1.11.1</version>
+        <license>MIT</license>
+        <licenseversion></licenseversion>
+    </library>
 </libraries>

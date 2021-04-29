@@ -354,6 +354,9 @@ require_once(__DIR__.'/lemo_db_queries.php');
                 '<?php echo get_string('view_noTimespan', 'block_lemo4moodle')?>' id="viewNoTimespan">
             <input type='hidden' value=
                 '<?php echo get_string('view_modalError', 'block_lemo4moodle')?>' id="viewModalError">
+            <!-- Language used by the user -->
+            <input type='hidden' value=
+                '<?php echo $USER->lang?>' id="userLanguage">
         </div>
     </div>
 
@@ -372,6 +375,7 @@ require_once(__DIR__.'/lemo_db_queries.php');
     <!-- JQuery and JQuery Datepicker. -->
     <script src="lib/jquery/jquery.js"></script>
     <script src="lib/jquery/jquery-ui.js"></script>
+    <script src="lib/jquery/jquery-ui-i18n.min.js"></script>
 
     <!-- Materialize CSS Framework - minified - JavaScript. -->
     <script src="lib/materialize/js/materialize.min.js"></script>
