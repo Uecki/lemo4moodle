@@ -116,6 +116,33 @@ foreach ($barchart as $b) {
     $barchartdatatemp[] = $b;
 }
 
+// Create array with all basic modules currently used by moodle.
+// This is done to display their name correctly in the drop down menu.
+$modulenames = array(
+    'assign',
+    'assignment',
+    'book',
+    'chat',
+    'choice',
+    'data',
+    'feedback',
+    'folder',
+    'forum',
+    'glossary',
+    'imscp',
+    'label',
+    'lesson',
+    'lti',
+    'page',
+    'quiz',
+    'resource',
+    'scorm',
+    'survey',
+    'url',
+    'wiki',
+    'workshop'
+);
+
 // Assign the objectname to each result of the barchart query by comparing the contextids from the
 // objectlist ($modulesarray) with the contextid of each query result.
 // Also, change UNIX timestamps to a string with the format dd-mm-yyyy.
@@ -141,10 +168,8 @@ foreach($barchartdatatemp as $bd) {
 
     // Replace the component (module) name with the string from the language file.
     $bd->component = substr_replace($bd->component, '', 0, 4);
-    $bd->component = get_string($bd->component, 'block_lemo4moodle');
-    if(strpos($bd->component, '[[') !== false) {
-        $bd->component = substr_replace($bd->component, '', 0, 2);
-        $bd->component = substr_replace($bd->component, '', strlen($bd->component)-2, strlen($bd->component));
+    if(in_array($bd->component, $modulenames)) {
+        $bd->component = get_string($bd->component, 'block_lemo4moodle');
     }
 }
 
