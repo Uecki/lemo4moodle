@@ -38,6 +38,7 @@ var viewFile = $('#viewFile').val();
 var viewTimespan = $('#viewTimespan').val();
 var viewNoTimespan = $('#viewNoTimespan').val();
 var viewModalError = $('#viewModalError').val();
+var userLanguage = $('#userLanguage').val();
 
 $(document).ready(function() {
 
@@ -147,9 +148,12 @@ $(document).ready(function() {
 
 // JQuery datepicker funtion (for filter).
 $(function() {
-    $(".datepick").datepicker({
-        dateFormat: 'dd.mm.yy'
-    });
+    var options = $.extend({},
+        $.datepicker.regional[userLanguage], {
+            dateFormat: "dd.mm.yy"
+        }
+    );
+    $(".datepick").datepicker(options);
 });
 
 // Initialize the Materialize modal (PopUp) and select.
