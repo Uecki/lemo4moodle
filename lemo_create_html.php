@@ -305,6 +305,8 @@ if ($_POST['allCharts'] == 'true') {
                 get_string("view_noTimespan", "block_lemo4moodle") . '" id="viewNoTimespan">
             <input type="hidden" value="' .
                 get_string("view_modalError", "block_lemo4moodle") . '" id="viewModalError">
+            <!-- Language used by the user -->
+            <input type="hidden" value' . $USER->lang . ' id="userLanguage">
         </div>
         </div>
 
@@ -524,6 +526,8 @@ if ($_POST['allCharts'] == 'true') {
                 get_string("view_noTimespan", "block_lemo4moodle") . '" id="viewNoTimespan">
             <input type="hidden" value="' .
                 get_string("view_modalError", "block_lemo4moodle") . '" id="viewModalError">
+            <!-- Language used by the user -->
+            <input type="hidden" value' . $USER->lang . ' id="userLanguage">
         </div>
         </div>';
 
