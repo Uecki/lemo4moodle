@@ -36,13 +36,6 @@
     padding: 10px;
 }
 
-.block_lemo4moodle {
-    min-height: 700px;
-    min-width: 1150px;
-    max-height: 100vh;
-    max-width: 100vw;
-}
-
 .block_lemo4moodle button {
     margin-top: 5px;
     margin-bottom: 5px;
