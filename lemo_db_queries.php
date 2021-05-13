@@ -28,7 +28,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 // SQL Query -> Linechart (date, hits, user counter).
-$querylinechart = "SELECT id, timecreated AS date, COUNT(action) AS allhits,
+$querylinechart = "SELECT id, timecreated AS date, userid, COUNT(action) AS allhits,
                                 COUNT(CASE WHEN " .  $DB->sql_compare_text('userid') . " = " . $DB->sql_compare_text(':userid') . "
                                 THEN $userid END) AS ownhits
                            FROM {logstore_standard_log}
@@ -60,16 +60,31 @@ foreach ($linechart as $l) {
 // Group dates and values by day.
 $linechartdata = array();
 $linechartdata[] = $linechartdatatemp[0];
+$userids = array();
+$userids[] = $linechartdatatemp[0]->userid;
 $linechartdatacounter = 0;
 
-for ($i = 1; $i < sizeof($linechartdatatemp); $i++) {
+for ($i = 1; $i < count($linechartdatatemp); $i++) {
 
     if($linechartdatatemp[$i]->date == $linechartdata[$linechartdatacounter]->date) {
         $linechartdata[$linechartdatacounter]->allhits+=$linechartdatatemp[$i]->allhits;
         $linechartdata[$linechartdatacounter]->ownhits+=$linechartdatatemp[$i]->ownhits;
+        // Check if the userid already had actions on that day.
+        if(in_array($linechartdatatemp[$i]->userid, $userids) == false) {
+            $userids[] = $linechartdatatemp[$i]->userid;
+        }
     } else {
+        $linechartdata[$linechartdatacounter]->users = count($userids);
+        unset($userids);
         $linechartdatacounter++;
         $linechartdata[$linechartdatacounter] = $linechartdatatemp[$i];
+        $userids[] = $linechartdatatemp[$i]->userid;
+
+    }
+
+    // Add the number of users to the last element of the array.
+    if($i == count($linechartdatatemp) - 1) {
+        $linechartdata[$linechartdatacounter]->users = count($userids);
     }
 
 }
